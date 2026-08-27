@@ -1,0 +1,9 @@
+/build/
+/examples/template/build/
+/examples/platformer/build/
+/.cache/
+__pycache__/
+*.pyc
+*.pyo
+*.swp
+*~

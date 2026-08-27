@@ -1,0 +1,119 @@
+{
+  "schema": 2,
+  "id": "ktf-samsung",
+  "status": "research",
+  "api_level_mappings": {
+    "1.2.1": {
+      "headers": true,
+      "target_build": true,
+      "abi_adapter": "table-veneer-bootstrap",
+      "install_profiles": ["none"]
+    }
+  },
+  "architecture": {
+    "cpu": "arm7tdmi",
+    "isa": "armv4t",
+    "endianness": "little",
+    "float_abi": "soft",
+    "application_abi": "aapcs",
+    "provider_abi": "samsung-packed-words"
+  },
+  "process_import_root": "0x01001000",
+  "direct_root_fields": {
+    "MC_KNL": "0x00",
+    "MC_GRP": "0x04",
+    "MC_FS": "0x0c",
+    "MC_NET": "0x14",
+    "MC_UTIL": "0x18",
+    "MC_HTTP": "0x2c",
+    "CSTDLIB": "0x38",
+    "MC_UIC": "0x44",
+    "MC_MDA": "0x4c"
+  },
+  "master_vector": {
+    "MC_UTIL": 0,
+    "MC_MISC": 1,
+    "MC_GRP": 2,
+    "MC_DB": 4,
+    "MC_FS": 6,
+    "MC_SRL": 7,
+    "MC_UIC": 8,
+    "MC_MDA": 9,
+    "MC_NET": 10,
+    "MC_PHN": 11
+  },
+  "master_vector_getter": {
+    "table": "MC_KNL",
+    "slot": "0x84",
+    "confidence": "confirmed"
+  },
+  "layouts": {
+    "MCTimer": 28,
+    "MC_FileInfo": 12,
+    "MC_GrpContext": 60,
+    "MC_GrpDisplayInfo": 36
+  },
+  "shared_buffer_slots": {
+    "MC_knlCreateSharedBuf": "0x3c",
+    "MC_knlGetSharedBuf": "0x40",
+    "MC_knlGetSharedBufSize": "0x44",
+    "MC_knlResizeSharedBuf": "0x48",
+    "MC_knlDestroySharedBuf": "0x4c"
+  },
+  "memory_resolution": {
+    "kind": "handle-to-head-to-payload",
+    "handle_head_offset": 0,
+    "payload_offset": 8
+  },
+  "fact_evidence": {
+    "architecture": {
+      "profile": "ktf-samsung",
+      "confidence": "confirmed",
+      "source": "anycall_magichole:analysis/wipi_mc_knl_set_timer_boundary_recheck.md"
+    },
+    "process_import_root": {
+      "profile": "ktf-samsung",
+      "confidence": "confirmed",
+      "source": "anycall_magichole:docs/maps/wipi_public_syscall_c_map.csv"
+    },
+    "direct_root_fields": {
+      "profile": "ktf-samsung",
+      "confidence": "confirmed",
+      "source": "anycall_magichole:docs/maps/wipi_public_syscall_c_map.csv"
+    },
+    "master_vector": {
+      "profile": "ktf-samsung",
+      "confidence": "confirmed",
+      "source": "anycall_magichole:docs/interfaces/dispatch.md"
+    },
+    "master_vector_getter": {
+      "profile": "ktf-samsung",
+      "confidence": "confirmed",
+      "source": "anycall_magichole:docs/interfaces/dispatch.md"
+    },
+    "layouts": {
+      "profile": "ktf-samsung",
+      "confidence": "candidate",
+      "source": "wipi-wiki@d65e5a74174851d4cc733bdb2a4830693a7c1a7b:c-api types plus reviewed profile models",
+      "validation_need": "Pin every profile-specific offset with direct guest writes or an authorized device probe."
+    },
+    "shared_buffer_slots": {
+      "profile": "ktf-samsung",
+      "confidence": "confirmed",
+      "source": "anycall_magichole:docs/interfaces/kernel.md"
+    },
+    "memory_resolution": {
+      "profile": "ktf-samsung",
+      "confidence": "candidate",
+      "source": "wipi-wiki@d65e5a74174851d4cc733bdb2a4830693a7c1a7b:c-api/kernel#MC_GETDPTR plus recovered handle model",
+      "validation_need": "Pin both dereferences and the payload offset with a firmware callsite or named-device probe."
+    }
+  },
+  "claims": {
+    "headers": true,
+    "table_veneer": true,
+    "bootstrap": false,
+    "package": false,
+    "real_device": false
+  }
+}

@@ -1,0 +1,144 @@
+{
+  "schema": 2,
+  "id": "lgt-raptor",
+  "status": "emulator-implemented-device-research",
+  "api_level_mappings": {
+    "1.2.1": {
+      "headers": true,
+      "target_build": true,
+      "abi_adapter": "numbered-import-veneer",
+      "install_profiles": ["aram-wie-raptor"]
+    }
+  },
+  "architecture": {
+    "cpu": "arm7tdmi",
+    "isa": "armv4t",
+    "endianness": "little",
+    "float_abi": "soft",
+    "application_abi": "aapcs",
+    "provider_abi": "lgt-numbered-imports"
+  },
+  "container": {
+    "archive": "zip",
+    "executable": "binary.mod",
+    "executable_format": "ELF32-ARM",
+    "aram_required_section": ".raptor"
+  },
+  "import_module": "0x1fb",
+  "known_public_methods": {
+    "MC_knlPrintk": "0x64",
+    "MC_knlSprintk": "0x65",
+    "MC_knlExit": "0x6b",
+    "MC_knlGetProgramName": "0x6f",
+    "MC_knlAlloc": "0x75",
+    "MC_knlCalloc": "0x76",
+    "MC_knlFree": "0x77",
+    "MC_knlGetTotalMemory": "0x78",
+    "MC_knlGetFreeMemory": "0x79",
+    "MC_knlDefTimer": "0x7a",
+    "MC_knlSetTimer": "0x7b",
+    "MC_knlUnsetTimer": "0x7c",
+    "MC_knlCurrentTime": "0x7d",
+    "MC_knlGetSystemProperty": "0x7e",
+    "MC_knlSetSystemProperty": "0x7f",
+    "MC_knlGetResourceID": "0x80",
+    "MC_knlGetResource": "0x81",
+    "MC_grpGetImageProperty": "0xc8",
+    "MC_grpGetImageFrameBuffer": "0xc9",
+    "MC_grpGetScreenFrameBuffer": "0xca",
+    "MC_grpDestroyOffScreenFrameBuffer": "0xcb",
+    "MC_grpCreateOffScreenFrameBuffer": "0xcc",
+    "MC_grpInitContext": "0xcd",
+    "MC_grpSetContext": "0xce",
+    "MC_grpPutPixel": "0xd0",
+    "MC_grpDrawLine": "0xd1",
+    "MC_grpDrawRect": "0xd2",
+    "MC_grpFillRect": "0xd3",
+    "MC_grpCopyFrameBuffer": "0xd4",
+    "MC_grpDrawImage": "0xd5",
+    "MC_grpCopyArea": "0xd7",
+    "MC_grpDrawArc": "0xd8",
+    "MC_grpFillArc": "0xd9",
+    "MC_grpDrawString": "0xda",
+    "MC_grpGetRGBPixels": "0xdc",
+    "MC_grpSetRGBPixels": "0xdd",
+    "MC_grpFlushLcd": "0xde",
+    "MC_grpGetPixelFromRGB": "0xdf",
+    "MC_grpGetRGBFromPixel": "0xe0",
+    "MC_grpGetDisplayInfo": "0xe1",
+    "MC_grpRepaint": "0xe2",
+    "MC_grpGetFont": "0xe3",
+    "MC_grpGetFontHeight": "0xe4",
+    "MC_grpGetFontAscent": "0xe5",
+    "MC_grpGetFontDescent": "0xe6",
+    "MC_grpGetStringWidth": "0xe7",
+    "MC_grpCreateImage": "0xe9",
+    "MC_netConnect": "0x258",
+    "MC_netClose": "0x259",
+    "MC_netSocketClose": "0x25e",
+    "MC_mdaClipCreate": "0x4b0",
+    "MC_mdaClipFree": "0x4b1",
+    "MC_mdaClipPutData": "0x4b3",
+    "MC_mdaClipGetVolume": "0x4b8",
+    "MC_mdaClipSetVolume": "0x4b9",
+    "MC_mdaPlay": "0x4ba",
+    "MC_mdaStop": "0x4bd",
+    "MC_mdaVibrator": "0x4c1",
+    "MC_mdaSetMuteState": "0x4d1",
+    "MC_mdaGetMuteState": "0x4d2",
+    "MC_miscBackLight": "0x578"
+  },
+  "layouts": {
+    "MCTimer": 4,
+    "MC_FileInfo": 12,
+    "MC_GrpContext": 56,
+    "MC_GrpDisplayInfo": 36
+  },
+  "memory_resolution": null,
+  "fact_evidence": {
+    "architecture": {
+      "profile": "lgt-raptor",
+      "confidence": "candidate",
+      "source": "public-prior-art:dlunch/wipi LGT target configuration",
+      "validation_need": "Confirm compiler and provider ABI flags against an authorized LGT module."
+    },
+    "container": {
+      "profile": "lgt-raptor",
+      "confidence": "candidate",
+      "source": "synthetic-black-box:Wie and ARAM Raptor loader probes",
+      "validation_need": "Pin a privacy-safe probe fixture and its expected ELF/section results."
+    },
+    "import_module": {
+      "profile": "lgt-raptor",
+      "confidence": "candidate",
+      "source": "public-prior-art:dlunch/wipi LGT numbered imports",
+      "validation_need": "Confirm module 0x1fb from an authorized binary.mod import table."
+    },
+    "known_public_methods": {
+      "profile": "lgt-raptor",
+      "confidence": "candidate",
+      "source": "public-prior-art:dlunch/wipi LGT numbered imports",
+      "validation_need": "Confirm each method ID independently before generating any veneer."
+    },
+    "layouts": {
+      "profile": "lgt-raptor",
+      "confidence": "candidate",
+      "source": "public-prior-art:dlunch/wipi LGT guest layouts",
+      "validation_need": "Pin every layout against an authorized LGT module or device trace."
+    },
+    "memory_resolution": {
+      "profile": "lgt-raptor",
+      "confidence": "unknown",
+      "source": "wipi-wiki@d65e5a74174851d4cc733bdb2a4830693a7c1a7b:c-api/kernel#MC_GETDPTR",
+      "validation_need": "Recover the LGT memory-ID representation before providing MC_GETDPTR."
+    }
+  },
+  "claims": {
+    "headers": true,
+    "numbered_import_veneer": true,
+    "bootstrap": false,
+    "package": true,
+    "package_scope": "aram-wie-raptor emulator install profile",
+    "real_device": false
+  }
+}

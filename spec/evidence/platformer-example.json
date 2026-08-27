@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "verified_on": "2026-08-27",
+  "scope": "original platformer example on pinned ARAM and WIE emulators",
+  "api_level": "1.2.1",
+  "abi_profile": "lgt-raptor",
+  "install_profile": "aram-wie-raptor",
+  "example": "examples/platformer/main.c",
+  "artifact": {
+    "package": "examples/platformer/build/wipi-1.2.1/lgt-raptor/aram-wie-raptor/libwipi-sky-hopper.zip",
+    "size": 6213,
+    "sha256": "ab315b54b06767553bb6a537aa852cbdb9a45f083549fb0b7bd96025755542f3"
+  },
+  "aram": {
+    "core_revision": "d62ce143f0c325a8aff53de005a767c26116fff5",
+    "runner_revision": "e8fd74d51a76cbb4ddc11218a9c5eac46ac4ba91",
+    "verifier": "python tools/verify_aram.py --suite platformer --build-probe",
+    "milestone": "interactive",
+    "api_calls": 5297,
+    "observed_public_apis": 13,
+    "unimplemented_calls": 0,
+    "input_events": 4,
+    "frame_changes": 25
+  },
+  "wie": {
+    "revision": "739389449482cebfba6333f3015466bb76070c21",
+    "verifier": "python tools/verify_wie.py --suite platformer --prepare",
+    "milestone": "interactive",
+    "painted_frames": 16,
+    "unique_frames": 3,
+    "input_sequence": ["right", "select"],
+    "display": "320x240"
+  },
+  "claims": {
+    "packages": true,
+    "loads": true,
+    "entry": true,
+    "first_frame": true,
+    "interactive_move_and_jump": true,
+    "real_device_verified": false
+  }
+}

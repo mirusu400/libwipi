@@ -1,0 +1,161 @@
+{
+  "schema": 1,
+  "id": "aram-wie-raptor",
+  "status": "emulator-contract",
+  "api_level": "1.2.1",
+  "abi_profile": "lgt-raptor",
+  "target_build": true,
+  "emulators": {
+    "aram": {
+      "repository": "aram-core",
+      "revision": "d62ce143f0c325a8aff53de005a767c26116fff5",
+      "runner_repository": "aram-emu",
+      "runner_revision": "e8fd74d51a76cbb4ddc11218a9c5eac46ac4ba91"
+    },
+    "wie": {
+      "repository": "https://github.com/dlunch/wie",
+      "revision": "739389449482cebfba6333f3015466bb76070c21"
+    }
+  },
+  "container": {
+    "outer_archive": "zip",
+    "metadata": "app_info",
+    "inner_archive": "{aid}.jar",
+    "executable": "binary.mod",
+    "executable_format": "ELF32-ARM-ET_EXEC",
+    "elf_entry": "aligned-thumb-code-address",
+    "aram_entry_rule": "entry | 1",
+    "wie_entry_rule": "entry + 1",
+    "aram_metadata_section": ".raptor",
+    "dependency_output_offset": "0x214",
+    "clet_descriptor_words": 12
+  },
+  "imports": {
+    "resolver_offset": "0x4",
+    "module": "0x1fb",
+    "clet_register_method": "0x3",
+    "default_environment": "wie",
+    "confirmed_public_methods": {
+      "MC_knlExit": "0x6b",
+      "MC_knlGetProgramName": "0x6f",
+      "MC_knlAlloc": "0x75",
+      "MC_knlCalloc": "0x76",
+      "MC_knlFree": "0x77",
+      "MC_knlGetTotalMemory": "0x78",
+      "MC_knlGetFreeMemory": "0x79",
+      "MC_knlDefTimer": "0x7a",
+      "MC_knlSetTimer": "0x7b",
+      "MC_knlUnsetTimer": "0x7c",
+      "MC_knlCurrentTime": "0x7d",
+      "MC_knlGetSystemProperty": "0x7e",
+      "MC_knlSetSystemProperty": "0x7f",
+      "MC_knlGetResourceID": "0x80",
+      "MC_knlGetResource": "0x81",
+      "MC_grpGetImageProperty": "0xc8",
+      "MC_grpGetImageFrameBuffer": "0xc9",
+      "MC_grpGetScreenFrameBuffer": "0xca",
+      "MC_grpDestroyOffScreenFrameBuffer": "0xcb",
+      "MC_grpCreateOffScreenFrameBuffer": "0xcc",
+      "MC_grpInitContext": "0xcd",
+      "MC_grpSetContext": "0xce",
+      "MC_grpPutPixel": "0xd0",
+      "MC_grpDrawLine": "0xd1",
+      "MC_grpDrawRect": "0xd2",
+      "MC_grpFillRect": "0xd3",
+      "MC_grpCopyFrameBuffer": "0xd4",
+      "MC_grpDrawImage": "0xd5",
+      "MC_grpCopyArea": "0xd7",
+      "MC_grpDrawArc": "0xd8",
+      "MC_grpFillArc": "0xd9",
+      "MC_grpDrawString": "0xda",
+      "MC_grpGetRGBPixels": "0xdc",
+      "MC_grpSetRGBPixels": "0xdd",
+      "MC_grpFlushLcd": "0xde",
+      "MC_grpGetPixelFromRGB": "0xdf",
+      "MC_grpGetRGBFromPixel": "0xe0",
+      "MC_grpGetDisplayInfo": "0xe1",
+      "MC_grpRepaint": "0xe2",
+      "MC_grpGetFont": "0xe3",
+      "MC_grpGetFontHeight": "0xe4",
+      "MC_grpGetFontAscent": "0xe5",
+      "MC_grpGetFontDescent": "0xe6",
+      "MC_grpGetStringWidth": "0xe7",
+      "MC_grpCreateImage": "0xe9",
+      "MC_netConnect": "0x258",
+      "MC_netClose": "0x259",
+      "MC_netSocketClose": "0x25e",
+      "MC_mdaClipCreate": "0x4b0",
+      "MC_mdaClipFree": "0x4b1",
+      "MC_mdaClipPutData": "0x4b3",
+      "MC_mdaClipGetVolume": "0x4b8",
+      "MC_mdaClipSetVolume": "0x4b9",
+      "MC_mdaPlay": "0x4ba",
+      "MC_mdaStop": "0x4bd",
+      "MC_mdaVibrator": "0x4c1",
+      "MC_mdaSetMuteState": "0x4d1",
+      "MC_mdaGetMuteState": "0x4d2",
+      "MC_miscBackLight": "0x578"
+    },
+    "aram_method_overrides": {
+      "MC_grpCopyArea": "0xd6",
+      "MC_grpDrawArc": "0xd7",
+      "MC_grpFillArc": "0xd8",
+      "MC_grpDrawString": "0xd9",
+      "MC_grpGetRGBPixels": "0xdb",
+      "MC_grpSetRGBPixels": "0xdc"
+    },
+    "return_overrides": {
+      "MC_grpGetDisplayInfo": {
+        "environment": "wie",
+        "provider_success": 1,
+        "public_success": 0
+      }
+    }
+  },
+  "memory_resolution": {
+    "representation": "direct-guest-address",
+    "scope": "aram-and-wie-emulator-install-only",
+    "device_abi_claim": false
+  },
+  "lifecycle": {
+    "descriptor_version": 3,
+    "aram_start_callback_word": 6,
+    "wie_registration_callback_count": 6,
+    "input_press_type": 502,
+    "input_release_type": 503,
+    "public_key_values": {
+      "up": -1,
+      "down": -2,
+      "left": -3,
+      "right": -4,
+      "select": -5
+    },
+    "wie_provider_key_overrides": {
+      "141": -1,
+      "146": -2,
+      "142": -3,
+      "145": -4,
+      "148": -5
+    },
+    "key_normalization_scope": "abi-adapter-only"
+  },
+  "entry_environment": {
+    "aram_third_argument": "nonzero-wipic-base",
+    "wie_third_argument": "zero",
+    "scope": "abi-adapter-only"
+  },
+  "evidence": {
+    "aram_revision": "d62ce143f0c325a8aff53de005a767c26116fff5",
+    "aram_runner_revision": "e8fd74d51a76cbb4ddc11218a9c5eac46ac4ba91",
+    "wie_revision": "739389449482cebfba6333f3015466bb76070c21",
+    "confidence": "confirmed",
+    "scope": "synthetic emulator loader and provider behavior"
+  },
+  "claims": {
+    "emulator_package": true,
+    "aram_runtime_verified": true,
+    "wie_runtime_verified": true,
+    "conformance_evidence": "spec/evidence/emulator-conformance.json",
+    "real_device": false
+  }
+}

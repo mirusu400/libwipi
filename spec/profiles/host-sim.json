@@ -1,0 +1,25 @@
+{
+  "schema": 2,
+  "id": "host-sim",
+  "status": "planned",
+  "api_level_mappings": {
+    "1.2.1": {
+      "headers": true,
+      "target_build": false,
+      "semantic_runtime": "cstdlib-only"
+    }
+  },
+  "host_layouts_are_device_evidence": false,
+  "fact_evidence": {
+    "host_layouts_are_device_evidence": {
+      "profile": "host-sim",
+      "confidence": "confirmed",
+      "source": "libwipi:AGENTS.md#initial-profiles"
+    }
+  },
+  "claims": {
+    "headers": true,
+    "runtime": false,
+    "real_device": false
+  }
+}

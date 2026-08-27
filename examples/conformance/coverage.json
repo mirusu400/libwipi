@@ -1,0 +1,78 @@
+{
+  "schema": 1,
+  "api_level": "1.2.1",
+  "abi_profile": "lgt-raptor",
+  "install_profile": "aram-wie-raptor",
+  "categories": {
+    "graphics": {
+      "apis": [
+        "MC_grpGetScreenFrameBuffer",
+        "MC_grpGetDisplayInfo",
+        "MC_grpInitContext",
+        "MC_grpGetPixelFromRGB",
+        "MC_grpFillRect",
+        "MC_grpDrawRect",
+        "MC_grpDrawLine",
+        "MC_grpDrawArc",
+        "MC_grpFillArc",
+        "MC_grpDrawString",
+        "MC_grpFlushLcd"
+      ],
+      "observable": "A labeled multicolor dashboard is presented every paint."
+    },
+    "font": {
+      "apis": ["MC_grpGetFont", "MC_grpDrawString"],
+      "observable": "The dashboard title, status labels, model, and counters render as text."
+    },
+    "system": {
+      "apis": [
+        "MC_knlGetTotalMemory",
+        "MC_knlGetFreeMemory",
+        "MC_knlCurrentTime",
+        "MC_knlGetSystemProperty"
+      ],
+      "observable": "SYSTEM changes to PASS and displays the PHONEMODEL property."
+    },
+    "memory": {
+      "apis": ["MC_knlCalloc", "MC_GETDPTR", "MC_knlFree"],
+      "observable": "MEMORY changes to PASS only after zero-fill and pointer resolution checks."
+    },
+    "timer": {
+      "apis": ["MC_knlDefTimer", "MC_knlSetTimer", "timer_callback"],
+      "observable": "TIMER changes from WAIT to PASS and its count advances."
+    },
+    "input": {
+      "apis": [
+        "handleCletEvent",
+        "WIPI_CLET_EVENT_KEY_PRESS",
+        "WIPI_CLET_EVENT_KEY_RELEASE"
+      ],
+      "observable": "INPUT changes from WAIT to PASS and displays the last key value."
+    },
+    "audio": {
+      "apis": [
+        "MC_mdaClipCreate",
+        "MC_mdaClipPutData",
+        "MC_mdaClipSetVolume",
+        "MC_mdaPlay",
+        "MC_mdaStop",
+        "MC_mdaClipFree"
+      ],
+      "observable": "A generated one-second SMAF phrase plays and AUDIO changes to PASS."
+    }
+  },
+  "known_exclusions": {
+    "storage": {
+      "reason": "Method 0x190 is filesystem open in the pinned ARAM profile but database open in the pinned Wie runtime; a common wrapper would hide an unresolved ABI split."
+    },
+    "backlight": {
+      "reason": "Method 0x578 is backlight in Wie but an observed private runtime initializer in the pinned ARAM profile."
+    },
+    "vibration": {
+      "reason": "Method 0x4c1 is implemented by Wie but is not yet modeled by the pinned ARAM Raptor runtime."
+    },
+    "font_metrics": {
+      "reason": "Font metric selector IDs are implemented by Wie but are not yet mapped by the pinned ARAM Raptor adapter; font acquisition and drawing are tested instead."
+    }
+  }
+}

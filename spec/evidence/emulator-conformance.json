@@ -1,0 +1,70 @@
+{
+  "schema": 1,
+  "verified_on": "2026-08-27",
+  "scope": "synthetic ARAM and WIE emulator conformance; no real-device claim",
+  "api_level": "1.2.1",
+  "abi_profile": "lgt-raptor",
+  "install_profile": "aram-wie-raptor",
+  "artifact": {
+    "source": "examples/conformance/main.c",
+    "package": "build/wipi-1.2.1/lgt-raptor/aram-wie-raptor/examples/conformance/libwipi-conformance.zip",
+    "size": 4754,
+    "sha256": "369e32a1aeb59bd1ba369a31f4352f63196816f41a293e760cb11fd976dcf0d6"
+  },
+  "coverage": {
+    "contract": "examples/conformance/coverage.json",
+    "categories": [
+      "audio",
+      "font",
+      "graphics",
+      "input",
+      "memory",
+      "system",
+      "timer"
+    ],
+    "observed_public_apis": 24
+  },
+  "aram": {
+    "core_revision": "d62ce143f0c325a8aff53de005a767c26116fff5",
+    "runner_revision": "e8fd74d51a76cbb4ddc11218a9c5eac46ac4ba91",
+    "verifier": "python tools/verify_aram.py --build-probe",
+    "milestone": "interactive",
+    "api_calls": 2562,
+    "implemented_calls": 2562,
+    "unimplemented_calls": 0,
+    "input_events": 2,
+    "frame_changes": 11,
+    "audio": {
+      "chunks": 90,
+      "frames": 63504,
+      "sample_rate": 44100,
+      "channels": 2,
+      "discontinuities": 0,
+      "missing_frames": 0,
+      "overlapping_frames": 0,
+      "format_changes": 0,
+      "invalid_chunks": 0,
+      "dropped_samples": 0
+    }
+  },
+  "wie": {
+    "revision": "739389449482cebfba6333f3015466bb76070c21",
+    "verifier": "python tools/verify_wie.py --prepare",
+    "milestone": "interactive",
+    "painted_frames": 8,
+    "unique_frames": 7,
+    "input_repaints": true,
+    "audio_plays": 2,
+    "audio_events": 12,
+    "audio_duration_ms": 2000,
+    "display": "320x240"
+  },
+  "claims": {
+    "packages": true,
+    "loads": true,
+    "entry": true,
+    "first_frame": true,
+    "interactive": true,
+    "real_device_verified": false
+  }
+}
