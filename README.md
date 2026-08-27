@@ -13,7 +13,7 @@ result and an LGT fact is not presented as a platform-wide WIPI requirement.
 
 | API / ABI / install selection | Result | Boundary |
 |---|---|---|
-| `1.2.1/lgt-raptor/aram-wie-raptor` | Compiles, links an ELF `binary.mod`, packages, loads, reaches entry and first frame, and passes interactive graphics, font, system, memory, timer, input, and audio checks in pinned ARAM and WIE revisions | 59 public numbered-import veneers are linkable; 24 are exercised by the conformance app; no real-device claim |
+| `1.2.1/lgt-raptor/aram-wie-raptor` | Compiles, links an ELF `binary.mod`, packages, loads, reaches entry and first frame, and passes interactive graphics, font, system, memory, timer, input, audio, and haptics checks in pinned emulator revisions | 59 public numbered-import veneers are linkable and all 59 are exercised by the ARAM SDK lab; the smaller conformance app exercises 24; no real-device claim |
 | `1.2.1/ktf-samsung/none` | Generated headers, table binder, 205 generated veneers, special timer ABI adapter, freestanding C library, relocatable example, and object-code tests | No package/install profile and no emulator or real-device runtime claim |
 | WIPI-C `2.0`, `2.0.1`, `2.1.0`, or `2.2.0` | Tracked as explicit future API levels | No catalog or SDK support claim; the build rejects them |
 
@@ -70,8 +70,9 @@ application Makefile only supplies its AID, name, sources, and resources.
 with held-key movement, jumping, platform collision, scrolling, collectibles,
 hazards, lives, scoring, and a goal state. Build it with `make platformer`.
 
-[`examples`](examples) also contains three focused SDK examples for graphics,
-memory and packaged resources, and synthetic audio. Build all three with
+[`examples`](examples) also contains seven focused SDK lab applications for
+graphics, memory and resources, audio, device feedback, system services, image
+pipelines, and deterministic network lifecycle. Build all of them with
 `make sdk-examples`. Their ordinary application sources stay in this SDK, while
 the sibling `aram-test` repository owns automated ARAM execution and reports.
 

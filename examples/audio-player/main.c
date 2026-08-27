@@ -129,6 +129,16 @@ static void initialize_audio(void)
     }
 }
 
+static void release_audio(void)
+{
+    if (clip != (MC_MdaClip *)0) {
+        (void)MC_mdaStop(clip);
+        (void)MC_mdaClipFree(clip);
+        clip = (MC_MdaClip *)0;
+    }
+    player_state = PLAYER_STOPPED;
+}
+
 static void change_volume(M_Int32 delta)
 {
     if (clip == (MC_MdaClip *)0) {
@@ -191,7 +201,7 @@ void paintClet(M_Int32 x, M_Int32 y, M_Int32 width, M_Int32 height)
     (void)append_uint(cursor, play_count);
     draw_text(22, 218, line, color(231, 224, 247));
 
-    draw_text(14, 250, "OK/RIGHT  PLAY", color(194, 180, 226));
+    draw_text(14, 250, "OK PLAY  RIGHT RELOAD", color(194, 180, 226));
     draw_text(14, 270, "LEFT      STOP", color(194, 180, 226));
     draw_text(14, 290, "UP/DOWN   VOLUME", color(194, 180, 226));
     MC_grpFlushLcd(0, screen, 0, 0, display.m_width, display.m_height);
@@ -214,11 +224,7 @@ void startClet(M_Int32 argc, M_Char *argv[])
 
 void destroyClet(void)
 {
-    if (clip != (MC_MdaClip *)0) {
-        (void)MC_mdaStop(clip);
-        (void)MC_mdaClipFree(clip);
-        clip = (MC_MdaClip *)0;
-    }
+    release_audio();
 }
 
 void pauseClet(void)
@@ -243,9 +249,11 @@ void handleCletEvent(M_Int32 type, M_Int32 param1, M_Int32 param2)
     if (type != WIPI_CLET_EVENT_KEY_PRESS || clip == (MC_MdaClip *)0) {
         return;
     }
-    if (param1 == WIPI_CLET_KEY_SELECT || param1 == '5' ||
-        param1 == WIPI_CLET_KEY_RIGHT || param1 == '6') {
+    if (param1 == WIPI_CLET_KEY_SELECT || param1 == '5') {
         (void)play_tone();
+    } else if (param1 == WIPI_CLET_KEY_RIGHT || param1 == '6') {
+        release_audio();
+        initialize_audio();
     } else if (param1 == WIPI_CLET_KEY_LEFT || param1 == '4') {
         (void)MC_mdaStop(clip);
         player_state = PLAYER_STOPPED;

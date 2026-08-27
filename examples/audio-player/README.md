@@ -2,11 +2,12 @@
 
 This standalone WIPI-C example creates a media clip, supplies an original
 two-note SMAF byte sequence, changes clip volume, plays and stops the clip, and
-releases ownership during Clet destruction.
+releases ownership during reload or Clet destruction.
 
 Controls:
 
-- OK or Right: restart playback
+- OK: restart playback
+- Right: free and recreate the clip
 - Left: stop playback
 - Up and Down: change volume
 

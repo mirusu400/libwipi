@@ -4,7 +4,15 @@ import unittest
 
 
 ROOT = Path(__file__).resolve().parents[1]
-EXAMPLE_IDS = ("graphics-gallery", "memory-resource", "audio-player")
+EXAMPLE_IDS = (
+    "graphics-gallery",
+    "memory-resource",
+    "audio-player",
+    "vibrate",
+    "system-services",
+    "image-pipeline",
+    "network-lifecycle",
+)
 
 
 class SDKExampleTests(unittest.TestCase):
@@ -12,7 +20,7 @@ class SDKExampleTests(unittest.TestCase):
         manifest = json.loads(
             (ROOT / "examples/sdk-lab.json").read_text(encoding="utf-8")
         )
-        self.assertEqual(manifest["schema"], 1)
+        self.assertEqual(manifest["schema"], 2)
         self.assertEqual(manifest["api_level"], "1.2.1")
         self.assertEqual(manifest["abi_profile"], "lgt-raptor")
         self.assertEqual(manifest["install_profile"], "aram-wie-raptor")
@@ -30,7 +38,29 @@ class SDKExampleTests(unittest.TestCase):
             self.assertEqual(example["probe"]["controls"].count(",") + 1,
                              len(example["probe"]["controls"].split(",")))
             self.assertGreater(example["expect"]["min_observed_apis"], 0)
+            self.assertGreaterEqual(
+                example["expect"]["min_observed_apis"],
+                len(example["expect"]["required_apis"]),
+            )
             self.assertGreaterEqual(example["expect"]["min_frame_changes"], 1)
+
+    def test_manifest_covers_every_confirmed_install_import(self):
+        manifest = json.loads(
+            (ROOT / "examples/sdk-lab.json").read_text(encoding="utf-8")
+        )
+        contract = json.loads(
+            (ROOT / "spec/install/aram-wie-raptor.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        required = {
+            name
+            for example in manifest["examples"]
+            for name in example["expect"]["required_apis"]
+        }
+        confirmed = set(contract["imports"]["confirmed_public_methods"])
+        self.assertEqual(required, confirmed)
+        self.assertEqual(len(confirmed), 59)
 
     def test_examples_use_the_shared_application_build(self):
         for example_id in EXAMPLE_IDS:
@@ -69,6 +99,41 @@ class SDKExampleTests(unittest.TestCase):
                 "MC_mdaPlay",
                 "MC_mdaStop",
                 "MC_mdaClipFree",
+            ),
+            "vibrate": (
+                "MC_mdaVibrator",
+                "MC_mdaSetMuteState",
+                "MC_mdaGetMuteState",
+                "MC_miscBackLight",
+            ),
+            "system-services": (
+                "MC_knlGetProgramName",
+                "MC_knlCurrentTime",
+                "MC_knlGetSystemProperty",
+                "MC_knlSetSystemProperty",
+                "MC_knlDefTimer",
+                "MC_knlSetTimer",
+                "MC_knlUnsetTimer",
+                "MC_knlExit",
+            ),
+            "image-pipeline": (
+                "MC_grpCreateOffScreenFrameBuffer",
+                "MC_grpDestroyOffScreenFrameBuffer",
+                "MC_grpSetContext",
+                "MC_grpSetRGBPixels",
+                "MC_grpGetRGBPixels",
+                "MC_grpCopyFrameBuffer",
+                "MC_grpCopyArea",
+                "MC_grpCreateImage",
+                "MC_grpGetImageProperty",
+                "MC_grpGetImageFrameBuffer",
+                "MC_grpDrawImage",
+                "MC_grpRepaint",
+            ),
+            "network-lifecycle": (
+                "MC_netConnect",
+                "MC_netSocketClose",
+                "MC_netClose",
             ),
         }
         for example_id, APIs in required.items():

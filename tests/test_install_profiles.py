@@ -86,11 +86,11 @@ class InstallProfileTests(unittest.TestCase):
         sources = self.profile["evidence"]
         self.assertEqual(
             sources["aram_revision"],
-            "d62ce143f0c325a8aff53de005a767c26116fff5",
+            "257f10f3d34433ecfc4c72fabbfeb3e50af87723",
         )
         self.assertEqual(
             sources["aram_runner_revision"],
-            "e8fd74d51a76cbb4ddc11218a9c5eac46ac4ba91",
+            "7bc29d5c7d55c5c9a93948883769fb2493c69669",
         )
         self.assertEqual(
             sources["wie_revision"],

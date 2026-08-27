@@ -4,6 +4,10 @@
 /examples/graphics-gallery/build/
 /examples/memory-resource/build/
 /examples/audio-player/build/
+/examples/vibrate/build/
+/examples/system-services/build/
+/examples/image-pipeline/build/
+/examples/network-lifecycle/build/
 /.cache/
 __pycache__/
 *.pyc

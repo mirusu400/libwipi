@@ -207,6 +207,10 @@ sdk-examples:
 	$(MAKE) --no-print-directory -C examples/graphics-gallery package inspect
 	$(MAKE) --no-print-directory -C examples/memory-resource package inspect
 	$(MAKE) --no-print-directory -C examples/audio-player package inspect
+	$(MAKE) --no-print-directory -C examples/vibrate package inspect
+	$(MAKE) --no-print-directory -C examples/system-services package inspect
+	$(MAKE) --no-print-directory -C examples/image-pipeline package inspect
+	$(MAKE) --no-print-directory -C examples/network-lifecycle package inspect
 
 test-sdk-examples: sdk-examples
 	python3 tests/check_raptor_elf.py \
@@ -217,6 +221,18 @@ test-sdk-examples: sdk-examples
 		$(OBJDUMP)
 	python3 tests/check_raptor_elf.py \
 		examples/audio-player/build/wipi-1.2.1/lgt-raptor/aram-wie-raptor/binary.mod \
+		$(OBJDUMP)
+	python3 tests/check_raptor_elf.py \
+		examples/vibrate/build/wipi-1.2.1/lgt-raptor/aram-wie-raptor/binary.mod \
+		$(OBJDUMP)
+	python3 tests/check_raptor_elf.py \
+		examples/system-services/build/wipi-1.2.1/lgt-raptor/aram-wie-raptor/binary.mod \
+		$(OBJDUMP)
+	python3 tests/check_raptor_elf.py \
+		examples/image-pipeline/build/wipi-1.2.1/lgt-raptor/aram-wie-raptor/binary.mod \
+		$(OBJDUMP)
+	python3 tests/check_raptor_elf.py \
+		examples/network-lifecycle/build/wipi-1.2.1/lgt-raptor/aram-wie-raptor/binary.mod \
 		$(OBJDUMP)
 
 test-target: test-target-ktf test-target-lgt
@@ -229,4 +245,8 @@ clean:
 	$(MAKE) --no-print-directory -C examples/graphics-gallery clean
 	$(MAKE) --no-print-directory -C examples/memory-resource clean
 	$(MAKE) --no-print-directory -C examples/audio-player clean
+	$(MAKE) --no-print-directory -C examples/vibrate clean
+	$(MAKE) --no-print-directory -C examples/system-services clean
+	$(MAKE) --no-print-directory -C examples/image-pipeline clean
+	$(MAKE) --no-print-directory -C examples/network-lifecycle clean
 	rm -rf build

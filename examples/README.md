@@ -9,10 +9,14 @@ learning one SDK area at a time and for packaging as ordinary applications.
 | `graphics-gallery` | Drawing primitives, colors, fonts, and text | Left and Right change pages |
 | `memory-resource` | Memory IDs, pointer resolution, and package resources | OK repeats the checks |
 | `audio-player` | Clip creation, data, volume, playback, stop, and cleanup | OK, directions |
+| `vibrate` | Vibration strength and duration with host haptics | OK, directions, digits |
+| `system-services` | Identity, properties, time, timers, and exit | Directions and OK |
+| `image-pipeline` | Images, offscreen buffers, RGB transfer, copy, and repaint | Any key rebuilds |
+| `network-lifecycle` | Deterministic connect, callback, close, and error path | Up and OK |
 | `platformer` | Timer, held input, collision, scrolling, and game state | Directions and OK |
 | `conformance` | Compact multi-family conformance fixture | Automated input |
 
-Build the three SDK-focused examples together:
+Build the SDK-focused examples together:
 
 ```powershell
 docker run --rm -v "${PWD}:/work" -w /work libwipi-toolchain `

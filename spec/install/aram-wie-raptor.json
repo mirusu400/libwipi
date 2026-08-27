@@ -8,9 +8,9 @@
   "emulators": {
     "aram": {
       "repository": "aram-core",
-      "revision": "d62ce143f0c325a8aff53de005a767c26116fff5",
+      "revision": "257f10f3d34433ecfc4c72fabbfeb3e50af87723",
       "runner_repository": "aram-emu",
-      "runner_revision": "e8fd74d51a76cbb4ddc11218a9c5eac46ac4ba91"
+      "runner_revision": "7bc29d5c7d55c5c9a93948883769fb2493c69669"
     },
     "wie": {
       "repository": "https://github.com/dlunch/wie",
@@ -145,8 +145,8 @@
     "scope": "abi-adapter-only"
   },
   "evidence": {
-    "aram_revision": "d62ce143f0c325a8aff53de005a767c26116fff5",
-    "aram_runner_revision": "e8fd74d51a76cbb4ddc11218a9c5eac46ac4ba91",
+    "aram_revision": "257f10f3d34433ecfc4c72fabbfeb3e50af87723",
+    "aram_runner_revision": "7bc29d5c7d55c5c9a93948883769fb2493c69669",
     "wie_revision": "739389449482cebfba6333f3015466bb76070c21",
     "confidence": "confirmed",
     "scope": "synthetic emulator loader and provider behavior"
