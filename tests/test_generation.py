@@ -67,6 +67,34 @@ class GenerationTests(unittest.TestCase):
         self.assertIn("movs r0, #0", display_info)
         self.assertIn("MC_mdaPlay", globals_)
 
+    def test_aram_lgt_veneer_boundary(self):
+        assembly = (
+            ROOT / "src/abi/lgt/generated_veneer_aram_raptor.S"
+        ).read_text()
+        globals_ = [
+            line.removeprefix(".global ")
+            for line in assembly.splitlines()
+            if line.startswith(".global MC_")
+        ]
+        install = json.loads(
+            (ROOT / "spec/install/aram-raptor.json").read_text()
+        )
+        confirmed = install["imports"]["confirmed_public_methods"]
+        self.assertEqual(set(globals_), set(confirmed))
+        self.assertEqual(len(globals_), 100)
+        self.assertIn("MC_fsList", globals_)
+        self.assertIn("MC_dbSortRecords", globals_)
+        self.assertIn("MC_mdaRecord", globals_)
+        self.assertNotIn("MC_knlPrintk", globals_)
+        for name in ("MC_fsOpen", "MC_dbOpenDataBase", "MC_mdaClipCreate"):
+            start = assembly.index(f"{name}:")
+            end = assembly.index(f".size {name}", start)
+            veneer = assembly[start:end]
+            method = int(confirmed[name], 0)
+            self.assertIn(f"movs r1, #{method >> 8:#x}", veneer)
+            self.assertIn("lsls r1, r1, #8", veneer)
+            self.assertIn(f"adds r1, #{method & 0xff:#x}", veneer)
+
     def test_every_catalog_declaration_is_emitted(self):
         with (ROOT / "spec/wipi-1.2.1/api.csv").open(
             encoding="utf-8", newline=""

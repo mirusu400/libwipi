@@ -116,6 +116,22 @@ Headers contain the broader bootstrap catalog, so declaration alone does not
 promise a provider veneer; use of an unmapped method deliberately produces a
 link error.
 
+For ARAM-only SDK development, select `aram-raptor`. It exposes 100 methods:
+the common graphics, kernel, network, and misc subset plus all 17 filesystem,
+13 database, and 21 media APIs. The extra method numbers are a synthetic ARAM
+test contract, not a device ABI. The independent examples are
+[`database-crud`](../examples/database-crud),
+[`filesystem`](../examples/filesystem), and
+[`media-suite`](../examples/media-suite).
+
+```powershell
+docker run --rm -v "${PWD}:/work" -w /work libwipi-toolchain `
+  make aram-sdk-examples
+python ..\aram-test\libwipi_examples.py `
+  --manifest examples\sdk-lab-aram.json --build-probe `
+  --output ..\aram-test\build\libwipi-examples-aram
+```
+
 Memory allocation returns `M_MemID`, not a stable C pointer. Retain the ID and
 call `MC_GETDPTR(id)` whenever a pointer is needed. Do not retain a resolved
 pointer across an operation that can compact provider memory. In this emulator

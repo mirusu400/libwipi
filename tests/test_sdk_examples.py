@@ -13,6 +13,8 @@ EXAMPLE_IDS = (
     "image-pipeline",
     "network-lifecycle",
 )
+ARAM_ONLY_EXAMPLE_IDS = ("database-crud", "filesystem", "media-suite")
+ARAM_EXAMPLE_IDS = EXAMPLE_IDS + ARAM_ONLY_EXAMPLE_IDS
 
 
 class SDKExampleTests(unittest.TestCase):
@@ -71,6 +73,77 @@ class SDKExampleTests(unittest.TestCase):
                 self.assertIn("mk/application.mk", makefile)
                 for forbidden in ("-mcpu", "-mthumb", "-mfloat-abi", "-nostdlib"):
                     self.assertNotIn(forbidden, makefile)
+
+    def test_aram_manifest_covers_every_confirmed_install_import(self):
+        manifest = json.loads(
+            (ROOT / "examples/sdk-lab-aram.json").read_text(encoding="utf-8")
+        )
+        contract = json.loads(
+            (ROOT / "spec/install/aram-raptor.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual(manifest["install_profile"], "aram-raptor")
+        self.assertEqual(
+            tuple(example["id"] for example in manifest["examples"]),
+            ARAM_EXAMPLE_IDS,
+        )
+        required = set()
+        for example in manifest["examples"]:
+            required.update(example["expect"]["required_apis"])
+            restart = example["expect"].get("restart")
+            if restart is not None:
+                self.assertEqual(restart["runs"], 2)
+                required.update(restart["required_apis"])
+            self.assertIn("/aram-raptor/", example["package"])
+        confirmed = set(contract["imports"]["confirmed_public_methods"])
+        self.assertEqual(required, confirmed)
+        self.assertEqual(len(confirmed), 100)
+
+    def test_aram_family_examples_call_every_family_api(self):
+        manifest = json.loads(
+            (ROOT / "examples/sdk-lab-aram.json").read_text(encoding="utf-8")
+        )
+        by_id = {example["id"]: example for example in manifest["examples"]}
+        family_prefixes = {
+            "database-crud": "MC_db",
+            "filesystem": "MC_fs",
+            "media-suite": "MC_mda",
+        }
+        for example_id, prefix in family_prefixes.items():
+            source = (ROOT / "examples" / example_id / "main.c").read_text(
+                encoding="utf-8"
+            )
+            expected = {
+                name
+                for name in by_id[example_id]["expect"]["required_apis"]
+                if name.startswith(prefix)
+            }
+            restart = by_id[example_id]["expect"].get("restart", {})
+            expected.update(restart.get("required_apis", []))
+            for name in expected:
+                self.assertIn(name, source)
+            for forbidden in (
+                "LIBWIPI_INSTALL_ARAM",
+                "LIBWIPI_LGT_ENVIRONMENT",
+                "aram-emu",
+                "Wie",
+            ):
+                self.assertNotIn(forbidden, source)
+
+    def test_aram_family_examples_default_to_the_scoped_install(self):
+        for example_id in ARAM_ONLY_EXAMPLE_IDS:
+            makefile = (ROOT / "examples" / example_id / "Makefile").read_text(
+                encoding="utf-8"
+            )
+            self.assertIn("INSTALL_PROFILE ?= aram-raptor", makefile)
+            self.assertIn("mk/application.mk", makefile)
+
+    def test_media_suite_packages_original_file_data(self):
+        resource = ROOT / "examples/media-suite/assets/clip-data.bin"
+        self.assertEqual(resource.read_bytes(), b"LIBWIPI MEDIA FILE DATA\n")
+        makefile = (ROOT / "examples/media-suite/Makefile").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("assets/clip-data.bin=res/clip-data.bin", makefile)
 
     def test_examples_are_profile_independent_and_cover_their_families(self):
         required = {
@@ -166,10 +239,14 @@ class SDKExampleTests(unittest.TestCase):
         self.assertIn("test-sdk-examples:", makefile)
         for example_id in EXAMPLE_IDS:
             self.assertIn(f"examples/{example_id}", makefile)
+        self.assertIn("aram-sdk-examples:", makefile)
+        self.assertIn("test-aram-sdk-examples:", makefile)
+        for example_id in ARAM_ONLY_EXAMPLE_IDS:
+            self.assertIn(f"examples/{example_id}", makefile)
 
     def test_example_documentation_avoids_em_dash(self):
         paths = [ROOT / "examples/README.md"]
-        paths.extend(ROOT / "examples" / name / "README.md" for name in EXAMPLE_IDS)
+        paths.extend(ROOT / "examples" / name / "README.md" for name in ARAM_EXAMPLE_IDS)
         for path in paths:
             with self.subTest(path=path):
                 self.assertNotIn("\u2014", path.read_text(encoding="utf-8"))

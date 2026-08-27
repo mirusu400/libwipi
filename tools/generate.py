@@ -687,17 +687,17 @@ def generated_files(
     result[ROOT / "src" / "abi" / "ktf" / "generated_veneer.S"] = (
         render_ktf_veneer(rows)
     )
-    aram_wie = next(
-        (
-            install
-            for install in install_profiles
-            if install["id"] == "aram-wie-raptor"
-        ),
-        None,
-    )
-    if aram_wie is not None:
-        result[ROOT / "src" / "abi" / "lgt" / "generated_veneer.S"] = (
-            render_lgt_veneer(rows, aram_wie)
+    for install in install_profiles:
+        if install["abi_profile"] != "lgt-raptor":
+            continue
+        install_id = str(install["id"])
+        filename = (
+            "generated_veneer.S"
+            if install_id == "aram-wie-raptor"
+            else "generated_veneer_" + install_id.replace("-", "_") + ".S"
+        )
+        result[ROOT / "src" / "abi" / "lgt" / filename] = render_lgt_veneer(
+            rows, install
         )
     result[ROOT / "docs" / "generated" / "api-coverage.md"] = render_coverage(rows)
     return result

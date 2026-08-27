@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from pathlib import Path
+import json
 import re
 import sys
 
@@ -24,18 +25,41 @@ def require_number(block: str, instruction: str, register: str, value: int) -> N
         )
 
 
+def require_u16(block: str, register: str, value: int) -> None:
+    if value <= 0xFF:
+        require_number(block, "movs", register, value)
+        return
+    require_number(block, "movs", register, value >> 8)
+    require_number(block, "lsls", register, 8)
+    if value & 0xFF:
+        require_number(block, "adds", register, value & 0xFF)
+
+
 text = Path(sys.argv[1]).read_text(encoding="utf-8")
+install_id = sys.argv[2] if len(sys.argv) > 2 else "aram-wie-raptor"
+if install_id not in {"aram-raptor", "aram-wie-raptor"}:
+    raise AssertionError(f"unknown LGT install profile: {install_id}")
+root = Path(__file__).resolve().parents[1]
+contract = json.loads(
+    (root / "spec" / "install" / f"{install_id}.json").read_text(
+        encoding="utf-8"
+    )
+)
+methods = contract["imports"]["confirmed_public_methods"]
+method_overrides = contract["imports"].get("aram_method_overrides", {})
+return_overrides = contract["imports"].get("return_overrides", {})
 symbols = re.findall(r"^[0-9a-f]+ <(MC_[A-Za-z0-9_]+)>:\s*$", text, re.M)
-if len(symbols) != 59 or len(set(symbols)) != 59:
-    raise AssertionError(f"expected 59 unique LGT veneers, found {len(set(symbols))}")
+if set(symbols) != set(methods) or len(symbols) != len(methods):
+    raise AssertionError(
+        f"expected {len(methods)} exact LGT veneers, found {len(set(symbols))}"
+    )
 if re.search(r"\bblx\b", text):
     raise AssertionError("ARMv4T veneer contains an unsupported BLX instruction")
 
 for name in symbols:
     block = function_block(text, name)
-    require_number(block, "movs", "r0", 1)
-    require_number(block, "lsls", "r0", 8)
-    require_number(block, "adds", "r0", 0xFB)
+    require_u16(block, "r0", int(contract["imports"]["module"], 0))
+    require_u16(block, "r1", int(methods[name], 0))
     common_patterns = (
         (r"push\s+\{r0,\s*r1,\s*r2,\s*r3,\s*r4,\s*lr\}", "argument save"),
         (r"ldr\s+r3,\s*\[r3,\s*#4\]", "resolver +4 load"),
@@ -45,7 +69,7 @@ for name in symbols:
     for pattern, description in common_patterns:
         if re.search(pattern, block) is None:
             raise AssertionError(f"{name}: missing {description}")
-    if name != "MC_grpGetDisplayInfo":
+    if name not in return_overrides:
         for pattern, description in (
             (r"ldr\s+r4,\s*\[sp,\s*#20\]", "saved LR load"),
             (r"pop\s+\{r0,\s*r1,\s*r2,\s*r3,\s*r4\}", "argument restore"),
@@ -56,7 +80,7 @@ for name in symbols:
                 raise AssertionError(f"{name}: missing {description}")
 
 timer = function_block(text, "MC_knlSetTimer")
-require_number(timer, "movs", "r1", 0x7B)
+require_u16(timer, "r1", int(methods["MC_knlSetTimer"], 0))
 for pattern, description in (
     (r"movs?\s+r1,\s*r2", "timeout low word r2 -> r1"),
     (r"movs?\s+r2,\s*r3", "timeout high word r3 -> r2"),
@@ -66,39 +90,34 @@ for pattern, description in (
         raise AssertionError(f"MC_knlSetTimer: missing {description}")
 
 media = function_block(text, "MC_mdaPlay")
-require_number(media, "movs", "r1", 4)
-require_number(media, "lsls", "r1", 8)
-require_number(media, "adds", "r1", 0xBA)
+require_u16(media, "r1", int(methods["MC_mdaPlay"], 0))
 
 backlight = function_block(text, "MC_miscBackLight")
-require_number(backlight, "movs", "r1", 5)
-require_number(backlight, "lsls", "r1", 8)
-require_number(backlight, "adds", "r1", 0x78)
+require_u16(backlight, "r1", int(methods["MC_miscBackLight"], 0))
 
-for name, aram_method, wie_method in (
-    ("MC_grpCopyArea", 0xD6, 0xD7),
-    ("MC_grpDrawArc", 0xD7, 0xD8),
-    ("MC_grpFillArc", 0xD8, 0xD9),
-    ("MC_grpDrawString", 0xD9, 0xDA),
-    ("MC_grpGetRGBPixels", 0xDB, 0xDC),
-    ("MC_grpSetRGBPixels", 0xDC, 0xDD),
-):
+for name, encoded_aram_method in method_overrides.items():
     block = function_block(text, name)
     if "__wipi_lgt_environment" not in block:
         raise AssertionError(f"{name} does not select an environment ABI map")
-    require_number(block, "movs", "r1", aram_method)
-    require_number(block, "movs", "r1", wie_method)
+    require_u16(block, "r1", int(encoded_aram_method, 0))
+    require_u16(block, "r1", int(methods[name], 0))
 
-display_info = function_block(text, "MC_grpGetDisplayInfo")
-for pattern, description in (
-    (r"pop\s+\{r0,\s*r1,\s*r2,\s*r3\}", "argument restore"),
-    (r"cmp\s+r0,\s*#1", "WIE success comparison"),
-    (r"movs\s+r0,\s*#0", "public success normalization"),
-    (r"pop\s+\{r4\}", "callee register restore"),
-    (r"pop\s+\{r1\}", "caller return restore"),
-    (r"bx\s+r1", "caller return"),
-):
-    if re.search(pattern, display_info) is None:
-        raise AssertionError(f"MC_grpGetDisplayInfo: missing {description}")
+for name, override in return_overrides.items():
+    block = function_block(text, name)
+    provider_success = override["provider_success"]
+    public_success = override["public_success"]
+    for pattern, description in (
+        (r"pop\s+\{r0,\s*r1,\s*r2,\s*r3\}", "argument restore"),
+        (rf"cmp\s+r0,\s*#{provider_success}", "provider success comparison"),
+        (rf"movs\s+r0,\s*#{public_success}", "public success normalization"),
+        (r"pop\s+\{r4\}", "callee register restore"),
+        (r"pop\s+\{r1\}", "caller return restore"),
+        (r"bx\s+r1", "caller return"),
+    ):
+        if re.search(pattern, block) is None:
+            raise AssertionError(f"{name}: missing {description}")
 
-print("verified 59 ARMv4T LGT veneers, environment import IDs, and timer shuffle")
+print(
+    f"verified {len(methods)} ARMv4T LGT veneers for {install_id}, "
+    "environment import IDs, and timer shuffle"
+)

@@ -85,6 +85,14 @@ The conformance application has crossed the package, load, entry, first-frame,
 and interactive milestones on both emulators. This does not promote the
 install-scoped evidence into a general LGT device ABI claim.
 
+The separate `aram-raptor` install profile is an ARAM-only SDK test contract.
+It retains the established Raptor methods needed by the seven common examples
+and assigns `0x7000 + WIPI 1.2.1 catalog ordinal` to every FS, DB, and MDA API.
+That synthetic range is implemented only by ARAM and is never presented as a
+Wie, LGT, carrier, handset, or standard WIPI ABI. Its 100 generated veneers are
+pinned by object-code tests. Ten independent examples observe all 100 methods,
+including two-process database and filesystem persistence checks.
+
 ### `host-sim`
 
 The simulator profile is for fast semantics and ownership tests. Host
@@ -118,6 +126,7 @@ The currently implemented catalog is `spec/wipi-1.2.1/api.csv`.
 - `mk/generated/api-levels.mk`;
 - `src/abi/ktf/generated_veneer.S`;
 - `src/abi/lgt/generated_veneer.S`;
+- `src/abi/lgt/generated_veneer_aram_raptor.S`;
 - `docs/generated/api-coverage.md`.
 
 Generated files begin with a warning and must never be edited by hand.
@@ -134,9 +143,10 @@ failure value.
 The KTF `MC_GETDPTR` helper implements the recorded dynamic
 handle-to-head-to-payload model, but that profile fact remains a candidate
 pending a direct callsite or named-device probe. A general LGT device
-memory-ID layout remains unknown. Only `aram-wie-raptor` resolves its emulator
-memory IDs as direct guest addresses; that rule is compile-time scoped to the
-install profile and is not a hardware default. Static indirect-buffer
+memory-ID layout remains unknown. Only the two explicit emulator install
+profiles resolve memory IDs as direct guest addresses; that rule is
+compile-time scoped to the selected install profile and is not a hardware
+default. Static indirect-buffer
 declaration macros are absent until their header contents are proven.
 
 Ownership behavior is not changed by a tail veneer. The source-standard rules

@@ -1,4 +1,5 @@
 import json
+import csv
 from pathlib import Path
 import unittest
 
@@ -120,6 +121,84 @@ class InstallProfileTests(unittest.TestCase):
         self.assertEqual(memory["representation"], "direct-guest-address")
         self.assertEqual(memory["scope"], "aram-and-wie-emulator-install-only")
         self.assertFalse(memory["device_abi_claim"])
+
+
+class ARAMInstallProfileTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.profile = json.loads(
+            (ROOT / "spec/install/aram-raptor.json").read_text(encoding="utf-8")
+        )
+        cls.common = json.loads(
+            (ROOT / "spec/install/aram-wie-raptor.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        with (ROOT / "spec/wipi-1.2.1/api.csv").open(
+            encoding="utf-8", newline=""
+        ) as stream:
+            cls.catalog = list(csv.DictReader(stream))
+
+    def test_profile_is_aram_only_and_not_a_device_claim(self):
+        profile = self.profile
+        self.assertEqual(profile["id"], "aram-raptor")
+        self.assertEqual(profile["api_level"], "1.2.1")
+        self.assertEqual(profile["abi_profile"], "lgt-raptor")
+        self.assertTrue(profile["target_build"])
+        self.assertEqual(set(profile["emulators"]), {"aram"})
+        self.assertTrue(profile["claims"]["emulator_package"])
+        self.assertTrue(profile["claims"]["aram_runtime_verified"])
+        self.assertFalse(profile["claims"]["wie_runtime_verified"])
+        self.assertFalse(profile["claims"]["real_device"])
+        self.assertFalse(profile["imports"]["synthetic_extension"]["device_abi_claim"])
+
+    def test_synthetic_family_methods_follow_the_pinned_catalog_rule(self):
+        methods = self.profile["imports"]["confirmed_public_methods"]
+        self.assertEqual(len(methods), 100)
+        synthetic_families = {"MC_FS", "MC_DB", "MC_MDA"}
+        synthetic = {
+            row["name"]: hex(0x7000 + int(row["ordinal"]))
+            for row in self.catalog
+            if row["family"] in synthetic_families
+        }
+        self.assertEqual(len(synthetic), 51)
+        self.assertEqual(
+            {name: methods[name] for name in synthetic},
+            synthetic,
+        )
+        common = self.common["imports"]["confirmed_public_methods"]
+        for name, method in common.items():
+            family = next(row["family"] for row in self.catalog if row["name"] == name)
+            if family not in synthetic_families:
+                self.assertEqual(methods[name], method)
+
+    def test_synthetic_contract_is_revision_and_scope_pinned(self):
+        extension = self.profile["imports"]["synthetic_extension"]
+        self.assertEqual(extension["base"], "0x7000")
+        self.assertEqual(extension["rule"], "base-plus-wipi-1.2.1-catalog-ordinal")
+        self.assertEqual(extension["families"], ["MC_FS", "MC_DB", "MC_MDA"])
+        self.assertEqual(extension["provider_abi"], "aapcs-word-tail")
+        self.assertEqual(extension["scope"], "aram-emulator-only")
+        self.assertRegex(
+            self.profile["emulators"]["aram"]["revision"], r"^[0-9a-f]{40}$"
+        )
+
+    def test_sdk_lab_evidence_records_exact_coverage_and_restart_checks(self):
+        evidence = json.loads(
+            (ROOT / self.profile["claims"]["sdk_lab_evidence"]).read_text(
+                encoding="utf-8"
+            )
+        )
+        self.assertEqual(evidence["install_profile"], "aram-raptor")
+        self.assertEqual(evidence["coverage"]["confirmed_imports"], 100)
+        self.assertEqual(evidence["coverage"]["declared_required"], 100)
+        self.assertEqual(evidence["coverage"]["observed_confirmed"], 100)
+        self.assertEqual(evidence["coverage"]["unimplemented_calls"], 0)
+        self.assertEqual(len(evidence["examples"]), 10)
+        self.assertTrue(evidence["persistence"]["database"]["passed"])
+        self.assertTrue(evidence["persistence"]["filesystem"]["passed"])
+        self.assertFalse(evidence["claims"]["wie_verified"])
+        self.assertFalse(evidence["claims"]["real_device_verified"])
 
 
 if __name__ == "__main__":

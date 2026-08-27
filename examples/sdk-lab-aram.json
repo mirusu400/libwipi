@@ -1,0 +1,400 @@
+{
+  "schema": 2,
+  "suite": "libwipi-sdk-examples-aram",
+  "api_level": "1.2.1",
+  "abi_profile": "lgt-raptor",
+  "install_profile": "aram-raptor",
+  "runtime_profile": "wipi-1.2.1/lgt/raptor",
+  "aram": {
+    "core_revision": "d71fc837c1c2eed2342a0bcb340d08ce338a1cf3",
+    "runner_revision": "7bc29d5c7d55c5c9a93948883769fb2493c69669"
+  },
+  "examples": [
+    {
+      "id": "graphics-gallery",
+      "package": "examples/graphics-gallery/build/wipi-1.2.1/lgt-raptor/aram-raptor/libwipi-graphics-gallery.zip",
+      "probe": {
+        "slices": 768,
+        "post_frame_slices": 256,
+        "pre_input_slices": 16,
+        "controls": "right,right,left",
+        "control_hold_slices": 12,
+        "control_release_slices": 12
+      },
+      "expect": {
+        "min_observed_apis": 18,
+        "min_input_events": 6,
+        "min_frame_changes": 3,
+        "audio_output": false,
+        "required_apis": [
+          "MC_grpDrawArc",
+          "MC_grpDrawLine",
+          "MC_grpDrawRect",
+          "MC_grpDrawString",
+          "MC_grpFillArc",
+          "MC_grpFillRect",
+          "MC_grpFlushLcd",
+          "MC_grpGetDisplayInfo",
+          "MC_grpGetFont",
+          "MC_grpGetFontAscent",
+          "MC_grpGetFontDescent",
+          "MC_grpGetFontHeight",
+          "MC_grpGetPixelFromRGB",
+          "MC_grpGetRGBFromPixel",
+          "MC_grpGetScreenFrameBuffer",
+          "MC_grpGetStringWidth",
+          "MC_grpInitContext",
+          "MC_grpPutPixel"
+        ]
+      }
+    },
+    {
+      "id": "memory-resource",
+      "package": "examples/memory-resource/build/wipi-1.2.1/lgt-raptor/aram-raptor/libwipi-memory-resource.zip",
+      "probe": {
+        "slices": 640,
+        "post_frame_slices": 160,
+        "pre_input_slices": 16,
+        "controls": "ok",
+        "control_hold_slices": 12,
+        "control_release_slices": 12
+      },
+      "expect": {
+        "min_observed_apis": 16,
+        "min_input_events": 2,
+        "min_frame_changes": 1,
+        "audio_output": false,
+        "required_apis": [
+          "MC_grpDrawRect",
+          "MC_grpDrawString",
+          "MC_grpFillRect",
+          "MC_grpFlushLcd",
+          "MC_grpGetDisplayInfo",
+          "MC_grpGetFont",
+          "MC_grpGetPixelFromRGB",
+          "MC_grpGetScreenFrameBuffer",
+          "MC_grpInitContext",
+          "MC_knlAlloc",
+          "MC_knlCalloc",
+          "MC_knlFree",
+          "MC_knlGetFreeMemory",
+          "MC_knlGetResource",
+          "MC_knlGetResourceID",
+          "MC_knlGetTotalMemory"
+        ]
+      }
+    },
+    {
+      "id": "audio-player",
+      "package": "examples/audio-player/build/wipi-1.2.1/lgt-raptor/aram-raptor/libwipi-audio-player.zip",
+      "probe": {
+        "slices": 768,
+        "post_frame_slices": 256,
+        "pre_input_slices": 16,
+        "controls": "ok,up,down,left,ok,right",
+        "control_hold_slices": 12,
+        "control_release_slices": 12,
+        "performance_duration": "1s",
+        "warmup_frames": 1
+      },
+      "expect": {
+        "min_observed_apis": 16,
+        "min_input_events": 12,
+        "min_frame_changes": 6,
+        "audio_output": true,
+        "required_apis": [
+          "MC_grpDrawRect",
+          "MC_grpDrawString",
+          "MC_grpFillRect",
+          "MC_grpFlushLcd",
+          "MC_grpGetDisplayInfo",
+          "MC_grpGetFont",
+          "MC_grpGetPixelFromRGB",
+          "MC_grpGetScreenFrameBuffer",
+          "MC_grpInitContext",
+          "MC_mdaClipCreate",
+          "MC_mdaClipFree",
+          "MC_mdaClipGetVolume",
+          "MC_mdaClipPutData",
+          "MC_mdaClipSetVolume",
+          "MC_mdaPlay",
+          "MC_mdaStop"
+        ]
+      }
+    },
+    {
+      "id": "vibrate",
+      "package": "examples/vibrate/build/wipi-1.2.1/lgt-raptor/aram-raptor/libwipi-vibrate.zip",
+      "probe": {
+        "slices": 768,
+        "post_frame_slices": 128,
+        "pre_input_slices": 16,
+        "controls": "ok,up,left",
+        "control_hold_slices": 12,
+        "control_release_slices": 12
+      },
+      "expect": {
+        "min_observed_apis": 12,
+        "min_input_events": 6,
+        "min_frame_changes": 6,
+        "audio_output": false,
+        "required_apis": [
+          "MC_grpDrawString",
+          "MC_grpFillRect",
+          "MC_grpFlushLcd",
+          "MC_grpGetDisplayInfo",
+          "MC_grpGetFont",
+          "MC_grpGetPixelFromRGB",
+          "MC_grpGetScreenFrameBuffer",
+          "MC_grpInitContext",
+          "MC_mdaGetMuteState",
+          "MC_mdaSetMuteState",
+          "MC_mdaVibrator",
+          "MC_miscBackLight"
+        ],
+        "haptics": {
+          "min_activations": 1,
+          "min_peak_level": 100,
+          "min_duration_ms": 300
+        }
+      }
+    },
+    {
+      "id": "system-services",
+      "package": "examples/system-services/build/wipi-1.2.1/lgt-raptor/aram-raptor/libwipi-system-services.zip",
+      "probe": {
+        "slices": 1024,
+        "post_frame_slices": 128,
+        "pre_input_slices": 128,
+        "controls": "up,ok",
+        "control_hold_slices": 24,
+        "control_release_slices": 12
+      },
+      "expect": {
+        "milestone": "exit",
+        "min_observed_apis": 17,
+        "min_input_events": 3,
+        "min_frame_changes": 1,
+        "audio_output": false,
+        "required_apis": [
+          "MC_grpDrawRect",
+          "MC_grpDrawString",
+          "MC_grpFillRect",
+          "MC_grpFlushLcd",
+          "MC_grpGetDisplayInfo",
+          "MC_grpGetFont",
+          "MC_grpGetPixelFromRGB",
+          "MC_grpGetScreenFrameBuffer",
+          "MC_grpInitContext",
+          "MC_knlCurrentTime",
+          "MC_knlDefTimer",
+          "MC_knlExit",
+          "MC_knlGetProgramName",
+          "MC_knlGetSystemProperty",
+          "MC_knlSetSystemProperty",
+          "MC_knlSetTimer",
+          "MC_knlUnsetTimer"
+        ]
+      }
+    },
+    {
+      "id": "image-pipeline",
+      "package": "examples/image-pipeline/build/wipi-1.2.1/lgt-raptor/aram-raptor/libwipi-image-pipeline.zip",
+      "probe": {
+        "slices": 1024,
+        "post_frame_slices": 192,
+        "pre_input_slices": 16,
+        "controls": "ok,right",
+        "control_hold_slices": 20,
+        "control_release_slices": 12
+      },
+      "expect": {
+        "min_observed_apis": 20,
+        "min_input_events": 4,
+        "min_frame_changes": 2,
+        "audio_output": false,
+        "required_apis": [
+          "MC_grpCopyArea",
+          "MC_grpCopyFrameBuffer",
+          "MC_grpCreateImage",
+          "MC_grpCreateOffScreenFrameBuffer",
+          "MC_grpDestroyOffScreenFrameBuffer",
+          "MC_grpDrawImage",
+          "MC_grpDrawString",
+          "MC_grpFillRect",
+          "MC_grpGetDisplayInfo",
+          "MC_grpGetFont",
+          "MC_grpGetImageFrameBuffer",
+          "MC_grpGetImageProperty",
+          "MC_grpGetPixelFromRGB",
+          "MC_grpGetRGBPixels",
+          "MC_grpGetScreenFrameBuffer",
+          "MC_grpInitContext",
+          "MC_grpRepaint",
+          "MC_grpSetContext",
+          "MC_grpSetRGBPixels",
+          "MC_knlAlloc"
+        ]
+      }
+    },
+    {
+      "id": "network-lifecycle",
+      "package": "examples/network-lifecycle/build/wipi-1.2.1/lgt-raptor/aram-raptor/libwipi-network-lifecycle.zip",
+      "probe": {
+        "slices": 1024,
+        "post_frame_slices": 192,
+        "pre_input_slices": 32,
+        "controls": "up,ok",
+        "control_hold_slices": 20,
+        "control_release_slices": 12
+      },
+      "expect": {
+        "min_observed_apis": 11,
+        "min_input_events": 4,
+        "min_frame_changes": 2,
+        "audio_output": false,
+        "required_apis": [
+          "MC_grpDrawString",
+          "MC_grpFillRect",
+          "MC_grpFlushLcd",
+          "MC_grpGetDisplayInfo",
+          "MC_grpGetFont",
+          "MC_grpGetPixelFromRGB",
+          "MC_grpGetScreenFrameBuffer",
+          "MC_grpInitContext",
+          "MC_netClose",
+          "MC_netConnect",
+          "MC_netSocketClose"
+        ]
+      }
+    },
+    {
+      "id": "database-crud",
+      "package": "examples/database-crud/build/wipi-1.2.1/lgt-raptor/aram-raptor/libwipi-database-crud.zip",
+      "probe": {
+        "slices": 1024,
+        "post_frame_slices": 256,
+        "pre_input_slices": 8,
+        "controls": "ok",
+        "control_hold_slices": 12,
+        "control_release_slices": 12
+      },
+      "expect": {
+        "min_observed_apis": 21,
+        "min_input_events": 2,
+        "min_frame_changes": 1,
+        "audio_output": false,
+        "required_apis": [
+          "MC_dbOpenDataBase",
+          "MC_dbCloseDataBase",
+          "MC_dbDeleteDataBase",
+          "MC_dbInsertRecord",
+          "MC_dbSelectRecord",
+          "MC_dbUpdateRecord",
+          "MC_dbDeleteRecord",
+          "MC_dbListRecords",
+          "MC_dbSortRecords",
+          "MC_dbGetAccessMode",
+          "MC_dbGetNumberOfRecords",
+          "MC_dbGetRecordSize"
+        ],
+        "restart": {
+          "runs": 2,
+          "required_apis": [
+            "MC_dbListDataBases"
+          ]
+        }
+      }
+    },
+    {
+      "id": "filesystem",
+      "package": "examples/filesystem/build/wipi-1.2.1/lgt-raptor/aram-raptor/libwipi-filesystem.zip",
+      "probe": {
+        "slices": 1024,
+        "post_frame_slices": 256,
+        "pre_input_slices": 8,
+        "controls": "ok",
+        "control_hold_slices": 12,
+        "control_release_slices": 12
+      },
+      "expect": {
+        "min_observed_apis": 25,
+        "min_input_events": 2,
+        "min_frame_changes": 1,
+        "audio_output": false,
+        "required_apis": [
+          "MC_fsOpen",
+          "MC_fsRead",
+          "MC_fsWrite",
+          "MC_fsClose",
+          "MC_fsSeek",
+          "MC_fsFileAttribute",
+          "MC_fsRemove",
+          "MC_fsRename",
+          "MC_fsMkDir",
+          "MC_fsRmDir",
+          "MC_fsList",
+          "MC_fsTotalSpace",
+          "MC_fsAvailable",
+          "MC_fsGetCounts",
+          "MC_fsTell",
+          "MC_fsIsExist"
+        ],
+        "restart": {
+          "runs": 2,
+          "required_apis": [
+            "MC_fsSetMode"
+          ]
+        }
+      }
+    },
+    {
+      "id": "media-suite",
+      "package": "examples/media-suite/build/wipi-1.2.1/lgt-raptor/aram-raptor/libwipi-media-suite.zip",
+      "probe": {
+        "slices": 1536,
+        "post_frame_slices": 384,
+        "pre_input_slices": 8,
+        "controls": "ok",
+        "control_hold_slices": 12,
+        "control_release_slices": 12,
+        "performance_duration": "1s",
+        "warmup_frames": 2
+      },
+      "expect": {
+        "min_observed_apis": 30,
+        "min_input_events": 2,
+        "min_frame_changes": 1,
+        "audio_output": true,
+        "haptics": {
+          "min_activations": 1,
+          "min_peak_level": 80,
+          "min_duration_ms": 300
+        },
+        "required_apis": [
+          "MC_mdaClipPutData",
+          "MC_mdaClipPutDataByFile",
+          "MC_mdaClipCreate",
+          "MC_mdaClipFree",
+          "MC_mdaClipGetType",
+          "MC_mdaClipGetData",
+          "MC_mdaClipAvailableDataSize",
+          "MC_mdaClipClearData",
+          "MC_mdaClipSetPosition",
+          "MC_mdaClipGetVolume",
+          "MC_mdaClipSetVolume",
+          "MC_mdaPlay",
+          "MC_mdaPause",
+          "MC_mdaResume",
+          "MC_mdaStop",
+          "MC_mdaRecord",
+          "MC_mdaGetVolume",
+          "MC_mdaSetVolume",
+          "MC_mdaVibrator",
+          "MC_mdaSetMuteState",
+          "MC_mdaGetMuteState"
+        ]
+      }
+    }
+  ]
+}

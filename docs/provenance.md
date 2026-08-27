@@ -11,6 +11,11 @@ synthetic and authorized black-box validation. The implemented
 profile-wide LGT/device facts retain their independent candidate or unknown
 confidence states.
 
+The `aram-raptor` profile is a separate synthetic emulator contract. Its FS,
+DB, and MDA import numbers are derived from the pinned 1.2.1 catalog only
+inside the reserved ARAM lab range. They are not evidence for Wie, an LGT
+provider, or a physical device.
+
 Each profile manifest has a `fact_evidence` entry for every ABI fact group.
 The entry repeats the profile, records `confirmed`, `candidate`, or `unknown`,
 names a privacy-safe source locator, and states the validation need for every
@@ -26,6 +31,10 @@ hash to the source/API/ABI/install axes, emulator revisions, observed API count,
 frame/input/audio diagnostics, exclusions, and an explicit `real_device=false`
 claim. `tools/verify_aram.py` and `tools/verify_wie.py` re-check revisions before
 running that package.
+
+The ARAM-only 100-method lab is recorded separately in
+`spec/evidence/aram-sdk-lab.json`. Its two restart checks use isolated temporary
+state roots and contain no user save paths or private input data.
 
 Public prior art may inform architecture, but implementation copied from a
 third-party repository must be license-compatible and attributed explicitly.

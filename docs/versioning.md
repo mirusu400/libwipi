@@ -30,11 +30,12 @@ surface. The Wiki-derived references are pinned there to the reviewed source
 revision rather than silently following future site changes.
 
 The build selects the source level independently from the ABI and install
-profiles. The two currently accepted triples are:
+profiles. The three currently accepted triples are:
 
 | API level | ABI profile | Install profile | Scope |
 |---|---|---|---|
 | `1.2.1` | `ktf-samsung` | `none` | Library and relocatable target evidence; no container/runtime claim |
+| `1.2.1` | `lgt-raptor` | `aram-raptor` | ARAM-only synthetic SDK lab with 100 mapped APIs; no WIE or device ABI claim |
 | `1.2.1` | `lgt-raptor` | `aram-wie-raptor` | ELF/package and interactive ARAM/WIE emulator verification |
 
 For example:

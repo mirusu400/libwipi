@@ -17,8 +17,8 @@ APP_SOURCES ?= main.c
 APP_RESOURCES ?=
 PYTHON ?= python3
 
-ifneq ($(API_LEVEL)/$(PROFILE)/$(INSTALL_PROFILE),1.2.1/lgt-raptor/aram-wie-raptor)
-$(error mk/application.mk currently packages only 1.2.1/lgt-raptor/aram-wie-raptor)
+ifeq ($(filter $(API_LEVEL)/$(PROFILE)/$(INSTALL_PROFILE),1.2.1/lgt-raptor/aram-raptor 1.2.1/lgt-raptor/aram-wie-raptor),)
+$(error mk/application.mk requires an implemented 1.2.1/lgt-raptor emulator install profile)
 endif
 
 APP_BUILD_DIR := build/wipi-$(API_LEVEL)/$(PROFILE)/$(INSTALL_PROFILE)

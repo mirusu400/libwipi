@@ -7,7 +7,7 @@
       "headers": true,
       "target_build": true,
       "abi_adapter": "numbered-import-veneer",
-      "install_profiles": ["aram-wie-raptor"]
+      "install_profiles": ["aram-raptor", "aram-wie-raptor"]
     }
   },
   "architecture": {
@@ -138,7 +138,7 @@
     "numbered_import_veneer": true,
     "bootstrap": false,
     "package": true,
-    "package_scope": "aram-wie-raptor emulator install profile",
+    "package_scope": "aram-raptor and aram-wie-raptor emulator install profiles",
     "real_device": false
   }
 }

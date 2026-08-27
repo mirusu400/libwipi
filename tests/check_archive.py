@@ -9,6 +9,7 @@ import sys
 archive = Path(sys.argv[1])
 nm = sys.argv[2]
 profile = sys.argv[3] if len(sys.argv) > 3 else "ktf-samsung"
+install_profile = sys.argv[4] if len(sys.argv) > 4 else "aram-wie-raptor"
 raw_archive = archive.read_bytes()
 if not raw_archive.startswith(b"!<arch>\n"):
     raise AssertionError("library is not a System V archive")
@@ -58,9 +59,15 @@ required = {"MC_knlSetTimer", "MC_grpFillRect"}
 if profile == "ktf-samsung":
     required.add("MC_fsOpen")
 elif profile == "lgt-raptor":
+    if install_profile not in {"aram-raptor", "aram-wie-raptor"}:
+        raise AssertionError(f"unknown LGT install profile: {install_profile}")
     install = json.loads(
-        (root / "spec/install/aram-wie-raptor.json").read_text(encoding="utf-8")
+        (root / "spec" / "install" / f"{install_profile}.json").read_text(
+            encoding="utf-8"
+        )
     )
+    if install.get("id") != install_profile:
+        raise AssertionError("install profile identity does not match its filename")
     required.update(install["imports"]["confirmed_public_methods"])
     required.update(
         {
@@ -81,6 +88,6 @@ for name in ("MC_knlPrintk", "MC_knlSprintk", "MC_knlExecute"):
         raise AssertionError(f"unverified variadic symbol was defined: {name}")
 
 print(
-    f"verified deterministic {profile} archive ({member_count} members, "
+    f"verified deterministic {profile}/{install_profile} archive ({member_count} members, "
     f"{len(defined)} definitions)"
 )

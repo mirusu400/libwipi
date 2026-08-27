@@ -7,7 +7,8 @@
 #if defined(LIBWIPI_PROFILE_HOST_SIM)
 void *wipi_host_resolve_memid(M_MemID memory_id);
 #elif defined(LIBWIPI_PROFILE_LGT_RAPTOR)
-#if !defined(LIBWIPI_INSTALL_ARAM_WIE_RAPTOR)
+#if !defined(LIBWIPI_INSTALL_ARAM_WIE_RAPTOR) && \
+    !defined(LIBWIPI_INSTALL_ARAM_RAPTOR)
 /* Deliberately undefined until a non-emulator LGT memory model is proven. */
 void *wipi_lgt_resolve_memid(M_MemID memory_id);
 #endif
@@ -29,8 +30,9 @@ static inline void *wipi_resolve_memid(M_MemID memory_id)
         return (void *)(uintptr_t)(indirect_head + 8u);
     }
 #elif defined(LIBWIPI_PROFILE_LGT_RAPTOR)
-#if defined(LIBWIPI_INSTALL_ARAM_WIE_RAPTOR)
-    /* Confirmed only for the pinned ARAM and Wie emulator install profile. */
+#if defined(LIBWIPI_INSTALL_ARAM_WIE_RAPTOR) || \
+    defined(LIBWIPI_INSTALL_ARAM_RAPTOR)
+    /* Confirmed only for the selected pinned emulator install profile. */
     return (void *)(uintptr_t)memory_id;
 #else
     return wipi_lgt_resolve_memid(memory_id);

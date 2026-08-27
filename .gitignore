@@ -8,6 +8,9 @@
 /examples/system-services/build/
 /examples/image-pipeline/build/
 /examples/network-lifecycle/build/
+/examples/database-crud/build/
+/examples/filesystem/build/
+/examples/media-suite/build/
 /.cache/
 __pycache__/
 *.pyc

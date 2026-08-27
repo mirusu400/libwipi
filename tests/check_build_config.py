@@ -72,11 +72,31 @@ if "build/wipi-1.2.1/lgt-raptor/aram-wie-raptor/" not in emulator.stdout.replace
 if "-DLIBWIPI_INSTALL_ARAM_WIE_RAPTOR=1" not in emulator.stdout:
     raise AssertionError("build does not define the selected install profile")
 
+aram = run_make(
+    "API_LEVEL=1.2.1",
+    "PROFILE=lgt-raptor",
+    "INSTALL_PROFILE=aram-raptor",
+)
+if aram.returncode != 0:
+    raise AssertionError(f"ARAM emulator build triple failed:\n{aram.stdout}")
+if "build/wipi-1.2.1/lgt-raptor/aram-raptor/" not in aram.stdout.replace("\\", "/"):
+    raise AssertionError("ARAM output does not keep all three selection axes")
+if "-DLIBWIPI_INSTALL_ARAM_RAPTOR=1" not in aram.stdout:
+    raise AssertionError("build does not define the ARAM install profile")
+
 for level in ("2.0", "2.0.1", "2.1.0", "2.2.0"):
     require_failure((f"API_LEVEL={level}", "PROFILE=ktf-samsung"), "not implemented")
 require_failure(("API_LEVEL=9.9", "PROFILE=ktf-samsung"), "unknown API_LEVEL")
 require_failure(
     ("API_LEVEL=1.2.1", "PROFILE=lgt-raptor", "INSTALL_PROFILE=none"),
+    "unavailable build triple",
+)
+require_failure(
+    (
+        "API_LEVEL=1.2.1",
+        "PROFILE=ktf-samsung",
+        "INSTALL_PROFILE=aram-raptor",
+    ),
     "unavailable build triple",
 )
 require_failure(
@@ -110,5 +130,13 @@ lgt_header = compile_header(
 )
 if lgt_header.returncode != 0:
     raise AssertionError(f"ARAM/WIE selected header failed:\n{lgt_header.stdout}")
+
+aram_header = compile_header(
+    "-DLIBWIPI_API_LEVEL_1_2_1=1",
+    "-DLIBWIPI_PROFILE_LGT_RAPTOR=1",
+    "-DLIBWIPI_INSTALL_ARAM_RAPTOR=1",
+)
+if aram_header.returncode != 0:
+    raise AssertionError(f"ARAM selected header failed:\n{aram_header.stdout}")
 
 print("verified explicit API/profile/install build selection")

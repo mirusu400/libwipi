@@ -9,6 +9,7 @@ class DocumentationTests(unittest.TestCase):
     def test_readme_exposes_the_usable_triple_and_verifiers(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
         for required in (
+            "1.2.1/lgt-raptor/aram-raptor",
             "1.2.1/lgt-raptor/aram-wie-raptor",
             "docs/getting-started.md",
             "tools/verify_aram.py --build-probe",
@@ -16,6 +17,8 @@ class DocumentationTests(unittest.TestCase):
             "no real-device claim",
         ):
             self.assertIn(required, readme)
+        self.assertIn("100 public veneers", readme)
+        self.assertIn("examples\\sdk-lab-aram.json", readme)
         self.assertNotIn("numbered-import veneers are a later milestone", readme)
 
     def test_getting_started_covers_a_copyable_application(self):

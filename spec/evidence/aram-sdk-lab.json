@@ -1,0 +1,162 @@
+{
+  "schema": 1,
+  "verified_on": "2026-08-28",
+  "scope": "synthetic ARAM SDK lab; no WIE, carrier, handset, or real-device claim",
+  "api_level": "1.2.1",
+  "abi_profile": "lgt-raptor",
+  "install_profile": "aram-raptor",
+  "contract": "spec/install/aram-raptor.json",
+  "manifest": "examples/sdk-lab-aram.json",
+  "revisions": {
+    "aram_core": "d71fc837c1c2eed2342a0bcb340d08ce338a1cf3",
+    "aram_runner": "7bc29d5c7d55c5c9a93948883769fb2493c69669",
+    "aram_test": "f387aaf1d596fa879c48ca9331a9f81e6a75448f"
+  },
+  "coverage": {
+    "cataloged_apis": 239,
+    "confirmed_imports": 100,
+    "declared_required": 100,
+    "observed_confirmed": 100,
+    "observed_confirmed_percent": 100,
+    "unimplemented_calls": 0
+  },
+  "examples": [
+    {
+      "id": "graphics-gallery",
+      "sha256": "e26715a1b4f88d45837e9bef8a3091b54cba3888708f0f21fcc88ce63ab713c2",
+      "runs": 1,
+      "observed_apis": 18
+    },
+    {
+      "id": "memory-resource",
+      "sha256": "caa8f7d05f7f7242e379337841dd22e1775e24a41218499a682bd166f407396c",
+      "runs": 1,
+      "observed_apis": 16
+    },
+    {
+      "id": "audio-player",
+      "sha256": "a9176ecdaa12f703c564e6831b23e5c6a290fae0dddf1c65d47e77314e0a9c23",
+      "runs": 1,
+      "observed_apis": 16,
+      "audio": {
+        "channels": 2,
+        "chunks": 90,
+        "frames": 63504,
+        "measured_frames": 111,
+        "sample_rate": 44100
+      }
+    },
+    {
+      "id": "vibrate",
+      "sha256": "c196a93776d9f01ad6974f63be583ff822774c2ac4c590803d073650f37ba536",
+      "runs": 1,
+      "observed_apis": 12,
+      "haptics": {
+        "activations": 1,
+        "max_duration_ms": 400,
+        "peak_level": 100,
+        "samples": 67
+      }
+    },
+    {
+      "id": "system-services",
+      "sha256": "06bcb35899c50dc238519d5816b3f4b888b9440b6f44070d19023e03c70cd69e",
+      "runs": 1,
+      "observed_apis": 17
+    },
+    {
+      "id": "image-pipeline",
+      "sha256": "902cdbcfe35e22b3dc31a7e35ceb2ee21037c92a45a9e6417ee65f965d0abcc0",
+      "runs": 1,
+      "observed_apis": 20
+    },
+    {
+      "id": "network-lifecycle",
+      "sha256": "941c0d75c00f238436d1c14c0189e1fda4bf63ca94fabb0017e06edc5d271ae2",
+      "runs": 1,
+      "observed_apis": 11
+    },
+    {
+      "id": "database-crud",
+      "sha256": "fe901789b80080f95a3473311486c3504e787f6d8896323ff2b49fffb6cbaf34",
+      "runs": 2,
+      "observed_apis": 22,
+      "restart": {
+        "observed_apis": [
+          "MC_dbListDataBases"
+        ],
+        "required_apis": [
+          "MC_dbListDataBases"
+        ],
+        "runs": 2
+      }
+    },
+    {
+      "id": "filesystem",
+      "sha256": "0e0ef3a42c47344f56b7ebfdb7fd22b0a34eb4b3f05598c4d260e5d72885f264",
+      "runs": 2,
+      "observed_apis": 26,
+      "restart": {
+        "observed_apis": [
+          "MC_fsSetMode"
+        ],
+        "required_apis": [
+          "MC_fsSetMode"
+        ],
+        "runs": 2
+      }
+    },
+    {
+      "id": "media-suite",
+      "sha256": "f14b5bd2e6724c29df94533eef80fb9467fddf2c5d589d02e273c80501507cef",
+      "runs": 1,
+      "observed_apis": 30,
+      "audio": {
+        "channels": 2,
+        "chunks": 116,
+        "frames": 81850,
+        "measured_frames": 116,
+        "sample_rate": 44100
+      },
+      "haptics": {
+        "activations": 1,
+        "max_duration_ms": 334,
+        "peak_level": 85,
+        "samples": 21
+      }
+    }
+  ],
+  "persistence": {
+    "database": {
+      "runs": 2,
+      "signal_api": "MC_dbListDataBases",
+      "passed": true
+    },
+    "filesystem": {
+      "runs": 2,
+      "signal_api": "MC_fsSetMode",
+      "passed": true
+    },
+    "state_scope": "isolated temporary roots"
+  },
+  "media": {
+    "api_family_coverage": "21/21",
+    "sample_rate": 44100,
+    "channels": 2,
+    "audio_frames": 81850,
+    "haptics_peak_level": 85,
+    "haptics_max_duration_ms": 334
+  },
+  "claims": {
+    "packages": true,
+    "loads": true,
+    "entry": true,
+    "first_frame": true,
+    "interactive": true,
+    "restart_persistence": true,
+    "audio_output": true,
+    "haptics_output": true,
+    "wie_verified": false,
+    "real_device_verified": false
+  }
+}
