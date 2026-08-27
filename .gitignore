@@ -1,6 +1,9 @@
 /build/
 /examples/template/build/
 /examples/platformer/build/
+/examples/graphics-gallery/build/
+/examples/memory-resource/build/
+/examples/audio-player/build/
 /.cache/
 __pycache__/
 *.pyc

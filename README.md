@@ -70,6 +70,11 @@ application Makefile only supplies its AID, name, sources, and resources.
 with held-key movement, jumping, platform collision, scrolling, collectibles,
 hazards, lives, scoring, and a goal state. Build it with `make platformer`.
 
+[`examples`](examples) also contains three focused SDK examples for graphics,
+memory and packaged resources, and synthetic audio. Build all three with
+`make sdk-examples`. Their ordinary application sources stay in this SDK, while
+the sibling `aram-test` repository owns automated ARAM execution and reports.
+
 See [Getting started](docs/getting-started.md) for the complete application
 layout, lifecycle callbacks, resource syntax, supported method list, package
 inspection, and emulator verification commands.

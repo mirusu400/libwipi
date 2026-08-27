@@ -42,7 +42,8 @@ HOST_LGT_INPUT_TEST := build/host/tests/lgt-input-semantics
 
 .PHONY: all clean library example conformance generate check-generated test test-host test-semantics \
 	test-target test-target-profile test-target-ktf test-target-lgt \
-	test-application-template test-platformer-example platformer
+	test-application-template test-platformer-example platformer \
+	sdk-examples test-sdk-examples
 
 all: $(LIBRARY) example
 
@@ -187,6 +188,7 @@ test-target-lgt:
 		INSTALL_PROFILE=aram-wie-raptor test-target-profile
 	$(MAKE) --no-print-directory test-application-template
 	$(MAKE) --no-print-directory test-platformer-example
+	$(MAKE) --no-print-directory test-sdk-examples
 
 test-application-template:
 	$(MAKE) --no-print-directory -C examples/template package
@@ -201,6 +203,22 @@ test-platformer-example: platformer
 		examples/platformer/build/wipi-1.2.1/lgt-raptor/aram-wie-raptor/binary.mod \
 		$(OBJDUMP)
 
+sdk-examples:
+	$(MAKE) --no-print-directory -C examples/graphics-gallery package inspect
+	$(MAKE) --no-print-directory -C examples/memory-resource package inspect
+	$(MAKE) --no-print-directory -C examples/audio-player package inspect
+
+test-sdk-examples: sdk-examples
+	python3 tests/check_raptor_elf.py \
+		examples/graphics-gallery/build/wipi-1.2.1/lgt-raptor/aram-wie-raptor/binary.mod \
+		$(OBJDUMP)
+	python3 tests/check_raptor_elf.py \
+		examples/memory-resource/build/wipi-1.2.1/lgt-raptor/aram-wie-raptor/binary.mod \
+		$(OBJDUMP)
+	python3 tests/check_raptor_elf.py \
+		examples/audio-player/build/wipi-1.2.1/lgt-raptor/aram-wie-raptor/binary.mod \
+		$(OBJDUMP)
+
 test-target: test-target-ktf test-target-lgt
 
 test: test-host test-target
@@ -208,4 +226,7 @@ test: test-host test-target
 clean:
 	$(MAKE) --no-print-directory -C examples/template clean
 	$(MAKE) --no-print-directory -C examples/platformer clean
+	$(MAKE) --no-print-directory -C examples/graphics-gallery clean
+	$(MAKE) --no-print-directory -C examples/memory-resource clean
+	$(MAKE) --no-print-directory -C examples/audio-player clean
 	rm -rf build

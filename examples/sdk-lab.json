@@ -1,0 +1,70 @@
+{
+  "schema": 1,
+  "suite": "libwipi-sdk-examples",
+  "api_level": "1.2.1",
+  "abi_profile": "lgt-raptor",
+  "install_profile": "aram-wie-raptor",
+  "runtime_profile": "wipi-1.2.1/lgt/raptor",
+  "aram": {
+    "core_revision": "2b13a761f944092e517abc4283aca0cb44e9b5e3",
+    "runner_revision": "e8fd74d51a76cbb4ddc11218a9c5eac46ac4ba91"
+  },
+  "examples": [
+    {
+      "id": "graphics-gallery",
+      "package": "examples/graphics-gallery/build/wipi-1.2.1/lgt-raptor/aram-wie-raptor/libwipi-graphics-gallery.zip",
+      "probe": {
+        "slices": 768,
+        "post_frame_slices": 256,
+        "pre_input_slices": 16,
+        "controls": "right,right,left",
+        "control_hold_slices": 12,
+        "control_release_slices": 12
+      },
+      "expect": {
+        "min_observed_apis": 17,
+        "min_input_events": 6,
+        "min_frame_changes": 3,
+        "audio_output": false
+      }
+    },
+    {
+      "id": "memory-resource",
+      "package": "examples/memory-resource/build/wipi-1.2.1/lgt-raptor/aram-wie-raptor/libwipi-memory-resource.zip",
+      "probe": {
+        "slices": 640,
+        "post_frame_slices": 160,
+        "pre_input_slices": 16,
+        "controls": "ok",
+        "control_hold_slices": 12,
+        "control_release_slices": 12
+      },
+      "expect": {
+        "min_observed_apis": 15,
+        "min_input_events": 2,
+        "min_frame_changes": 1,
+        "audio_output": false
+      }
+    },
+    {
+      "id": "audio-player",
+      "package": "examples/audio-player/build/wipi-1.2.1/lgt-raptor/aram-wie-raptor/libwipi-audio-player.zip",
+      "probe": {
+        "slices": 768,
+        "post_frame_slices": 256,
+        "pre_input_slices": 16,
+        "controls": "ok,up,down,left,ok",
+        "control_hold_slices": 12,
+        "control_release_slices": 12,
+        "performance_duration": "1s",
+        "warmup_frames": 1
+      },
+      "expect": {
+        "min_observed_apis": 15,
+        "min_input_events": 10,
+        "min_frame_changes": 5,
+        "audio_output": true
+      }
+    }
+  ]
+}
