@@ -9,83 +9,334 @@
 extern "C" {
 #endif
 
-/* WIPI ordinal 007. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 7.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_grpGetImageProperty(MC_GrpImage img, M_Int32 index);
-/* WIPI ordinal 008. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 8.
+ * @par Documentation status
+ * cataloged.
+ */
 MC_GrpFrameBuffer MC_grpGetImageFrameBuffer(MC_GrpImage img);
-/* WIPI ordinal 009. */
+/**
+ * @brief Obtain the frame buffer handle for a display index.
+ * @param i Display index.
+ * @return The frame buffer handle for the selected display.
+ * @par Ownership
+ * The display provider owns the returned screen frame buffer.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 9.
+ * @par Documentation status
+ * reviewed.
+ */
 MC_GrpFrameBuffer MC_grpGetScreenFrameBuffer(M_Int32 i);
-/* WIPI ordinal 010. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 10.
+ * @par Documentation status
+ * cataloged.
+ */
 void MC_grpDestroyOffScreenFrameBuffer(MC_GrpFrameBuffer fb);
-/* WIPI ordinal 011. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 11.
+ * @par Documentation status
+ * cataloged.
+ */
 MC_GrpFrameBuffer MC_grpCreateOffScreenFrameBuffer(M_Int32 w, M_Int32 h);
-/* WIPI ordinal 012. */
+/**
+ * @brief Initialize a caller-provided graphics context.
+ * @param pgc Graphics context storage to initialize.
+ * @par Ownership
+ * The caller owns the context storage.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 12.
+ * @par Documentation status
+ * reviewed.
+ */
 void MC_grpInitContext(MC_GrpContext *pgc);
-/* WIPI ordinal 013. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 13.
+ * @par Documentation status
+ * cataloged.
+ */
 void MC_grpSetContext(MC_GrpContext *pgc, M_Int32 index, void *pv);
-/* WIPI ordinal 014. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 14.
+ * @par Documentation status
+ * cataloged.
+ */
 void MC_grpGetContext(MC_GrpContext *pgc, M_Int32 index, void *pv);
-/* WIPI ordinal 015. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 15.
+ * @par Documentation status
+ * cataloged.
+ */
 void MC_grpPutPixel(MC_GrpFrameBuffer dst, M_Int32 x, M_Int32 y, MC_GrpContext *pgc);
-/* WIPI ordinal 016. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 16.
+ * @par Documentation status
+ * cataloged.
+ */
 void MC_grpDrawLine(MC_GrpFrameBuffer dst, M_Int32 x1, M_Int32 y1, M_Int32 x2, M_Int32 y2, MC_GrpContext *pgc);
-/* WIPI ordinal 017. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 17.
+ * @par Documentation status
+ * cataloged.
+ */
 void MC_grpDrawRect(MC_GrpFrameBuffer dst, M_Int32 x, M_Int32 y, M_Int32 w, M_Int32 h, MC_GrpContext *pgc);
-/* WIPI ordinal 018. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 18.
+ * @par Documentation status
+ * cataloged.
+ */
 void MC_grpFillRect(MC_GrpFrameBuffer dst, M_Int32 x, M_Int32 y, M_Int32 w, M_Int32 h, MC_GrpContext *pgc);
-/* WIPI ordinal 019. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 19.
+ * @par Documentation status
+ * cataloged.
+ */
 void MC_grpCopyFrameBuffer(MC_GrpFrameBuffer dst, M_Int32 dx, M_Int32 dy, M_Int32 w, M_Int32 h, MC_GrpFrameBuffer src, M_Int32 sx, M_Int32 sy, MC_GrpContext *pgc);
-/* WIPI ordinal 020. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 20.
+ * @par Documentation status
+ * cataloged.
+ */
 void MC_grpDrawImage(MC_GrpFrameBuffer dst, M_Int32 dx, M_Int32 dy, M_Int32 w, M_Int32 h, MC_GrpImage src, M_Int32 sx, M_Int32 sy, MC_GrpContext *pgc);
-/* WIPI ordinal 021. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 21.
+ * @par Documentation status
+ * cataloged.
+ */
 void MC_grpCopyArea(MC_GrpFrameBuffer dst, M_Int32 dx, M_Int32 dy, M_Int32 w, M_Int32 h, M_Int32 x, M_Int32 y, MC_GrpContext *pgc);
-/* WIPI ordinal 022. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 22.
+ * @par Documentation status
+ * cataloged.
+ */
 void MC_grpDrawArc(MC_GrpFrameBuffer dst, M_Int32 x, M_Int32 y, M_Int32 w, M_Int32 h, M_Int32 s, M_Int32 e, MC_GrpContext *pgc);
-/* WIPI ordinal 023. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 23.
+ * @par Documentation status
+ * cataloged.
+ */
 void MC_grpFillArc(MC_GrpFrameBuffer dst, M_Int32 x, M_Int32 y, M_Int32 w, M_Int32 h, M_Int32 s, M_Int32 e, MC_GrpContext *pgc);
-/* WIPI ordinal 024. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 24.
+ * @par Documentation status
+ * cataloged.
+ */
 void MC_grpDrawString(MC_GrpFrameBuffer dst, M_Int32 x, M_Int32 y, const M_Char *str, M_Int32 len, MC_GrpContext *pgc);
-/* WIPI ordinal 025. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 25.
+ * @par Documentation status
+ * cataloged.
+ */
 void MC_grpDrawUnicodeString(MC_GrpFrameBuffer dst, M_Int32 x, M_Int32 y, const M_UCode *str, M_Int32 len, MC_GrpContext *pgc);
-/* WIPI ordinal 026. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 26.
+ * @par Documentation status
+ * cataloged.
+ */
 void MC_grpGetRGBPixels(MC_GrpFrameBuffer dst, M_Int32 x, M_Int32 y, M_Int32 w, M_Int32 h, M_Uint32 *pd, M_Int32 ipl);
-/* WIPI ordinal 027. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 27.
+ * @par Documentation status
+ * cataloged.
+ */
 void MC_grpSetRGBPixels(MC_GrpFrameBuffer dst, M_Int32 x, M_Int32 y, M_Int32 w, M_Int32 h, const M_Uint32 *psrc, M_Int32 ibpl, MC_GrpContext *pgc);
-/* WIPI ordinal 028. */
+/**
+ * @brief Flush a rectangular frame-buffer region to a display.
+ * @param i Display index.
+ * @param frm Source frame buffer.
+ * @param x Left coordinate.
+ * @param y Top coordinate.
+ * @param w Region width.
+ * @param h Region height.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 28.
+ * @par Documentation status
+ * reviewed.
+ */
 void MC_grpFlushLcd(M_Int32 i, MC_GrpFrameBuffer frm, M_Int32 x, M_Int32 y, M_Int32 w, M_Int32 h);
-/* WIPI ordinal 029. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 29.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_grpGetPixelFromRGB(M_Int32 r, M_Int32 g, M_Int32 b);
-/* WIPI ordinal 030. */
+/**
+ * @brief Read display dimensions and pixel-format information.
+ * @param i Display index.
+ * @param pi Output display-information structure.
+ * @return The public WIPI result code after any profile-specific normalization.
+ * @note The WIE install adapter normalizes its observed provider success value to the public WIPI success value.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 30.
+ * @par Documentation status
+ * reviewed.
+ */
 M_Int32 MC_grpGetDisplayInfo(M_Int32 i, MC_GrpDisplayInfo *pi);
-/* WIPI ordinal 031. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 31.
+ * @par Documentation status
+ * cataloged.
+ */
 void MC_grpRepaint(M_Int32 lcd, M_Int32 x, M_Int32 y, M_Int32 w, M_Int32 h);
-/* WIPI ordinal 032. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 32.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_grpGetFont(M_Int32 face, M_Int32 size, M_Int32 style);
-/* WIPI ordinal 033. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 33.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_grpGetFontHeight(M_Int32 font);
-/* WIPI ordinal 034. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 34.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_grpGetFontAscent(M_Int32 font);
-/* WIPI ordinal 035. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 35.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_grpGetFontDescent(M_Int32 font);
-/* WIPI ordinal 036. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 36.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_grpGetStringWidth(M_Int32 font, const M_Uint8 *str, M_Int32 len);
-/* WIPI ordinal 037. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 37.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_grpGetUnicodeStringWidth(M_Int32 font, const M_UCode *str, M_Int32 len);
-/* WIPI ordinal 038. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 38.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_grpCreateImage(MC_GrpImage *newImg, M_Uint32 bufID, M_Int32 off, M_Int32 len);
-/* WIPI ordinal 039. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 39.
+ * @par Documentation status
+ * cataloged.
+ */
 void MC_grpDestroyImage(MC_GrpImage img);
-/* WIPI ordinal 040. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 40.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_grpDecodeNextImage(MC_GrpImage dst);
-/* WIPI ordinal 041. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 41.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int16 MC_grpEncodeImage(MC_GrpFrameBuffer src, M_Int32 x, M_Int32 y, M_Int32 w, M_Int32 h, M_Int32 *len);
-/* WIPI ordinal 042. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 42.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_grpPostEvent(M_Int32 id, M_Int32 type, M_Int32 param1, M_Int32 param2);
-/* WIPI ordinal 043. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 43.
+ * @par Documentation status
+ * cataloged.
+ */
 void MC_grpDrawPolygon(MC_GrpFrameBuffer dst, M_Int32 *xPoints, M_Int32 *yPoints, M_Int32 nPoints, MC_GrpContext *pgc);
-/* WIPI ordinal 044. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 44.
+ * @par Documentation status
+ * cataloged.
+ */
 void MC_grpDrawFillPolygon(MC_GrpFrameBuffer dst, M_Int32 *xPoints, M_Int32 *yPoints, M_Int32 nPoints, MC_GrpContext *pgc);
-/* WIPI ordinal 045. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 45.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_grpGetRGBFromPixel(M_Int32 pixel, M_Int32 *r, M_Int32 *g, M_Int32 *b);
 
 #ifdef __cplusplus

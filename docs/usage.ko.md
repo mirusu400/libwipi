@@ -3,7 +3,7 @@
 이 문서는 현재 실제로 빌드하고 에뮬레이터에서 검증한 libwipi 경로를
 기준으로 새 WIPI-C 애플리케이션을 만드는 방법을 설명합니다.
 
-현재 끝까지 검증된 조합은 다음 하나입니다.
+이 가이드에서 기본으로 사용하는 조합은 ARAM과 WIE의 공통 테스트 경로입니다.
 
 ```text
 API_LEVEL=1.2.1
@@ -11,8 +11,9 @@ PROFILE=lgt-raptor
 INSTALL_PROFILE=aram-wie-raptor
 ```
 
-축약 표기는 `1.2.1/lgt-raptor/aram-wie-raptor`입니다. 이 조합은 ARAM과
-WIE용 Raptor 패키지를 뜻합니다. LGT 실기기 전체나 다른 WIPI 버전까지
+축약 표기는 `1.2.1/lgt-raptor/aram-wie-raptor`입니다. 별도로 검증된
+`1.2.1/lgt-raptor/aram-raptor` 조합은 SDK 테스트를 위한 ARAM 전용 합성
+메서드를 추가합니다. 어느 조합도 LGT 실기기 전체나 다른 WIPI 버전까지
 지원한다는 의미는 아닙니다.
 
 ## 1. 준비물
@@ -275,8 +276,10 @@ include $(LIBWIPI_ROOT)/mk/application.mk
 make clean package inspect
 ```
 
-현재 `mk/application.mk`가 패키징하는 조합은
-`1.2.1/lgt-raptor/aram-wie-raptor`뿐입니다.
+`mk/application.mk`의 기본값은 `1.2.1/lgt-raptor/aram-wie-raptor`입니다.
+ARAM 전용 테스트 계약이 필요하면 빌드할 때
+`INSTALL_PROFILE=aram-raptor`를 지정할 수 있습니다. 이 프로필의 추가 FS,
+DB, MDA 번호는 합성 에뮬레이터 계약이며 실제 LGT 기기 ABI 근거가 아닙니다.
 
 ## 11. 자주 만나는 오류
 

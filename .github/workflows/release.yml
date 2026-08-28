@@ -1,0 +1,87 @@
+name: SDK release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing v-prefixed tag to publish
+        required: true
+        type: string
+
+permissions:
+  actions: write
+  attestations: write
+  contents: write
+  id-token: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the release tag
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref }}
+
+      - name: Resolve immutable release metadata
+        id: metadata
+        shell: bash
+        env:
+          REQUESTED_TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
+        run: |
+          tag="$REQUESTED_TAG"
+          if [[ ! "$tag" =~ ^v[0-9][0-9A-Za-z._+-]*$ ]]; then
+            echo "release tag must be a safe v-prefixed version" >&2
+            exit 2
+          fi
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "epoch=$(git show -s --format=%ct HEAD)" >> "$GITHUB_OUTPUT"
+          echo "revision=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Build pinned GNU Arm toolchain
+        run: docker build -t libwipi-toolchain -f docker/toolchain.Dockerfile .
+
+      - name: Run all repository and target gates
+        run: >-
+          docker run --rm -v "${{ github.workspace }}:/work" -w /work
+          libwipi-toolchain sh -ec
+          'python3 tools/generate.py --check &&
+          python3 tools/generate_docs.py --check &&
+          python3 -m unittest discover -s tests -p "test_*.py" &&
+          make clean all test-target'
+
+      - name: Build deterministic test-suite bundles
+        run: >-
+          docker run --rm -v "${{ github.workspace }}:/work" -w /work
+          -e SOURCE_DATE_EPOCH=${{ steps.metadata.outputs.epoch }}
+          libwipi-toolchain python3 tools/build_release_bundles.py
+          --version "${{ steps.metadata.outputs.tag }}"
+          --source-revision "${{ steps.metadata.outputs.revision }}"
+
+      - name: Attest release assets
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-path: |
+            dist/*.zip
+            dist/SHA256SUMS
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ steps.metadata.outputs.tag }}
+        shell: bash
+        run: |
+          if ! gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            gh release create "$RELEASE_TAG" --verify-tag --generate-notes \
+              --title "libwipi $RELEASE_TAG"
+          fi
+          gh release upload "$RELEASE_TAG" dist/*.zip dist/SHA256SUMS --clobber
+
+      - name: Refresh versioned documentation
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run docs.yml --ref main

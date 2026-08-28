@@ -9,7 +9,13 @@
 extern "C" {
 #endif
 
-/* WIPI ordinal 124. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 124.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_phnCallPlace(M_Byte *phonenumber);
 
 #ifdef __cplusplus

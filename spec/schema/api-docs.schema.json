@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mirusu400.github.io/libwipi/schema/api-docs.schema.json",
+  "title": "libwipi API documentation",
+  "description": "Reviewed, version-scoped semantic documentation layered on a canonical WIPI-C API catalog.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "api_level",
+    "reference_revision",
+    "documentation_policy",
+    "families",
+    "symbols"
+  ],
+  "properties": {
+    "schema": { "const": 1 },
+    "api_level": { "type": "string", "minLength": 1 },
+    "reference_revision": { "type": "string", "minLength": 1 },
+    "documentation_policy": { "type": "string", "minLength": 1 },
+    "families": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["title", "summary"],
+        "properties": {
+          "title": { "type": "string", "minLength": 1 },
+          "summary": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "symbols": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/symbol" }
+    }
+  },
+  "$defs": {
+    "symbol": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "summary"],
+      "properties": {
+        "status": { "enum": ["draft", "reviewed"] },
+        "summary": { "type": "string", "minLength": 1 },
+        "details": { "type": "string", "minLength": 1 },
+        "parameters": {
+          "type": "object",
+          "additionalProperties": { "type": "string", "minLength": 1 }
+        },
+        "returns": { "type": "string", "minLength": 1 },
+        "ownership": { "type": "string", "minLength": 1 },
+        "notes": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "examples": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        }
+      }
+    }
+  }
+}

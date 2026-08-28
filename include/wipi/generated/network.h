@@ -9,35 +9,128 @@
 extern "C" {
 #endif
 
-/* WIPI ordinal 063. */
+/**
+ * @brief Start the network connection lifecycle and register its callback.
+ * @param cb Connection-state callback.
+ * @param param Opaque callback parameter.
+ * @return The provider-defined result code.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 63.
+ * @par Documentation status
+ * draft.
+ */
 M_Int32 MC_netConnect(NETCONNECTCB cb, void *param);
-/* WIPI ordinal 064. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 64.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_netSocketClose(M_Int32 fd);
-/* WIPI ordinal 065. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 65.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_netSocket(M_Int32 domain, M_Int32 type);
-/* WIPI ordinal 066. */
+/**
+ * @brief Close the network connection lifecycle.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 66.
+ * @par Documentation status
+ * draft.
+ */
 void MC_netClose(void);
-/* WIPI ordinal 067. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 67.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_netSocketConnect(M_Int32 fd, M_Int32 addr, M_Int16 port, NETSOCKCONNECTCB cb, void *param);
-/* WIPI ordinal 068. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 68.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_netSocketAccept(M_Int32 fd, NETSOCKACCEPTCB cb, void *param);
-/* WIPI ordinal 069. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 69.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_netSetReadCB(M_Int32 fd, NETSOCKREADCB cb, void *param);
-/* WIPI ordinal 070. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 70.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_netSetWriteCB(M_Int32 fd, NETSOCKWRITECB cb, void *param);
-/* WIPI ordinal 071. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 71.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_netGetHostAddr(M_Int32 dnsserver, M_Byte *hostname, NETHOSTADDRCB cb, void *param);
-/* WIPI ordinal 081. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 81.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_netSocketWrite(M_Int32 fd, M_Byte *buf, M_Int32 len);
-/* WIPI ordinal 082. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 82.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_netSocketRead(M_Int32 fd, M_Byte *buf, M_Int32 len);
-/* WIPI ordinal 083. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 83.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_netSocketBind(M_Int32 fd, M_Uint32 addr, M_Uint16 port);
-/* WIPI ordinal 084. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 84.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_netGetMaxPacketLength(void);
-/* WIPI ordinal 085. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 85.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_netSocketSendTo(M_Int32 fd, M_Byte *buf, M_Int32 len, M_Uint32 addr, M_Uint16 port);
-/* WIPI ordinal 086. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 86.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_netSocketRcvFrom(M_Int32 fd, M_Byte *buf, M_Int32 len, M_Uint32 *addr, M_Uint16 *port);
 
 #ifdef __cplusplus

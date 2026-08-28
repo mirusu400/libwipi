@@ -9,87 +9,333 @@
 extern "C" {
 #endif
 
-/* WIPI ordinal 168. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 168.
+ * @par Documentation status
+ * cataloged.
+ */
 MC_UicApplicationContext MC_uicCreateApplicationContext(void);
-/* WIPI ordinal 169. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 169.
+ * @par Documentation status
+ * cataloged.
+ */
 MC_UicClass MC_uicGetClass(M_Uint8 *psz);
-/* WIPI ordinal 170. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 170.
+ * @par Documentation status
+ * cataloged.
+ */
 MC_UicComponent MC_uicCreate(MC_UicApplicationContext pac, MC_UicClass cls);
-/* WIPI ordinal 171. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 171.
+ * @par Documentation status
+ * cataloged.
+ */
 void MC_uicDestroy(MC_UicComponent cc);
-/* WIPI ordinal 172. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 172.
+ * @par Documentation status
+ * cataloged.
+ */
 void MC_uicRepaint(MC_UicComponent cc, M_Int32 x, M_Int32 y, M_Int32 w, M_Int32 h);
-/* WIPI ordinal 173. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 173.
+ * @par Documentation status
+ * cataloged.
+ */
 void MC_uicPaint(MC_UicComponent cc, MC_GrpContext *pgc);
-/* WIPI ordinal 174. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 174.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Uint8 *MC_uicGetClassName(MC_UicComponent cc);
-/* WIPI ordinal 175. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 175.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Uint32 MC_uicIsInstance(MC_UicComponent cc, M_Uint8 *pcls);
-/* WIPI ordinal 176. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 176.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_uicHandleEvent(MC_UicComponent cc, M_Int32 type, M_Int32 param1, M_Int32 param2);
-/* WIPI ordinal 177. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 177.
+ * @par Documentation status
+ * cataloged.
+ */
 void MC_uicConfigure(MC_UicComponent cc, M_Int32 x, M_Int32 y, M_Int32 w, M_Int32 h, M_Int32 mask);
-/* WIPI ordinal 178. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 178.
+ * @par Documentation status
+ * cataloged.
+ */
 void MC_uicGetGeometry(MC_UicComponent cc, M_Int32 *px, M_Int32 *py, M_Int32 *pw, M_Int32 *ph);
-/* WIPI ordinal 179. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 179.
+ * @par Documentation status
+ * cataloged.
+ */
 void MC_uicSetEnable(MC_UicComponent cc, M_Int32 enable);
-/* WIPI ordinal 180. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 180.
+ * @par Documentation status
+ * cataloged.
+ */
 MC_UicCallbackProc MC_uicSetCallback(MC_UicComponent cc, M_Int32 idx, MC_UicCallbackProc proc, M_Int32 clientData);
-/* WIPI ordinal 181. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 181.
+ * @par Documentation status
+ * cataloged.
+ */
 MC_UicEventHandlerProc MC_uicSetEventHandler(MC_UicComponent cc, MC_UicEventHandlerProc handler);
-/* WIPI ordinal 182. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 182.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_uicSetFont(MC_UicComponent cc, M_Int32 fontid);
-/* WIPI ordinal 183. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 183.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_uicGetFont(MC_UicComponent cc);
-/* WIPI ordinal 184. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 184.
+ * @par Documentation status
+ * cataloged.
+ */
 void MC_uicSetFgColor(MC_UicComponent cc, M_Int32 nColor);
-/* WIPI ordinal 185. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 185.
+ * @par Documentation status
+ * cataloged.
+ */
 void MC_uicSetBgColor(MC_UicComponent cc, M_Int32 nColor);
-/* WIPI ordinal 186. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 186.
+ * @par Documentation status
+ * cataloged.
+ */
 void MC_uicSetLabel(MC_UicComponent cc, M_Uint8 *psz);
-/* WIPI ordinal 187. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 187.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Uint8 *MC_uicGetLabel(MC_UicComponent cc);
-/* WIPI ordinal 188. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 188.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_uicSetlabelAlignment(MC_UicComponent cc, M_Int32 align);
-/* WIPI ordinal 189. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 189.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_uicSetTimeMask(MC_UicComponent cc, M_Int32 mask);
-/* WIPI ordinal 190. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 190.
+ * @par Documentation status
+ * cataloged.
+ */
 void MC_uicSetTime(MC_UicComponent cc, struct tm *pd);
-/* WIPI ordinal 191. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 191.
+ * @par Documentation status
+ * cataloged.
+ */
 void MC_uicSetTimeLong(MC_UicComponent cc, time_t time_value);
-/* WIPI ordinal 192. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 192.
+ * @par Documentation status
+ * cataloged.
+ */
 void MC_uicGetTime(MC_UicComponent cc, struct tm *pd);
-/* WIPI ordinal 193. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 193.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_uicAddMenuItem(MC_UicComponent cc, M_Uint8 *psz, MC_GrpImage img);
-/* WIPI ordinal 194. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 194.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_uicGetMenuItem(MC_UicComponent cc, M_Uint32 idx, M_Uint8 *psz, M_Int32 buflen, MC_GrpImage *img);
-/* WIPI ordinal 195. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 195.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_uicRemoveMenuItem(MC_UicComponent cc, M_Uint32 idx);
-/* WIPI ordinal 196. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 196.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_uicSetActiveMenuItem(MC_UicComponent cc, M_Int32 idx);
-/* WIPI ordinal 197. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 197.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_uicGetActiveMenuItem(MC_UicComponent cc);
-/* WIPI ordinal 198. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 198.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_uicInsertText(MC_UicComponent cc, M_Int32 idx, M_Uint8 *psz, M_Int32 len);
-/* WIPI ordinal 199. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 199.
+ * @par Documentation status
+ * cataloged.
+ */
 void MC_uicDeleteText(MC_UicComponent cc, M_Int32 idx, M_Int32 len);
-/* WIPI ordinal 200. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 200.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_uicGetMaxTextSize(MC_UicComponent cc);
-/* WIPI ordinal 201. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 201.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_uicSetMaxTextSize(MC_UicComponent cc, M_Int32 max);
-/* WIPI ordinal 202. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 202.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_uicGetTextSize(MC_UicComponent cc);
-/* WIPI ordinal 203. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 203.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_uicGetText(MC_UicComponent cc, M_Int32 idx, M_Uint8 *pszBuf, M_Int32 len);
-/* WIPI ordinal 204. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 204.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_uicAddListItem(MC_UicComponent cc, M_Uint8 *psz, MC_GrpImage img);
-/* WIPI ordinal 205. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 205.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_uicGetListItem(MC_UicComponent cc, M_Uint32 idx, M_Uint8 *psz, M_Int32 buflen, MC_GrpImage *img);
-/* WIPI ordinal 206. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 206.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_uicRemoveListItem(MC_UicComponent cc, M_Uint32 idx);
-/* WIPI ordinal 207. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 207.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_uicSetActiveListItem(MC_UicComponent cc, M_Int32 idx);
-/* WIPI ordinal 208. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 208.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_uicGetActiveListItem(MC_UicComponent cc);
 
 #ifdef __cplusplus

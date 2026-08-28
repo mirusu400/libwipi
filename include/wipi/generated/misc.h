@@ -9,13 +9,37 @@
 extern "C" {
 #endif
 
-/* WIPI ordinal 120. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 120.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_miscBackLight(M_Int32 id, MC_BackLight on_off, M_Int32 color, M_Int32 timeout);
-/* WIPI ordinal 121. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 121.
+ * @par Documentation status
+ * cataloged.
+ */
 void MC_miscSetLed(M_Int32 leds);
-/* WIPI ordinal 122. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 122.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_miscGetLed(void);
-/* WIPI ordinal 123. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 123.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_miscGetLedCount(void);
 
 #ifdef __cplusplus

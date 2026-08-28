@@ -56,8 +56,8 @@ The selected level is also passed to the compiler, where
 The versioned WIPI Wiki indexes 1.2.1, 2.0, and 2.2.0 separately:
 
 - <https://mirusu400.github.io/wipi-wiki/llms.txt>
-- <https://mirusu400.github.io/wipi-wiki/v20/c-api/index/>
-- <https://mirusu400.github.io/wipi-wiki/v22/c-api/index/>
+- <https://mirusu400.github.io/wipi-wiki/v20/c-api/index.md>
+- <https://mirusu400.github.io/wipi-wiki/v22/c-api/index.md>
 
 WIPI 2.0 adds native C families and functions including Generic I/O, terminal
 resources, SMS, secure communication, mathematics, and dynamic-library

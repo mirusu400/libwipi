@@ -9,17 +9,53 @@
 extern "C" {
 #endif
 
-/* WIPI ordinal 093. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 93.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_utilHtonl(M_Int32 val);
-/* WIPI ordinal 094. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 94.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int16 MC_utilHtons(M_Int16 val);
-/* WIPI ordinal 095. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 95.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_utilNtohl(M_Int32 val);
-/* WIPI ordinal 096. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 96.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int16 MC_utilNtohs(M_Int16 val);
-/* WIPI ordinal 097. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 97.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_utilInetAddrInt(M_Byte *addr);
-/* WIPI ordinal 098. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 98.
+ * @par Documentation status
+ * cataloged.
+ */
 void MC_utilInetAddrStr(M_Int32 ip, M_Byte *addr);
 
 #ifdef __cplusplus

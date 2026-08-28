@@ -9,65 +9,281 @@
 extern "C" {
 #endif
 
-/* WIPI ordinal 138. */
+/**
+ * @brief Allocate a zero-filled WIPI-managed memory block and return its memory ID.
+ * @details Like MC_knlAlloc, this returns a memory ID rather than a stable native pointer.
+ * @param size Requested zero-filled allocation size in bytes.
+ * @return A nonzero memory ID on success, or the provider-defined failure value.
+ * @par Ownership
+ * The caller owns the memory ID and releases it with MC_knlFree.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 138.
+ * @par Documentation status
+ * reviewed.
+ */
 M_Uint32 MC_knlCalloc(M_Int32 size);
-/* WIPI ordinal 139. */
+/**
+ * @brief Release a WIPI-managed allocation identified by a memory ID.
+ * @param mID Memory ID previously returned by MC_knlAlloc or MC_knlCalloc.
+ * @par Ownership
+ * The memory ID and every pointer resolved from it become invalid after this call.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 139.
+ * @par Documentation status
+ * reviewed.
+ */
 void MC_knlFree(M_Uint32 mID);
-/* WIPI ordinal 140. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 140.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_knlGetFreeMemory(void);
-/* WIPI ordinal 141. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 141.
+ * @par Documentation status
+ * cataloged.
+ */
 int MC_knlPrintk(M_Char *format, ...);
-/* WIPI ordinal 142. */
+/**
+ * @brief Resolve a packaged resource name to a resource ID and size.
+ * @param resourceName Resource path stored in the application package.
+ * @param size Output location that receives the resource size.
+ * @return A resource ID or the provider-defined failure value.
+ * @par Ownership
+ * The returned ID refers to package-owned resource data.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 142.
+ * @par Documentation status
+ * reviewed.
+ */
 M_Int32 MC_knlGetResourceID(M_Char *resourceName, M_Int32 *size);
-/* WIPI ordinal 143. */
+/**
+ * @brief Copy a packaged resource into an application-provided buffer.
+ * @param resourceID Resource ID returned by MC_knlGetResourceID.
+ * @param buf Destination buffer.
+ * @param bufSize Destination capacity in bytes.
+ * @return The provider-defined result code.
+ * @par Ownership
+ * The caller owns the destination buffer and its copied contents.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 143.
+ * @par Documentation status
+ * reviewed.
+ */
 M_Int32 MC_knlGetResource(M_Int32 resourceID, void *buf, M_Int32 bufSize);
-/* WIPI ordinal 144. */
+/**
+ * @brief Initialize a timer object with its callback.
+ * @param tm Caller-owned timer storage.
+ * @param cb Callback invoked when a scheduled timer expires.
+ * @par Ownership
+ * The caller retains the timer storage and must keep it valid while scheduled.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 144.
+ * @par Documentation status
+ * reviewed.
+ */
 void MC_knlDefTimer(MCTimer *tm, TIMERCB cb);
-/* WIPI ordinal 145. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 145.
+ * @par Documentation status
+ * cataloged.
+ */
 int MC_knlSprintk(M_Char *buf, M_Char *format, ...);
-/* WIPI ordinal 146. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 146.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_knlGetExecNames(M_Char *prgName, M_Char *version, M_Char *vendor, M_Char *buf, M_Int32 bufSize);
-/* WIPI ordinal 147. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 147.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_knlExecute(M_Char *execName, M_Int32 parmCnt, ...);
-/* WIPI ordinal 148. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 148.
+ * @par Documentation status
+ * cataloged.
+ */
 void MC_knlExit(M_Int32 exitCode);
-/* WIPI ordinal 149. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 149.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_knlProgramStop(M_Int32 prgID);
-/* WIPI ordinal 150. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 150.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_knlGetCurProgramID(void);
-/* WIPI ordinal 151. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 151.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_knlGetParentProgramID(void);
-/* WIPI ordinal 152. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 152.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_knlGetAppManagerID(void);
-/* WIPI ordinal 153. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 153.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_knlGetProgramInfo(M_Int32 *buf, M_Int32 bufSize);
-/* WIPI ordinal 154. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 154.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_knlGetAccessLevel(void);
-/* WIPI ordinal 155. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 155.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_knlGetProgramName(M_Char *nameBuf, M_Int32 bufSize);
-/* WIPI ordinal 156. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 156.
+ * @par Documentation status
+ * cataloged.
+ */
 void *MC_knlCreateSharedBuf(const M_Char *name, M_Int32 size);
-/* WIPI ordinal 157. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 157.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_knlDestroySharedBuf(void *buf);
-/* WIPI ordinal 158. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 158.
+ * @par Documentation status
+ * cataloged.
+ */
 void *MC_knlGetSharedBuf(const M_Char *name);
-/* WIPI ordinal 159. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 159.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_knlGetSharedBufSize(void *buf);
-/* WIPI ordinal 160. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 160.
+ * @par Documentation status
+ * cataloged.
+ */
 void *MC_knlResizeSharedBuf(void *buf, M_Int32 size);
-/* WIPI ordinal 161. */
+/**
+ * @brief Allocate a WIPI-managed memory block and return its memory ID.
+ * @details The return value is a memory ID, not a stable C pointer. Resolve it with MC_GETDPTR only for the period in which the pointer is needed.
+ * @param size Requested allocation size in bytes.
+ * @return A nonzero memory ID on success, or the provider-defined failure value.
+ * @par Ownership
+ * The caller owns the memory ID and releases it with MC_knlFree.
+ * @note Compaction can invalidate a previously resolved pointer; retain the memory ID instead of the pointer.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 161.
+ * @par Documentation status
+ * reviewed.
+ */
 M_Uint32 MC_knlAlloc(M_Int32 size);
-/* WIPI ordinal 162. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 162.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_knlGetTotalMemory(void);
-/* WIPI ordinal 163. */
+/**
+ * @brief Schedule a previously defined timer with a 64-bit timeout and callback parameter.
+ * @param tm Timer initialized with MC_knlDefTimer.
+ * @param timeout WIPI timeout value passed as a 64-bit integer.
+ * @param parm Opaque value delivered to the timer callback.
+ * @return The provider-defined result code.
+ * @note libwipi uses a tested ABI veneer because the observed Samsung/KTF provider packs the 64-bit timeout differently from an AAPCS caller.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 163.
+ * @par Documentation status
+ * reviewed.
+ */
 M_Int32 MC_knlSetTimer(MCTimer *tm, M_Int64 timeout, void *parm);
-/* WIPI ordinal 164. */
+/**
+ * @brief Cancel a scheduled timer.
+ * @param tm Timer previously scheduled with MC_knlSetTimer.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 164.
+ * @par Documentation status
+ * reviewed.
+ */
 void MC_knlUnsetTimer(MCTimer *tm);
-/* WIPI ordinal 165. */
+/**
+ * @brief Read the current WIPI time value.
+ * @return A provider-defined 64-bit WIPI time value.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 165.
+ * @par Documentation status
+ * draft.
+ */
 M_Int64 MC_knlCurrentTime(void);
-/* WIPI ordinal 166. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 166.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_knlGetSystemProperty(M_Char *id, M_Char *rtnBuf, M_Int32 bufSize);
-/* WIPI ordinal 167. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 167.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_knlSetSystemProperty(M_Char *id, M_Char *buf);
 
 #ifdef __cplusplus

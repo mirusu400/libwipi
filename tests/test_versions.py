@@ -29,8 +29,13 @@ class ApiVersionManifestTests(unittest.TestCase):
             if entry["catalog_status"] == "implemented":
                 self.assertIsNotNone(catalog)
                 self.assertTrue((ROOT / catalog).is_file())
+                self.assertTrue((ROOT / entry["api_docs"]).is_file())
+                invariants = entry["catalog_invariants"]
+                self.assertGreater(invariants["public_rows"], 0)
+                self.assertGreater(invariants["family_count"], 0)
             else:
                 self.assertIsNone(catalog)
+                self.assertIsNone(entry.get("api_docs"))
 
     def test_version_is_not_conflated_with_device_profile(self):
         for entry in self.manifest["levels"]:

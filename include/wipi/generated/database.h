@@ -9,31 +9,114 @@
 extern "C" {
 #endif
 
-/* WIPI ordinal 125. */
+/**
+ * @brief Open a fixed-record database and optionally create it.
+ * @param dataBaseName Database name.
+ * @param recordSize Fixed record size.
+ * @param create Whether the database may be created.
+ * @param mode Database access mode.
+ * @return A database handle or the provider-defined failure value.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 125.
+ * @par Documentation status
+ * draft.
+ */
 M_Int32 MC_dbOpenDataBase(M_Char *dataBaseName, M_Int32 recordSize, M_Boolean create, M_Int32 mode);
-/* WIPI ordinal 126. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 126.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_dbCloseDataBase(M_Int32 dbId);
-/* WIPI ordinal 127. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 127.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_dbDeleteDataBase(M_Char *dataBaseName, M_Int32 mode);
-/* WIPI ordinal 128. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 128.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_dbInsertRecord(M_Int32 dbId, M_Byte *buf, M_Int32 len);
-/* WIPI ordinal 129. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 129.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_dbSelectRecord(M_Int32 dbId, M_Int32 recId, M_Byte *buf, M_Int32 len);
-/* WIPI ordinal 130. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 130.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_dbUpdateRecord(M_Int32 dbId, M_Int32 recId, M_Byte *buf, M_Int32 len);
-/* WIPI ordinal 131. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 131.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_dbDeleteRecord(M_Int32 dbId, M_Int32 recId);
-/* WIPI ordinal 132. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 132.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_dbListRecords(M_Int32 dbId, M_Int32 *buf, M_Int32 len);
-/* WIPI ordinal 133. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 133.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_dbSortRecords(M_Int32 dbId, M_Int32 *buf, M_Int32 len, M_Int32 (*compare)(const void *, const void *), M_Int32 (*filter)(const void *));
-/* WIPI ordinal 134. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 134.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_dbGetAccessMode(M_Char *dataBaseName);
-/* WIPI ordinal 135. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 135.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_dbGetNumberOfRecords(M_Int32 dbId);
-/* WIPI ordinal 136. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 136.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_dbGetRecordSize(M_Int32 dbId);
-/* WIPI ordinal 137. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 137.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_dbListDataBases(M_Byte *buf, M_Int32 len);
 
 #ifdef __cplusplus

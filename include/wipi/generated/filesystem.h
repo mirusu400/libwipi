@@ -9,39 +9,145 @@
 extern "C" {
 #endif
 
-/* WIPI ordinal 046. */
+/**
+ * @brief Open or create a file according to the supplied flags and access mode.
+ * @param name File path in the selected install profile's filesystem namespace.
+ * @param flag Open flags.
+ * @param aMode Access mode.
+ * @return A file descriptor or the provider-defined failure value.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 46.
+ * @par Documentation status
+ * draft.
+ */
 M_Int32 MC_fsOpen(M_Char *name, M_Int32 flag, M_Int32 aMode);
-/* WIPI ordinal 047. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 47.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_fsRead(M_Int32 fd, M_Byte *buf, M_Int32 len);
-/* WIPI ordinal 048. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 48.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_fsWrite(M_Int32 fd, M_Byte *buf, M_Int32 len);
-/* WIPI ordinal 049. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 49.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_fsClose(M_Int32 fd);
-/* WIPI ordinal 050. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 50.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_fsSeek(M_Int32 fd, M_Int32 pos, M_Int32 where);
-/* WIPI ordinal 051. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 51.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_fsFileAttribute(M_Char *name, MC_FileInfo *fa, M_Int32 aMode);
-/* WIPI ordinal 052. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 52.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_fsRemove(M_Char *name, M_Int32 aMode);
-/* WIPI ordinal 053. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 53.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_fsRename(M_Char *oldname, M_Char *newname, M_Int32 aMode);
-/* WIPI ordinal 054. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 54.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_fsMkDir(M_Char *dirName, M_Int32 aMode);
-/* WIPI ordinal 055. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 55.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_fsRmDir(M_Char *dirName, M_Int32 aMode);
-/* WIPI ordinal 056. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 56.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_fsList(M_Char *name, M_Char *buf, M_Int32 bufSize, M_Int32 aMode);
-/* WIPI ordinal 057. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 57.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_fsTotalSpace(void);
-/* WIPI ordinal 058. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 58.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_fsAvailable(void);
-/* WIPI ordinal 059. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 59.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_fsSetMode(M_Char *fileName, M_Int32 fmode, M_Int32 aMode);
-/* WIPI ordinal 060. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 60.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_fsGetCounts(M_Char *dirName, M_Int32 aMode);
-/* WIPI ordinal 061. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 61.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_fsTell(M_Int32 fd);
-/* WIPI ordinal 062. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 62.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_fsIsExist(M_Char *fileName, M_Int32 aMode);
 
 #ifdef __cplusplus

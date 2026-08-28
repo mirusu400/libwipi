@@ -51,15 +51,32 @@ HOST_LGT_INPUT_TEST := build/host/tests/lgt-input-semantics
 .PHONY: all clean library example conformance generate check-generated test test-host test-semantics \
 	test-target test-target-profile test-target-ktf test-target-lgt \
 	test-application-template test-platformer-example platformer \
-	sdk-examples test-sdk-examples aram-sdk-examples test-aram-sdk-examples
+	sdk-examples test-sdk-examples aram-sdk-examples test-aram-sdk-examples \
+	docs docs-check docs-linkcheck release-bundles
+
+SDK_VERSION ?= dev
 
 all: $(LIBRARY) example
 
 generate:
 	python3 tools/generate.py
+	python3 tools/generate_docs.py
 
 check-generated:
 	python3 tools/generate.py --check
+	python3 tools/generate_docs.py --check
+
+docs:
+	python3 tools/build_docs.py
+
+docs-check: check-generated
+	python3 tools/build_docs.py --jobs auto
+
+docs-linkcheck: check-generated
+	python3 tools/build_docs.py --builder linkcheck --jobs 1
+
+release-bundles:
+	python3 tools/build_release_bundles.py --version $(SDK_VERSION)
 
 $(BUILD_DIR)/%.o: %.c
 	@mkdir -p $(dir $@)

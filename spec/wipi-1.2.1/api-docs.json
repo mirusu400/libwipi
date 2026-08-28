@@ -1,0 +1,292 @@
+{
+  "schema": 1,
+  "api_level": "1.2.1",
+  "reference_revision": "mirusu400/wipi-wiki@d65e5a74174851d4cc733bdb2a4830693a7c1a7b",
+  "documentation_policy": "Only reviewed semantics are stated as facts. Cataloged symbols without an entry remain explicitly unreviewed; profile availability is derived from profile, install, example, and evidence manifests.",
+  "families": {
+    "MC_SRL": {
+      "title": "Serial",
+      "summary": "Serial-port lifecycle, reads, writes, and completion callbacks."
+    },
+    "MC_GRP": {
+      "title": "Graphics",
+      "summary": "Display information, frame buffers, drawing contexts, images, fonts, and repaint operations."
+    },
+    "MC_FS": {
+      "title": "Filesystem",
+      "summary": "File and directory operations whose persistence and method mapping depend on the selected install profile."
+    },
+    "MC_NET": {
+      "title": "Network",
+      "summary": "Connection lifecycle and socket operations."
+    },
+    "MC_HTTP": {
+      "title": "HTTP",
+      "summary": "HTTP request lifecycle, headers, body transfer, and callbacks."
+    },
+    "MC_UTIL": {
+      "title": "Utility",
+      "summary": "Encoding, conversion, compression, and general utility operations."
+    },
+    "MC_MDA": {
+      "title": "Media",
+      "summary": "Media clip creation, data transfer, playback, recording, volume, mute, and haptics."
+    },
+    "MC_MISC": {
+      "title": "Miscellaneous",
+      "summary": "Device services that do not belong to another public WIPI-C family."
+    },
+    "MC_PHN": {
+      "title": "Phone",
+      "summary": "Telephony and handset-service operations."
+    },
+    "MC_DB": {
+      "title": "Database",
+      "summary": "Fixed-record database lifecycle, CRUD, enumeration, sorting, and persistence."
+    },
+    "MC_KNL": {
+      "title": "Kernel",
+      "summary": "Memory IDs, resources, timers, process lifecycle, system properties, and shared buffers."
+    },
+    "MC_UIC": {
+      "title": "User interface controls",
+      "summary": "WIPI user-interface controls and event-oriented UI services."
+    },
+    "CSTDLIB": {
+      "title": "Freestanding C library",
+      "summary": "The local freestanding string, allocation, conversion, random, and time subset supplied by libwipi."
+    }
+  },
+  "symbols": {
+    "MC_knlAlloc": {
+      "status": "reviewed",
+      "summary": "Allocate a WIPI-managed memory block and return its memory ID.",
+      "details": "The return value is a memory ID, not a stable C pointer. Resolve it with MC_GETDPTR only for the period in which the pointer is needed.",
+      "parameters": {
+        "size": "Requested allocation size in bytes."
+      },
+      "returns": "A nonzero memory ID on success, or the provider-defined failure value.",
+      "ownership": "The caller owns the memory ID and releases it with MC_knlFree.",
+      "notes": [
+        "Compaction can invalidate a previously resolved pointer; retain the memory ID instead of the pointer."
+      ],
+      "examples": ["memory-resource"]
+    },
+    "MC_knlCalloc": {
+      "status": "reviewed",
+      "summary": "Allocate a zero-filled WIPI-managed memory block and return its memory ID.",
+      "details": "Like MC_knlAlloc, this returns a memory ID rather than a stable native pointer.",
+      "parameters": {
+        "size": "Requested zero-filled allocation size in bytes."
+      },
+      "returns": "A nonzero memory ID on success, or the provider-defined failure value.",
+      "ownership": "The caller owns the memory ID and releases it with MC_knlFree.",
+      "examples": ["memory-resource", "conformance"]
+    },
+    "MC_knlFree": {
+      "status": "reviewed",
+      "summary": "Release a WIPI-managed allocation identified by a memory ID.",
+      "parameters": {
+        "mID": "Memory ID previously returned by MC_knlAlloc or MC_knlCalloc."
+      },
+      "ownership": "The memory ID and every pointer resolved from it become invalid after this call.",
+      "examples": ["memory-resource", "conformance"]
+    },
+    "MC_knlGetResourceID": {
+      "status": "reviewed",
+      "summary": "Resolve a packaged resource name to a resource ID and size.",
+      "parameters": {
+        "resourceName": "Resource path stored in the application package.",
+        "size": "Output location that receives the resource size."
+      },
+      "returns": "A resource ID or the provider-defined failure value.",
+      "ownership": "The returned ID refers to package-owned resource data.",
+      "examples": ["memory-resource"]
+    },
+    "MC_knlGetResource": {
+      "status": "reviewed",
+      "summary": "Copy a packaged resource into an application-provided buffer.",
+      "parameters": {
+        "resourceID": "Resource ID returned by MC_knlGetResourceID.",
+        "buf": "Destination buffer.",
+        "bufSize": "Destination capacity in bytes."
+      },
+      "returns": "The provider-defined result code.",
+      "ownership": "The caller owns the destination buffer and its copied contents.",
+      "examples": ["memory-resource"]
+    },
+    "MC_knlDefTimer": {
+      "status": "reviewed",
+      "summary": "Initialize a timer object with its callback.",
+      "parameters": {
+        "tm": "Caller-owned timer storage.",
+        "cb": "Callback invoked when a scheduled timer expires."
+      },
+      "ownership": "The caller retains the timer storage and must keep it valid while scheduled.",
+      "examples": ["system-services", "conformance", "platformer"]
+    },
+    "MC_knlSetTimer": {
+      "status": "reviewed",
+      "summary": "Schedule a previously defined timer with a 64-bit timeout and callback parameter.",
+      "parameters": {
+        "tm": "Timer initialized with MC_knlDefTimer.",
+        "timeout": "WIPI timeout value passed as a 64-bit integer.",
+        "parm": "Opaque value delivered to the timer callback."
+      },
+      "returns": "The provider-defined result code.",
+      "notes": [
+        "libwipi uses a tested ABI veneer because the observed Samsung/KTF provider packs the 64-bit timeout differently from an AAPCS caller."
+      ],
+      "examples": ["system-services", "conformance", "platformer"]
+    },
+    "MC_knlUnsetTimer": {
+      "status": "reviewed",
+      "summary": "Cancel a scheduled timer.",
+      "parameters": {
+        "tm": "Timer previously scheduled with MC_knlSetTimer."
+      },
+      "examples": ["system-services"]
+    },
+    "MC_knlCurrentTime": {
+      "status": "draft",
+      "summary": "Read the current WIPI time value.",
+      "returns": "A provider-defined 64-bit WIPI time value.",
+      "examples": ["system-services", "conformance"]
+    },
+    "MC_grpGetScreenFrameBuffer": {
+      "status": "reviewed",
+      "summary": "Obtain the frame buffer handle for a display index.",
+      "parameters": {
+        "i": "Display index."
+      },
+      "returns": "The frame buffer handle for the selected display.",
+      "ownership": "The display provider owns the returned screen frame buffer.",
+      "examples": ["template", "graphics-gallery", "conformance"]
+    },
+    "MC_grpInitContext": {
+      "status": "reviewed",
+      "summary": "Initialize a caller-provided graphics context.",
+      "parameters": {
+        "pgc": "Graphics context storage to initialize."
+      },
+      "ownership": "The caller owns the context storage.",
+      "examples": ["template", "graphics-gallery", "conformance"]
+    },
+    "MC_grpGetDisplayInfo": {
+      "status": "reviewed",
+      "summary": "Read display dimensions and pixel-format information.",
+      "parameters": {
+        "i": "Display index.",
+        "pi": "Output display-information structure."
+      },
+      "returns": "The public WIPI result code after any profile-specific normalization.",
+      "notes": [
+        "The WIE install adapter normalizes its observed provider success value to the public WIPI success value."
+      ],
+      "examples": ["graphics-gallery", "conformance"]
+    },
+    "MC_grpFlushLcd": {
+      "status": "reviewed",
+      "summary": "Flush a rectangular frame-buffer region to a display.",
+      "parameters": {
+        "i": "Display index.",
+        "frm": "Source frame buffer.",
+        "x": "Left coordinate.",
+        "y": "Top coordinate.",
+        "w": "Region width.",
+        "h": "Region height."
+      },
+      "examples": ["template", "graphics-gallery", "conformance"]
+    },
+    "MC_netConnect": {
+      "status": "draft",
+      "summary": "Start the network connection lifecycle and register its callback.",
+      "parameters": {
+        "cb": "Connection-state callback.",
+        "param": "Opaque callback parameter."
+      },
+      "returns": "The provider-defined result code.",
+      "examples": ["network-lifecycle"]
+    },
+    "MC_netClose": {
+      "status": "draft",
+      "summary": "Close the network connection lifecycle.",
+      "examples": ["network-lifecycle"]
+    },
+    "MC_mdaClipCreate": {
+      "status": "draft",
+      "summary": "Create a media clip with a media type, data capacity, and event callback.",
+      "parameters": {
+        "mType": "Provider-recognized media type string.",
+        "bufSize": "Clip data capacity.",
+        "cb": "Media event callback."
+      },
+      "returns": "A media clip handle or the provider-defined failure value.",
+      "ownership": "The caller owns a successful clip handle and releases it with MC_mdaClipFree.",
+      "examples": ["audio-player", "media-suite", "conformance"]
+    },
+    "MC_mdaClipPutData": {
+      "status": "draft",
+      "summary": "Append encoded media data to a clip.",
+      "parameters": {
+        "clip": "Destination media clip.",
+        "buf": "Source media bytes.",
+        "size": "Number of source bytes."
+      },
+      "returns": "The provider-defined result code.",
+      "examples": ["audio-player", "conformance"]
+    },
+    "MC_mdaPlay": {
+      "status": "draft",
+      "summary": "Start media clip playback.",
+      "parameters": {
+        "clip": "Clip to play.",
+        "repeat": "Whether playback repeats according to the WIPI boolean contract."
+      },
+      "returns": "The provider-defined result code.",
+      "examples": ["audio-player", "media-suite", "conformance"]
+    },
+    "MC_mdaStop": {
+      "status": "draft",
+      "summary": "Stop media clip playback.",
+      "parameters": {
+        "clip": "Clip whose playback is stopped."
+      },
+      "returns": "The provider-defined result code.",
+      "examples": ["audio-player", "media-suite", "conformance"]
+    },
+    "MC_mdaClipFree": {
+      "status": "draft",
+      "summary": "Release a media clip.",
+      "parameters": {
+        "clip": "Clip to release."
+      },
+      "returns": "The provider-defined result code.",
+      "ownership": "The clip handle becomes invalid after a successful release.",
+      "examples": ["audio-player", "media-suite", "conformance"]
+    },
+    "MC_fsOpen": {
+      "status": "draft",
+      "summary": "Open or create a file according to the supplied flags and access mode.",
+      "parameters": {
+        "name": "File path in the selected install profile's filesystem namespace.",
+        "flag": "Open flags.",
+        "aMode": "Access mode."
+      },
+      "returns": "A file descriptor or the provider-defined failure value.",
+      "examples": ["filesystem"]
+    },
+    "MC_dbOpenDataBase": {
+      "status": "draft",
+      "summary": "Open a fixed-record database and optionally create it.",
+      "parameters": {
+        "dataBaseName": "Database name.",
+        "recordSize": "Fixed record size.",
+        "create": "Whether the database may be created.",
+        "mode": "Database access mode."
+      },
+      "returns": "A database handle or the provider-defined failure value.",
+      "examples": ["database-crud"]
+    }
+  }
+}

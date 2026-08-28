@@ -1,4 +1,5 @@
 /build/
+/dist/
 /examples/template/build/
 /examples/platformer/build/
 /examples/graphics-gallery/build/

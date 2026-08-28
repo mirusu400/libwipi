@@ -9,35 +9,125 @@
 extern "C" {
 #endif
 
-/* WIPI ordinal 072. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 72.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_netHttpConnect(M_Int32 fd, NETHTTPCB cb, void *param);
-/* WIPI ordinal 073. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 73.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_netHttpGetResponseCode(M_Int32 fd);
-/* WIPI ordinal 074. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 74.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_netHttpGetResponseMessage(M_Int32 fd, M_Byte *buf, M_Int32 len);
-/* WIPI ordinal 075. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 75.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_netHttpGetHeaderField(M_Int32 fd, M_Byte *name, M_Byte *buf, M_Int32 len);
-/* WIPI ordinal 076. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 76.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_netHttpGetLength(M_Int32 fd);
-/* WIPI ordinal 077. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 77.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_netHttpGetType(M_Int32 fd, M_Byte *buf, M_Int32 len);
-/* WIPI ordinal 078. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 78.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_netHttpGetEncoding(M_Int32 fd, M_Byte *buf, M_Int32 len);
-/* WIPI ordinal 079. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 79.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_netHttpClose(M_Int32 fd);
-/* WIPI ordinal 080. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 80.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_netHttpOpen(M_Byte *url);
-/* WIPI ordinal 087. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 87.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_netHttpSetRequestMethod(M_Int32 fd, M_Byte *method, M_Byte *msg, M_Int32 msglen);
-/* WIPI ordinal 088. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 88.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_netHttpGetRequestMethod(M_Int32 fd, M_Byte *buf, M_Int32 len);
-/* WIPI ordinal 089. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 89.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_netHttpSetRequestProperty(M_Int32 fd, M_Byte *key, M_Byte *value);
-/* WIPI ordinal 090. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 90.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_netHttpGetRequestProperty(M_Int32 fd, M_Byte *key, M_Byte *buf, M_Int32 len);
-/* WIPI ordinal 091. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 91.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_netHttpSetProxy(M_Int32 fd, M_Int32 proxyhost, M_Int16 proxyport);
-/* WIPI ordinal 092. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 92.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_netHttpGetProxy(M_Int32 fd, M_Int32 *proxyhost, M_Int16 *proxyport);
 
 #ifdef __cplusplus

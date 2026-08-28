@@ -9,47 +9,192 @@
 extern "C" {
 #endif
 
-/* WIPI ordinal 099. */
+/**
+ * @brief Append encoded media data to a clip.
+ * @param clip Destination media clip.
+ * @param buf Source media bytes.
+ * @param size Number of source bytes.
+ * @return The provider-defined result code.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 99.
+ * @par Documentation status
+ * draft.
+ */
 M_Int32 MC_mdaClipPutData(MC_MdaClip *clip, M_Byte *buf, M_Int32 size);
-/* WIPI ordinal 100. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 100.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_mdaClipPutDataByFile(MC_MdaClip *clip, M_Byte *filename, M_Int32 size, M_Int32 aMode);
-/* WIPI ordinal 101. */
+/**
+ * @brief Create a media clip with a media type, data capacity, and event callback.
+ * @param mType Provider-recognized media type string.
+ * @param bufSize Clip data capacity.
+ * @param cb Media event callback.
+ * @return A media clip handle or the provider-defined failure value.
+ * @par Ownership
+ * The caller owns a successful clip handle and releases it with MC_mdaClipFree.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 101.
+ * @par Documentation status
+ * draft.
+ */
 MC_MdaClip *MC_mdaClipCreate(M_Char *mType, M_Int32 bufSize, MEDIACB cb);
-/* WIPI ordinal 102. */
+/**
+ * @brief Release a media clip.
+ * @param clip Clip to release.
+ * @return The provider-defined result code.
+ * @par Ownership
+ * The clip handle becomes invalid after a successful release.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 102.
+ * @par Documentation status
+ * draft.
+ */
 M_Int32 MC_mdaClipFree(MC_MdaClip *clip);
-/* WIPI ordinal 103. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 103.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_mdaClipGetType(MC_MdaClip *clip, M_Byte *buf, M_Int32 bufSize);
-/* WIPI ordinal 104. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 104.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_mdaClipGetData(MC_MdaClip *clip, M_Byte *buf, M_Int32 size);
-/* WIPI ordinal 105. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 105.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_mdaClipAvailableDataSize(MC_MdaClip *clip);
-/* WIPI ordinal 106. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 106.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_mdaClipClearData(MC_MdaClip *clip);
-/* WIPI ordinal 107. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 107.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_mdaClipSetPosition(MC_MdaClip *clip, M_Int32 ms);
-/* WIPI ordinal 108. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 108.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_mdaClipGetVolume(MC_MdaClip *clip);
-/* WIPI ordinal 109. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 109.
+ * @par Documentation status
+ * cataloged.
+ */
 void MC_mdaClipSetVolume(MC_MdaClip *clip, M_Int32 level);
-/* WIPI ordinal 110. */
+/**
+ * @brief Start media clip playback.
+ * @param clip Clip to play.
+ * @param repeat Whether playback repeats according to the WIPI boolean contract.
+ * @return The provider-defined result code.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 110.
+ * @par Documentation status
+ * draft.
+ */
 M_Int32 MC_mdaPlay(MC_MdaClip *clip, M_Boolean repeat);
-/* WIPI ordinal 111. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 111.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_mdaPause(MC_MdaClip *clip);
-/* WIPI ordinal 112. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 112.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_mdaResume(MC_MdaClip *clip);
-/* WIPI ordinal 113. */
+/**
+ * @brief Stop media clip playback.
+ * @param clip Clip whose playback is stopped.
+ * @return The provider-defined result code.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 113.
+ * @par Documentation status
+ * draft.
+ */
 M_Int32 MC_mdaStop(MC_MdaClip *clip);
-/* WIPI ordinal 114. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 114.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_mdaRecord(MC_MdaClip *clip);
-/* WIPI ordinal 115. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 115.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_mdaGetVolume(void);
-/* WIPI ordinal 116. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 116.
+ * @par Documentation status
+ * cataloged.
+ */
 void MC_mdaSetVolume(M_Int32 value);
-/* WIPI ordinal 117. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 117.
+ * @par Documentation status
+ * cataloged.
+ */
 void MC_mdaVibrator(M_Int32 level, M_Int32 timeout);
-/* WIPI ordinal 118. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 118.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_mdaSetMuteState(M_Int32 source, M_Boolean bmute);
-/* WIPI ordinal 119. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 119.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Boolean MC_mdaGetMuteState(M_Int32 source);
 
 #ifdef __cplusplus

@@ -9,17 +9,53 @@
 extern "C" {
 #endif
 
-/* WIPI ordinal 001. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 1.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_srlClose(M_Int32 fd);
-/* WIPI ordinal 002. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 2.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_srlOpen(M_Int32 port, M_Byte *param);
-/* WIPI ordinal 003. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 3.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_srlWrite(M_Int32 fd, M_Uint8 *buf, M_Int32 size);
-/* WIPI ordinal 004. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 4.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_srlRead(M_Int32 fd, M_Uint8 *buf, M_Int32 size);
-/* WIPI ordinal 005. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 5.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_srlSetReadCB(M_Int32 fd, SRLREADCB cb, void *param);
-/* WIPI ordinal 006. */
+/**
+ * @brief Cataloged WIPI-C 1.2.1 API; detailed semantics are not yet reviewed.
+ * @par API level
+ * WIPI-C 1.2.1, ordinal 6.
+ * @par Documentation status
+ * cataloged.
+ */
 M_Int32 MC_srlSetWriteCB(M_Int32 fd, SRLWRITECB cb, void *param);
 
 #ifdef __cplusplus

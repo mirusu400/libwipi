@@ -13,7 +13,6 @@ import sys
 
 
 ROOT = Path(__file__).resolve().parents[1]
-CATALOG = ROOT / "spec" / "wipi-1.2.1" / "api.csv"
 VERSION_MANIFEST = ROOT / "spec" / "versions.json"
 PROFILE_DIR = ROOT / "spec" / "profiles"
 INSTALL_DIR = ROOT / "spec" / "install"
@@ -41,12 +40,10 @@ def api_macro(api_level: str) -> str:
     return f"LIBWIPI_API_LEVEL_{token}"
 
 
-def read_build_metadata() -> tuple[
-    list[dict[str, object]],
-    list[dict[str, object]],
-    list[dict[str, object]],
-]:
+def read_version_manifest() -> tuple[dict[str, object], list[dict[str, object]]]:
     manifest = json.loads(VERSION_MANIFEST.read_text(encoding="utf-8"))
+    if manifest.get("schema_version") != 1:
+        raise ValueError("unsupported version manifest schema")
     levels = manifest.get("levels")
     if not isinstance(levels, list) or not levels:
         raise ValueError("version manifest must contain API levels")
@@ -55,6 +52,19 @@ def read_build_metadata() -> tuple[
         raise ValueError("every API level must have a non-empty name")
     if len(set(names)) != len(names):
         raise ValueError("API levels must be unique")
+    bootstrap = manifest.get("bootstrap_api_level")
+    if bootstrap not in names:
+        raise ValueError("bootstrap API level is not listed")
+    return manifest, levels
+
+
+def read_build_metadata() -> tuple[
+    list[dict[str, object]],
+    list[dict[str, object]],
+    list[dict[str, object]],
+]:
+    _, levels = read_version_manifest()
+    names = [str(entry["api_level"]) for entry in levels]
 
     profiles: list[dict[str, object]] = []
     for path in sorted(PROFILE_DIR.glob("*.json")):
@@ -221,34 +231,92 @@ def render_api_levels_header(levels: list[dict[str, object]]) -> str:
     return "\n".join(lines)
 
 
-def read_catalog() -> list[dict[str, str]]:
-    with CATALOG.open("r", encoding="utf-8", newline="") as stream:
-        rows = list(csv.DictReader(stream))
-    validate_catalog(rows)
-    return rows
+def repository_path(relative: object, label: str) -> Path:
+    if not isinstance(relative, str) or not relative:
+        raise ValueError(f"{label} must be a non-empty repository path")
+    path = (ROOT / relative).resolve()
+    try:
+        path.relative_to(ROOT.resolve())
+    except ValueError as error:
+        raise ValueError(f"{label} escapes the repository: {relative}") from error
+    return path
 
 
-def validate_catalog(rows: list[dict[str, str]]) -> None:
-    if len(rows) != 239:
-        raise ValueError(f"catalog has {len(rows)} rows, expected 239")
+def read_catalogs(
+    levels: list[dict[str, object]],
+) -> dict[str, list[dict[str, str]]]:
+    catalogs: dict[str, list[dict[str, str]]] = {}
+    for entry in levels:
+        if entry.get("catalog_status") != "implemented":
+            if entry.get("catalog") is not None or entry.get("api_docs") is not None:
+                raise ValueError(
+                    f"unimplemented API level {entry['api_level']} has catalog outputs"
+                )
+            continue
+        api_level = str(entry["api_level"])
+        catalog_path = repository_path(entry.get("catalog"), f"{api_level} catalog")
+        with catalog_path.open("r", encoding="utf-8", newline="") as stream:
+            rows = list(csv.DictReader(stream))
+        validate_catalog(api_level, rows, entry.get("catalog_invariants"))
+        catalogs[api_level] = rows
+    if not catalogs:
+        raise ValueError("version manifest has no implemented catalogs")
+    return catalogs
+
+
+def validate_catalog(
+    api_level: str,
+    rows: list[dict[str, str]],
+    raw_invariants: object,
+) -> None:
+    if not isinstance(raw_invariants, dict):
+        raise ValueError(f"{api_level} catalog has no invariants")
+    required = {
+        "public_rows",
+        "ordinal_first",
+        "ordinal_last",
+        "family_count",
+        "ktf_samsung_confirmed",
+        "ktf_samsung_candidate",
+        "candidate_family",
+    }
+    if set(raw_invariants) != required:
+        raise ValueError(f"{api_level} catalog invariants have an invalid shape")
+    expected_rows = raw_invariants["public_rows"]
+    first = raw_invariants["ordinal_first"]
+    last = raw_invariants["ordinal_last"]
+    if not all(isinstance(value, int) for value in (expected_rows, first, last)):
+        raise ValueError(f"{api_level} catalog count invariants must be integers")
+    if len(rows) != expected_rows:
+        raise ValueError(
+            f"{api_level} catalog has {len(rows)} rows, expected {expected_rows}"
+        )
     ordinals = [int(row["ordinal"]) for row in rows]
-    if ordinals != list(range(1, 240)):
-        raise ValueError("catalog ordinals must be exactly 1..239 in order")
+    if ordinals != list(range(first, last + 1)):
+        raise ValueError(
+            f"{api_level} catalog ordinals must be exactly {first}..{last} in order"
+        )
     if len({row["name"] for row in rows}) != len(rows):
-        raise ValueError("catalog API names must be unique")
+        raise ValueError(f"{api_level} catalog API names must be unique")
     families = Counter(row["family"] for row in rows)
-    if set(families) != set(FAMILY_FILES) | {"CSTDLIB"}:
-        raise ValueError(f"unexpected families: {sorted(families)}")
+    if len(families) != raw_invariants["family_count"]:
+        raise ValueError(f"{api_level} catalog has an unexpected family count")
     confirmed = sum(
         row["ktf_samsung_confidence"] == "confirmed" for row in rows
     )
     candidates = [
         row for row in rows if row["ktf_samsung_confidence"] == "candidate"
     ]
-    if confirmed != 229 or len(candidates) != 10:
-        raise ValueError("catalog evidence split must remain 229/10")
-    if any(row["family"] != "CSTDLIB" for row in candidates):
-        raise ValueError("non-CSTDLIB candidate selector cannot generate a veneer")
+    if (
+        confirmed != raw_invariants["ktf_samsung_confirmed"]
+        or len(candidates) != raw_invariants["ktf_samsung_candidate"]
+    ):
+        raise ValueError(f"{api_level} catalog evidence split is stale")
+    candidate_family = raw_invariants["candidate_family"]
+    if any(row["family"] != candidate_family for row in candidates):
+        raise ValueError(
+            f"{api_level} candidate selector is outside {candidate_family}"
+        )
     for row in rows:
         expected_name = re.search(r"([A-Za-z_]\w*)\s*\(", row["prototype"])
         if not expected_name or expected_name.group(1) != row["name"]:
@@ -258,7 +326,155 @@ def validate_catalog(rows: list[dict[str, str]]) -> None:
             )
 
 
-def render_family_header(family: str, rows: list[dict[str, str]]) -> str:
+def prototype_parameter_names(prototype: str) -> set[str]:
+    parameters = prototype[prototype.index("(") + 1 : prototype.rindex(")")]
+    if parameters.strip() in {"", "void"}:
+        return set()
+    names: set[str] = set()
+    for parameter in parameters.split(","):
+        parameter = parameter.strip()
+        if parameter == "...":
+            continue
+        match = re.search(r"([A-Za-z_]\w*)\s*(?:\[[^]]*\])?$", parameter)
+        if not match:
+            raise ValueError(f"cannot identify parameter in prototype: {prototype}")
+        names.add(match.group(1))
+    return names
+
+
+def read_api_docs(
+    level: dict[str, object], rows: list[dict[str, str]]
+) -> dict[str, object]:
+    def require_text(value: object, label: str) -> str:
+        if not isinstance(value, str) or not value.strip():
+            raise ValueError(f"{api_level} API docs {label} must be non-empty text")
+        return value
+
+    api_level = str(level["api_level"])
+    path = repository_path(level.get("api_docs"), f"{api_level} API docs")
+    document = json.loads(path.read_text(encoding="utf-8"))
+    required = {
+        "schema",
+        "api_level",
+        "reference_revision",
+        "documentation_policy",
+        "families",
+        "symbols",
+    }
+    if set(document) != required or document.get("schema") != 1:
+        raise ValueError(f"{api_level} API docs have an invalid top-level shape")
+    if document.get("api_level") != api_level:
+        raise ValueError(f"{api_level} API docs identify another API level")
+    if document.get("reference_revision") != level.get("reference_revision"):
+        raise ValueError(f"{api_level} API docs use an unpinned reference revision")
+    require_text(document.get("documentation_policy"), "documentation policy")
+    families = document.get("families")
+    symbols = document.get("symbols")
+    catalog_families = {row["family"] for row in rows}
+    if not isinstance(families, dict) or set(families) != catalog_families:
+        raise ValueError(f"{api_level} API docs do not cover every family")
+    for family, documentation in families.items():
+        if not isinstance(documentation, dict) or set(documentation) != {
+            "title",
+            "summary",
+        }:
+            raise ValueError(f"{api_level} API family docs are invalid: {family}")
+        require_text(documentation["title"], f"{family} title")
+        require_text(documentation["summary"], f"{family} summary")
+    if not isinstance(symbols, dict):
+        raise ValueError(f"{api_level} API docs symbols must be an object")
+    by_name = {row["name"]: row for row in rows}
+    unknown = set(symbols).difference(by_name)
+    if unknown:
+        raise ValueError(f"{api_level} API docs contain unknown symbols: {sorted(unknown)}")
+    allowed = {
+        "status",
+        "summary",
+        "details",
+        "parameters",
+        "returns",
+        "ownership",
+        "notes",
+        "examples",
+    }
+    for name, documentation in symbols.items():
+        if not isinstance(documentation, dict) or not {"status", "summary"}.issubset(
+            documentation
+        ):
+            raise ValueError(f"{api_level} API docs entry is incomplete: {name}")
+        if set(documentation).difference(allowed):
+            raise ValueError(f"{api_level} API docs entry has unknown fields: {name}")
+        if documentation["status"] not in {"draft", "reviewed"}:
+            raise ValueError(f"{api_level} API docs status is invalid: {name}")
+        require_text(documentation["summary"], f"{name} summary")
+        for field in ("details", "returns", "ownership"):
+            if field in documentation:
+                require_text(documentation[field], f"{name} {field}")
+        parameters = documentation.get("parameters", {})
+        if not isinstance(parameters, dict):
+            raise ValueError(f"{api_level} API docs parameters are invalid: {name}")
+        for parameter, description in parameters.items():
+            require_text(parameter, f"{name} parameter name")
+            require_text(description, f"{name} parameter {parameter}")
+        expected_parameters = prototype_parameter_names(by_name[name]["prototype"])
+        if set(parameters) != expected_parameters:
+            raise ValueError(
+                f"{api_level} API docs parameter names do not match {name}: "
+                f"expected {sorted(expected_parameters)}, got {sorted(parameters)}"
+            )
+        for field in ("notes", "examples"):
+            values = documentation.get(field, [])
+            if not isinstance(values, list) or len(values) != len(set(values)):
+                raise ValueError(f"{api_level} API docs {field} are invalid: {name}")
+            for index, value in enumerate(values):
+                require_text(value, f"{name} {field}[{index}]")
+    return document
+
+
+def doxygen_comment(
+    api_level: str, row: dict[str, str], documentation: dict[str, object] | None
+) -> list[str]:
+    def safe(value: object) -> str:
+        return str(value).replace("*/", "* /")
+
+    if documentation is None:
+        summary = (
+            f"Cataloged WIPI-C {api_level} API; detailed semantics are not yet reviewed."
+        )
+        status = "cataloged"
+    else:
+        summary = safe(documentation["summary"])
+        status = safe(documentation["status"])
+    lines = ["/**", f" * @brief {summary}"]
+    if documentation is not None and documentation.get("details"):
+        lines.append(f" * @details {safe(documentation['details'])}")
+    if documentation is not None:
+        for name, description in documentation.get("parameters", {}).items():
+            lines.append(f" * @param {name} {safe(description)}")
+        if documentation.get("returns"):
+            lines.append(f" * @return {safe(documentation['returns'])}")
+        if documentation.get("ownership"):
+            lines.extend([" * @par Ownership", f" * {safe(documentation['ownership'])}"])
+        for note in documentation.get("notes", []):
+            lines.append(f" * @note {safe(note)}")
+    lines.extend(
+        [
+            " * @par API level",
+            f" * WIPI-C {api_level}, ordinal {int(row['ordinal'])}.",
+            " * @par Documentation status",
+            f" * {status}.",
+            " */",
+        ]
+    )
+    return lines
+
+
+def render_family_header(
+    api_level: str,
+    family: str,
+    rows: list[dict[str, str]],
+    api_docs: dict[str, object],
+) -> str:
     filename = FAMILY_FILES[family]
     guard = f"LIBWIPI_GENERATED_{filename.upper()}_H"
     lines = [
@@ -274,8 +490,9 @@ def render_family_header(family: str, rows: list[dict[str, str]]) -> str:
         "#endif",
         "",
     ]
+    symbol_docs = api_docs["symbols"]
     for row in rows:
-        lines.append(f"/* WIPI ordinal {int(row['ordinal']):03d}. */")
+        lines.extend(doxygen_comment(api_level, row, symbol_docs.get(row["name"])))
         lines.append(f"{row['prototype']};")
     lines.extend(
         [
@@ -324,9 +541,11 @@ def render_counts_header(rows: list[dict[str, str]]) -> str:
         "",
         "#include <wipi/api_level.h>",
         "",
-        "#define LIBWIPI_PUBLIC_API_COUNT 239",
-        "#define LIBWIPI_CONFIRMED_KTF_SAMSUNG_SELECTOR_COUNT 229",
-        "#define LIBWIPI_CANDIDATE_KTF_SAMSUNG_SELECTOR_COUNT 10",
+        f"#define LIBWIPI_PUBLIC_API_COUNT {len(rows)}",
+        "#define LIBWIPI_CONFIRMED_KTF_SAMSUNG_SELECTOR_COUNT "
+        + str(sum(row["ktf_samsung_confidence"] == "confirmed" for row in rows)),
+        "#define LIBWIPI_CANDIDATE_KTF_SAMSUNG_SELECTOR_COUNT "
+        + str(sum(row["ktf_samsung_confidence"] == "candidate" for row in rows)),
     ]
     for family in sorted(counts):
         macro = re.sub(r"[^A-Z0-9]+", "_", family.upper())
@@ -621,7 +840,7 @@ def render_lgt_veneer(
     return "\n".join(lines)
 
 
-def render_coverage(rows: list[dict[str, str]]) -> str:
+def render_coverage(api_level: str, rows: list[dict[str, str]]) -> str:
     counts = Counter(row["family"] for row in rows)
     candidates = [
         row for row in rows if row["ktf_samsung_confidence"] == "candidate"
@@ -635,11 +854,13 @@ def render_coverage(rows: list[dict[str, str]]) -> str:
     )
     lines = [
         "<!-- Generated by tools/generate.py. Do not edit. -->",
-        "# WIPI 1.2.1 API coverage",
+        f"# WIPI {api_level} API coverage",
         "",
         f"- Public API rows: **{len(rows)}**",
-        "- Samsung/KTF confirmed selectors: **229**",
-        "- Samsung/KTF candidate selectors: **10**",
+        "- Samsung/KTF confirmed selectors: "
+        f"**{sum(row['ktf_samsung_confidence'] == 'confirmed' for row in rows)}**",
+        "- Samsung/KTF candidate selectors: "
+        f"**{sum(row['ktf_samsung_confidence'] == 'candidate' for row in rows)}**",
         f"- Generated Samsung/KTF tail veneers: **{veneer_count}**",
         "- CSTDLIB strategy: **local freestanding implementation**",
         "",
@@ -661,7 +882,9 @@ def render_coverage(rows: list[dict[str, str]]) -> str:
 
 
 def generated_files(
+    api_level: str,
     rows: list[dict[str, str]],
+    api_docs: dict[str, object],
     levels: list[dict[str, object]],
     profiles: list[dict[str, object]],
     install_profiles: list[dict[str, object]],
@@ -670,7 +893,7 @@ def generated_files(
     for family, filename in FAMILY_FILES.items():
         family_rows = [row for row in rows if row["family"] == family]
         result[ROOT / "include" / "wipi" / "generated" / f"{filename}.h"] = (
-            render_family_header(family, family_rows)
+            render_family_header(api_level, family, family_rows, api_docs)
         )
     result[ROOT / "include" / "wipi" / "generated" / "api.h"] = (
         render_umbrella_header()
@@ -699,7 +922,9 @@ def generated_files(
         result[ROOT / "src" / "abi" / "lgt" / filename] = render_lgt_veneer(
             rows, install
         )
-    result[ROOT / "docs" / "generated" / "api-coverage.md"] = render_coverage(rows)
+    result[ROOT / "docs" / "generated" / "api-coverage.md"] = render_coverage(
+        api_level, rows
+    )
     return result
 
 
@@ -730,10 +955,23 @@ def main() -> int:
     parser.add_argument("--check", action="store_true")
     args = parser.parse_args()
     try:
-        rows = read_catalog()
+        manifest, manifest_levels = read_version_manifest()
         levels, profiles, install_profiles = read_build_metadata()
+        catalogs = read_catalogs(manifest_levels)
+        api_level = str(manifest["bootstrap_api_level"])
+        rows = catalogs[api_level]
+        level = next(entry for entry in levels if entry["api_level"] == api_level)
+        api_docs = read_api_docs(level, rows)
         return update_files(
-            generated_files(rows, levels, profiles, install_profiles), args.check
+            generated_files(
+                api_level,
+                rows,
+                api_docs,
+                levels,
+                profiles,
+                install_profiles,
+            ),
+            args.check,
         )
     except (OSError, ValueError, json.JSONDecodeError) as error:
         print(f"error: {error}", file=sys.stderr)

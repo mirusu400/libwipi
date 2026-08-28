@@ -9,6 +9,11 @@ The source API, carrier/device ABI, and executable/install profile are separate
 contracts. In particular, an emulator result is not presented as a handset
 result and an LGT fact is not presented as a platform-wide WIPI requirement.
 
+The searchable documentation portal is published at
+<https://mirusu400.github.io/libwipi/>. It includes function-level API pages,
+compiled example cross-links, an exact support matrix, Korean guides, release
+downloads, and `llms.txt`/per-page Markdown representations.
+
 ## Supported now
 
 | API / ABI / install selection | Result | Boundary |
@@ -114,6 +119,8 @@ establish complete WIPI-C coverage or compatibility with a physical handset.
 
 ## Documentation map
 
+- [Documentation portal](https://mirusu400.github.io/libwipi/): searchable,
+  version-selected HTML and machine-readable Markdown.
 - [Getting started](docs/getting-started.md): build a new application and run
   the conformance gates.
 - [Korean usage guide](docs/usage.ko.md): build, package, run, and troubleshoot
@@ -125,3 +132,20 @@ establish complete WIPI-C coverage or compatibility with a physical handset.
 - [Provenance](docs/provenance.md): evidence hierarchy and clean-room policy.
 - [Generated 1.2.1 coverage](docs/generated/api-coverage.md): catalog and KTF
   selector counts.
+- [Generated API reference](docs/generated/api/1.2.1/index.md): all 239 catalog
+  rows with prototypes, review state, profile availability, and examples.
+- [Compiled example gallery](docs/generated/examples/index.md): application
+  sources mapped back to the APIs they exercise.
+- [Testing and downloads](docs/testing.md): repository gates and the release
+  bundle contract for emulator and feature-phone developers.
+
+To reproduce the site locally, generate the checked-in pages and build them in
+the pinned documentation image:
+
+```powershell
+python tools/generate.py --check
+python tools/generate_docs.py --check
+docker build -t libwipi-docs -f docker/docs.Dockerfile .
+docker run --rm -v "${PWD}:/work" -w /work libwipi-docs `
+  python tools/build_docs.py
+```

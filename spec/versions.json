@@ -9,6 +9,16 @@
       "reference_url": "https://mirusu400.github.io/wipi-wiki/c-api/index/",
       "reference_revision": "mirusu400/wipi-wiki@d65e5a74174851d4cc733bdb2a4830693a7c1a7b",
       "catalog": "spec/wipi-1.2.1/api.csv",
+      "api_docs": "spec/wipi-1.2.1/api-docs.json",
+      "catalog_invariants": {
+        "public_rows": 239,
+        "ordinal_first": 1,
+        "ordinal_last": 239,
+        "family_count": 13,
+        "ktf_samsung_confirmed": 229,
+        "ktf_samsung_candidate": 10,
+        "candidate_family": "CSTDLIB"
+      },
       "catalog_status": "implemented",
       "sdk_status": "headers-ktf-abi-aram-lgt-and-aram-wie-lgt-emulators"
     },
@@ -18,6 +28,7 @@
       "reference_url": "https://mirusu400.github.io/wipi-wiki/v20/c-api/index/",
       "reference_revision": "mirusu400/wipi-wiki@d65e5a74174851d4cc733bdb2a4830693a7c1a7b",
       "catalog": null,
+      "api_docs": null,
       "catalog_status": "reference-indexed",
       "sdk_status": "planned"
     },
@@ -27,6 +38,7 @@
       "reference_url": "https://committee.tta.or.kr/",
       "reference_revision": null,
       "catalog": null,
+      "api_docs": null,
       "catalog_status": "source-needed",
       "sdk_status": "planned"
     },
@@ -36,6 +48,7 @@
       "reference_url": "https://committee.tta.or.kr/",
       "reference_revision": null,
       "catalog": null,
+      "api_docs": null,
       "catalog_status": "source-needed",
       "sdk_status": "planned"
     },
@@ -45,6 +58,7 @@
       "reference_url": "https://mirusu400.github.io/wipi-wiki/v22/c-api/index/",
       "reference_revision": "mirusu400/wipi-wiki@d65e5a74174851d4cc733bdb2a4830693a7c1a7b",
       "catalog": null,
+      "api_docs": null,
       "catalog_status": "reference-indexed",
       "sdk_status": "planned"
     }

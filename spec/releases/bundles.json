@@ -1,0 +1,59 @@
+{
+  "schema": 1,
+  "repository": "mirusu400/libwipi",
+  "bundles": [
+    {
+      "id": "conformance",
+      "title": "ARAM and WIE conformance fixture",
+      "description": "Compact graphics, memory, timer, input, system, and audio fixture for the common pinned ARAM/WIE install contract.",
+      "api_level": "1.2.1",
+      "abi_profile": "lgt-raptor",
+      "install_profile": "aram-wie-raptor",
+      "build_target": "conformance",
+      "suite_manifest": "examples/conformance/coverage.json",
+      "evidence": "spec/evidence/emulator-conformance.json",
+      "packages": [
+        "build/wipi-1.2.1/lgt-raptor/aram-wie-raptor/examples/conformance/libwipi-conformance.zip"
+      ],
+      "source_paths": [
+        "examples/conformance/main.c",
+        "examples/conformance/coverage.json",
+        "tools/verify_aram.py",
+        "tools/verify_wie.py",
+        "tests/wie/libwipi_conformance.rs"
+      ],
+      "runner_owner": "aram-test for ARAM compatibility orchestration; the checked-in libwipi verifier remains fixture-specific",
+      "real_device": false
+    },
+    {
+      "id": "sdk-lab-common",
+      "title": "ARAM and WIE common SDK example lab",
+      "description": "Seven independent packages covering every confirmed public method in the common ARAM/WIE Raptor install contract.",
+      "api_level": "1.2.1",
+      "abi_profile": "lgt-raptor",
+      "install_profile": "aram-wie-raptor",
+      "build_target": "sdk-examples",
+      "suite_manifest": "examples/sdk-lab.json",
+      "evidence": "spec/evidence/emulator-conformance.json",
+      "packages_from_manifest": true,
+      "source_paths_from_manifest": true,
+      "runner_owner": "aram-test",
+      "real_device": false
+    },
+    {
+      "id": "sdk-lab-aram",
+      "title": "ARAM extended SDK example lab",
+      "description": "Ten independent packages covering the scoped 100-method ARAM-only test contract, including persistence and media fixtures.",
+      "api_level": "1.2.1",
+      "abi_profile": "lgt-raptor",
+      "install_profile": "aram-raptor",
+      "build_target": "aram-sdk-examples",
+      "suite_manifest": "examples/sdk-lab-aram.json",
+      "evidence": "spec/evidence/aram-sdk-lab.json",
+      "packages_from_manifest": true,
+      "source_paths_from_manifest": true,
+      "runner_owner": "aram-test",
+      "real_device": false
+    }
+  ]
+}

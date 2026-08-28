@@ -1,0 +1,28 @@
+:root {
+  --libwipi-accent: #3d63dd;
+  --libwipi-accent-soft: #edf2ff;
+}
+
+html[data-theme="dark"] {
+  --libwipi-accent: #8da4ff;
+  --libwipi-accent-soft: #1b2442;
+}
+
+.bd-main .bd-content .bd-article-container {
+  max-width: 70rem;
+}
+
+.sd-card {
+  border-top: 0.2rem solid var(--libwipi-accent) !important;
+  background: color-mix(in srgb, var(--libwipi-accent-soft) 45%, transparent);
+}
+
+table code,
+.sig-name,
+.sig-prename {
+  word-break: normal;
+}
+
+.bd-article table {
+  width: 100%;
+}

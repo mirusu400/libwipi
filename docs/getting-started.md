@@ -1,7 +1,7 @@
 # Getting started with a WIPI-C application
 
-This guide builds a native WIPI-C 1.2.1 application for the one install target
-currently executed end to end by this repository:
+This guide uses the WIPI-C 1.2.1 install target shared by the pinned ARAM and
+WIE test paths:
 
 ```text
 API_LEVEL=1.2.1
@@ -9,8 +9,10 @@ PROFILE=lgt-raptor
 INSTALL_PROFILE=aram-wie-raptor
 ```
 
-That triple targets the pinned ARAM and WIE Raptor loaders. It is not a generic
-LGT handset package or a real-device compatibility claim.
+That triple is the default, portable emulator contract. The separately tested
+`1.2.1/lgt-raptor/aram-raptor` contract adds synthetic ARAM-only methods for SDK
+testing. Neither is a generic LGT handset package or a real-device compatibility
+claim.
 
 ## Prerequisites
 
@@ -120,9 +122,9 @@ For ARAM-only SDK development, select `aram-raptor`. It exposes 100 methods:
 the common graphics, kernel, network, and misc subset plus all 17 filesystem,
 13 database, and 21 media APIs. The extra method numbers are a synthetic ARAM
 test contract, not a device ABI. The independent examples are
-[`database-crud`](../examples/database-crud),
-[`filesystem`](../examples/filesystem), and
-[`media-suite`](../examples/media-suite).
+[`database-crud`](generated/examples/database-crud.md),
+[`filesystem`](generated/examples/filesystem.md), and
+[`media-suite`](generated/examples/media-suite.md).
 
 ```powershell
 docker run --rm -v "${PWD}:/work" -w /work libwipi-toolchain `
