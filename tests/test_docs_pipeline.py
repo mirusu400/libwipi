@@ -2,6 +2,7 @@ import csv
 import json
 from pathlib import Path
 import re
+import runpy
 import tempfile
 import unittest
 
@@ -133,6 +134,11 @@ class DocumentationPipelineTests(unittest.TestCase):
         self.assertIn('llms_txt_override_source = "llms-source"', conf)
         self.assertIn("myst_html_meta = {", conf)
         self.assertIn('"show_version_warning_banner": False', conf)
+        self.assertIn('html_favicon = "_static/favicon.svg"', conf)
+        self.assertTrue((ROOT / "docs/_static/favicon.svg").is_file())
+        sphinx_config = runpy.run_path(str(ROOT / "docs/conf.py"))
+        self.assertEqual(sphinx_config["html_context"]["default_mode"], "auto")
+        self.assertNotIn("default_mode", sphinx_config["html_theme_options"])
 
         doxyfile = (ROOT / "docs/Doxyfile").read_text(encoding="utf-8")
         self.assertIn("$(LIBWIPI_DOXYGEN_API_DEFINE)", doxyfile)

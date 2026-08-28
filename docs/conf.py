@@ -55,6 +55,7 @@ html_baseurl = VERSION_URL + "/"
 html_static_path = ["_static"]
 html_extra_path = ["versions.json"]
 html_css_files = ["custom.css"]
+html_favicon = "_static/favicon.svg"
 html_last_updated_fmt = None
 html_show_sourcelink = True
 html_theme_options = {
@@ -78,6 +79,7 @@ html_theme_options = {
     "footer_end": ["sphinx-version"],
 }
 html_context = {
+    "default_mode": "auto",
     "github_user": "mirusu400",
     "github_repo": "libwipi",
     "github_version": "main" if DOCS_VERSION == "latest" else DOCS_VERSION,
