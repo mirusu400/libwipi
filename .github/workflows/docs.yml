@@ -40,7 +40,7 @@ jobs:
         run: >-
           docker run --rm -v "${{ github.workspace }}:/work" -w /work
           libwipi-docs python tools/build_docs.py --site-root build/docs/site
-          --version latest --jobs auto
+          --version latest --jobs auto --publish-packages
 
       - name: Check documentation links
         run: >-

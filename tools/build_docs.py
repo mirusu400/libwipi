@@ -48,9 +48,13 @@ def build(
     base_url: str,
     builder: str,
     jobs: str,
+    publish_packages: bool = False,
+    source_revision: str | None = None,
 ) -> None:
     run([sys.executable, "tools/generate.py", "--check"])
     run([sys.executable, "tools/generate_docs.py", "--check"])
+    if publish_packages:
+        run(["make", "clean", "all", "test-target"])
 
     build_root = (ROOT / "build" / "docs").resolve()
     doxygen_output = checked_output(build_root, build_root / "doxygen")
@@ -107,6 +111,20 @@ def build(
                 base_url,
             ]
         )
+        if publish_packages:
+            package_command = [
+                sys.executable,
+                "tools/docs_package_assets.py",
+                "--site-root",
+                str(site_root),
+                "--version",
+                version,
+                "--base-url",
+                base_url,
+            ]
+            if source_revision:
+                package_command.extend(["--source-revision", source_revision])
+            run(package_command)
 
 
 def main() -> int:
@@ -118,11 +136,21 @@ def main() -> int:
     )
     parser.add_argument("--builder", choices=("dirhtml", "linkcheck"), default="dirhtml")
     parser.add_argument("--jobs", default="auto")
+    parser.add_argument("--publish-packages", action="store_true")
+    parser.add_argument("--source-revision")
     args = parser.parse_args()
     if not args.version or "/" in args.version or "\\" in args.version:
         parser.error("version must be one path component")
     try:
-        build(args.site_root, args.version, args.base_url, args.builder, args.jobs)
+        build(
+            args.site_root,
+            args.version,
+            args.base_url,
+            args.builder,
+            args.jobs,
+            args.publish_packages,
+            args.source_revision,
+        )
     except (OSError, ValueError, subprocess.CalledProcessError) as error:
         print(f"error: {error}", file=sys.stderr)
         return 2

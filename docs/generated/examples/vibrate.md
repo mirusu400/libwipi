@@ -12,8 +12,12 @@ A minimal original WIPI-C clet for `1.2.1/lgt-raptor/aram-wie-raptor` that exerc
 
 | API level | ABI profile | Install profile | Package |
 |---|---|---|---|
-| `1.2.1` | `lgt-raptor` | `aram-wie-raptor` | `examples/vibrate/build/wipi-1.2.1/lgt-raptor/aram-wie-raptor/libwipi-vibrate.zip` |
-| `1.2.1` | `lgt-raptor` | `aram-raptor` | `examples/vibrate/build/wipi-1.2.1/lgt-raptor/aram-raptor/libwipi-vibrate.zip` |
+| `1.2.1` | `lgt-raptor` | `aram-wie-raptor` | <span class="libwipi-package-download" data-package-key="1.2.1::lgt-raptor::aram-wie-raptor::vibrate">Compiled ZIP is added by the versioned documentation build.</span> |
+| `1.2.1` | `lgt-raptor` | `aram-raptor` | <span class="libwipi-package-download" data-package-key="1.2.1::lgt-raptor::aram-raptor::vibrate">Compiled ZIP is added by the versioned documentation build.</span> |
+
+> Compiled downloads are built from the same documentation revision,
+> inspected as Raptor packages, and published with SHA-256 hashes. They
+> are scoped emulator-profile artifacts, not real-device compatibility claims.
 
 ## APIs demonstrated
 

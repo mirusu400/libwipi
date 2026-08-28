@@ -163,6 +163,25 @@ class DocumentationPipelineTests(unittest.TestCase):
         self.assertIn("REQUESTED_TAG:", release_text)
         self.assertIn('tag="$REQUESTED_TAG"', release_text)
 
+    def test_docs_build_publishes_exact_revision_target_packages(self):
+        dockerfile = (ROOT / "docker/docs.Dockerfile").read_text(encoding="utf-8")
+        self.assertIn("gcc-arm-none-eabi", dockerfile)
+        self.assertIn("binutils-arm-none-eabi", dockerfile)
+
+        builder = (ROOT / "tools/build_docs.py").read_text(encoding="utf-8")
+        self.assertIn('"--publish-packages"', builder)
+        self.assertIn('"make", "clean", "all", "test-target"', builder)
+        self.assertIn("tools/docs_package_assets.py", builder)
+
+        versions = (ROOT / "tools/build_docs_versions.py").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn('"--publish-packages"', versions)
+        self.assertIn('"--source-revision"', versions)
+
+        workflow = (ROOT / ".github/workflows/docs.yml").read_text(encoding="utf-8")
+        self.assertIn("--publish-packages", workflow)
+
     def test_discovery_link_postprocessor_is_present(self):
         script = (ROOT / "tools/finalize_docs_site.py").read_text(encoding="utf-8")
         self.assertIn('rel="alternate"', script)

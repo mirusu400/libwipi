@@ -11,7 +11,7 @@ the repository gates. API lists are derived from source and suite manifests.
 | [Database CRUD](database-crud.md) | 23 | `aram-raptor` |
 | [Filesystem](filesystem.md) | 27 | `aram-raptor` |
 | [Graphics Gallery](graphics-gallery.md) | 18 | `aram-raptor`, `aram-wie-raptor` |
-| [Hello](hello.md) | 6 | source-only |
+| [Hello](hello.md) | 6 | `aram-raptor`, `aram-wie-raptor` |
 | [Image Pipeline](image-pipeline.md) | 20 | `aram-raptor`, `aram-wie-raptor` |
 | [Media suite](media-suite.md) | 31 | `aram-raptor` |
 | [Memory and Resource](memory-resource.md) | 17 | `aram-raptor`, `aram-wie-raptor` |

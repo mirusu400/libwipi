@@ -11,7 +11,11 @@ import re
 import sys
 from typing import Iterable
 
-import generate
+if __package__:
+    from . import docs_package_assets, generate
+else:
+    import docs_package_assets
+    import generate
 
 
 ROOT = generate.ROOT
@@ -133,10 +137,34 @@ def read_example_records(
         ]
 
     defaults = {
-        "template": "aram-wie-raptor",
-        "platformer": "aram-wie-raptor",
+        "hello": [
+            (
+                "aram-wie-raptor",
+                f"build/wipi-{bootstrap_api_level}/lgt-raptor/aram-wie-raptor/"
+                "examples/hello/libwipi-hello.zip",
+            ),
+            (
+                "aram-raptor",
+                f"build/wipi-{bootstrap_api_level}/lgt-raptor/aram-raptor/"
+                "examples/hello/libwipi-hello.zip",
+            ),
+        ],
+        "template": [
+            (
+                "aram-wie-raptor",
+                f"examples/template/build/wipi-{bootstrap_api_level}/lgt-raptor/"
+                "aram-wie-raptor/libwipi-starter.zip",
+            )
+        ],
+        "platformer": [
+            (
+                "aram-wie-raptor",
+                f"examples/platformer/build/wipi-{bootstrap_api_level}/lgt-raptor/"
+                "aram-wie-raptor/libwipi-sky-hopper.zip",
+            )
+        ],
     }
-    for example_id, install_profile in defaults.items():
+    for example_id, variants in defaults.items():
         record = records.get(example_id)
         if record is not None and not record["variants"]:
             record["variants"] = [
@@ -145,8 +173,9 @@ def read_example_records(
                     "abi_profile": "lgt-raptor",
                     "install_profile": install_profile,
                     "expected": {"required_apis": record["apis"]},
-                    "package": None,
+                    "package": package,
                 }
+                for install_profile, package in variants
             ]
     return records
 
@@ -562,10 +591,30 @@ def render_example_page(record: dict[str, object]) -> str:
             ]
         )
         for variant in record["variants"]:
-            package = code(variant["package"]) if variant["package"] else "build from source"
+            package_record = {
+                "example_id": str(record["id"]),
+                "api_level": str(variant["api_level"]),
+                "abi_profile": str(variant["abi_profile"]),
+                "install_profile": str(variant["install_profile"]),
+                "package": str(variant["package"]),
+            }
+            package = (
+                docs_package_assets.package_marker(package_record)
+                if variant["package"]
+                else "build from source"
+            )
             lines.append(
                 f"| {code(variant['api_level'])} | {code(variant['abi_profile'])} | "
                 f"{code(variant['install_profile'])} | {package} |"
+            )
+        if any(variant["package"] for variant in record["variants"]):
+            lines.extend(
+                [
+                    "",
+                    "> Compiled downloads are built from the same documentation revision,",
+                    "> inspected as Raptor packages, and published with SHA-256 hashes. They",
+                    "> are scoped emulator-profile artifacts, not real-device compatibility claims.",
+                ]
             )
     lines.extend(
         [
@@ -605,6 +654,13 @@ def render_downloads(bundle_manifest: dict[str, object]) -> str:
         "Workflow artifacts are not the public distribution channel.",
         "",
         "[Open GitHub Releases](https://github.com/mirusu400/libwipi/releases)",
+        "",
+        "## Individual compiled examples",
+        "",
+        "Each [Compiled example gallery](examples/index.md) page publishes a",
+        "profile-specific compiled ZIP from the same documentation revision, together",
+        "with its SHA-256 hash. Use the API, ABI, and install-profile columns to choose",
+        "the intended emulator contract.",
         "",
         "## Download and verify",
         "",

@@ -7,14 +7,25 @@ A checked-in libwipi application example.
 
 - {download}`Application source <../../../examples/hello/main.c>`
 
+## Build and runtime axes
+
+| API level | ABI profile | Install profile | Package |
+|---|---|---|---|
+| `1.2.1` | `lgt-raptor` | `aram-wie-raptor` | <span class="libwipi-package-download" data-package-key="1.2.1::lgt-raptor::aram-wie-raptor::hello">Compiled ZIP is added by the versioned documentation build.</span> |
+| `1.2.1` | `lgt-raptor` | `aram-raptor` | <span class="libwipi-package-download" data-package-key="1.2.1::lgt-raptor::aram-raptor::hello">Compiled ZIP is added by the versioned documentation build.</span> |
+
+> Compiled downloads are built from the same documentation revision,
+> inspected as Raptor packages, and published with SHA-256 hashes. They
+> are scoped emulator-profile artifacts, not real-device compatibility claims.
+
 ## APIs demonstrated
 
-- `MC_grpFillRect` (shown by more than one API-level variant)
-- `MC_grpFlushLcd` (shown by more than one API-level variant)
-- `MC_grpGetDisplayInfo` (shown by more than one API-level variant)
-- `MC_grpGetPixelFromRGB` (shown by more than one API-level variant)
-- `MC_grpGetScreenFrameBuffer` (shown by more than one API-level variant)
-- `MC_grpInitContext` (shown by more than one API-level variant)
+- [`MC_grpFillRect`](../api/1.2.1/symbols/MC_grpFillRect.md)
+- [`MC_grpFlushLcd`](../api/1.2.1/symbols/MC_grpFlushLcd.md)
+- [`MC_grpGetDisplayInfo`](../api/1.2.1/symbols/MC_grpGetDisplayInfo.md)
+- [`MC_grpGetPixelFromRGB`](../api/1.2.1/symbols/MC_grpGetPixelFromRGB.md)
+- [`MC_grpGetScreenFrameBuffer`](../api/1.2.1/symbols/MC_grpGetScreenFrameBuffer.md)
+- [`MC_grpInitContext`](../api/1.2.1/symbols/MC_grpInitContext.md)
 
 > The application source remains profile-independent. Emulator orchestration and
 > expected observations live in manifests and the owning test repository.

@@ -12,7 +12,11 @@ Sky Hopper is a small, original side-scrolling platformer example for `1.2.1/lgt
 
 | API level | ABI profile | Install profile | Package |
 |---|---|---|---|
-| `1.2.1` | `lgt-raptor` | `aram-wie-raptor` | build from source |
+| `1.2.1` | `lgt-raptor` | `aram-wie-raptor` | <span class="libwipi-package-download" data-package-key="1.2.1::lgt-raptor::aram-wie-raptor::platformer">Compiled ZIP is added by the versioned documentation build.</span> |
+
+> Compiled downloads are built from the same documentation revision,
+> inspected as Raptor packages, and published with SHA-256 hashes. They
+> are scoped emulator-profile artifacts, not real-device compatibility claims.
 
 ## APIs demonstrated
 

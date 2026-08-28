@@ -32,6 +32,16 @@ def release_tags() -> list[str]:
     return [line.strip() for line in output.splitlines() if line.strip()]
 
 
+def tag_revision(tag: str) -> str:
+    return subprocess.run(
+        git_command("rev-list", "-n", "1", tag),
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+
+
 def export_tag(tag: str, destination: Path) -> None:
     archive = subprocess.run(
         git_command("archive", "--format=zip", tag),
@@ -65,19 +75,28 @@ def build_tags(site_root: Path, base_url: str, tags: list[str]) -> None:
             if not builder.is_file():
                 print(f"warning: skipping {tag}; it predates the versioned docs builder")
                 continue
+            command = [
+                sys.executable,
+                str(builder),
+                "--site-root",
+                str(site_root.resolve()),
+                "--version",
+                tag,
+                "--base-url",
+                base_url,
+                "--jobs",
+                "auto",
+            ]
+            if (checkout / "tools" / "docs_package_assets.py").is_file():
+                command.extend(
+                    [
+                        "--publish-packages",
+                        "--source-revision",
+                        tag_revision(tag),
+                    ]
+                )
             subprocess.run(
-                [
-                    sys.executable,
-                    str(builder),
-                    "--site-root",
-                    str(site_root.resolve()),
-                    "--version",
-                    tag,
-                    "--base-url",
-                    base_url,
-                    "--jobs",
-                    "auto",
-                ],
+                command,
                 cwd=checkout,
                 check=True,
             )

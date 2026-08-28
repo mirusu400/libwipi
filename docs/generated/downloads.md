@@ -7,6 +7,13 @@ Workflow artifacts are not the public distribution channel.
 
 [Open GitHub Releases](https://github.com/mirusu400/libwipi/releases)
 
+## Individual compiled examples
+
+Each [Compiled example gallery](examples/index.md) page publishes a
+profile-specific compiled ZIP from the same documentation revision, together
+with its SHA-256 hash. Use the API, ABI, and install-profile columns to choose
+the intended emulator contract.
+
 ## Download and verify
 
 Choose an existing `v...` SDK tag in Releases. With the GitHub CLI:

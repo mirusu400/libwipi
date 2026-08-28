@@ -12,8 +12,12 @@ This WIPI-C example exercises offscreen framebuffers, context mutation, RGB pixe
 
 | API level | ABI profile | Install profile | Package |
 |---|---|---|---|
-| `1.2.1` | `lgt-raptor` | `aram-wie-raptor` | `examples/image-pipeline/build/wipi-1.2.1/lgt-raptor/aram-wie-raptor/libwipi-image-pipeline.zip` |
-| `1.2.1` | `lgt-raptor` | `aram-raptor` | `examples/image-pipeline/build/wipi-1.2.1/lgt-raptor/aram-raptor/libwipi-image-pipeline.zip` |
+| `1.2.1` | `lgt-raptor` | `aram-wie-raptor` | <span class="libwipi-package-download" data-package-key="1.2.1::lgt-raptor::aram-wie-raptor::image-pipeline">Compiled ZIP is added by the versioned documentation build.</span> |
+| `1.2.1` | `lgt-raptor` | `aram-raptor` | <span class="libwipi-package-download" data-package-key="1.2.1::lgt-raptor::aram-raptor::image-pipeline">Compiled ZIP is added by the versioned documentation build.</span> |
+
+> Compiled downloads are built from the same documentation revision,
+> inspected as Raptor packages, and published with SHA-256 hashes. They
+> are scoped emulator-profile artifacts, not real-device compatibility claims.
 
 ## APIs demonstrated
 
