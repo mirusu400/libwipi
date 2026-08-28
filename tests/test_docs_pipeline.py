@@ -148,6 +148,43 @@ class DocumentationPipelineTests(unittest.TestCase):
         for target in ("docs:", "docs-check:", "docs-linkcheck:", "release-bundles:"):
             self.assertIn(target, makefile)
 
+    def test_header_navigation_is_concise_and_stays_on_one_desktop_row(self):
+        index = (ROOT / "docs/index.md").read_text(encoding="utf-8")
+        navigation = (
+            "Quickstart <getting-started>",
+            "API Guide <api-usage>",
+            "API Reference <generated/api/1.2.1/index>",
+            "Examples <generated/examples/index>",
+            "Downloads <generated/downloads>",
+            "API Status <generated/api-coverage>",
+            "Compatibility <generated/support-matrix>",
+            "Testing <testing>",
+            "Architecture <architecture>",
+            "Versioning <versioning>",
+            "Memory Model <ownership>",
+            "Provenance <provenance>",
+            "Korean <ko/index>",
+            "LLM Index <llms-source>",
+        )
+        positions = [index.index(entry) for entry in navigation]
+        self.assertEqual(positions, sorted(positions))
+
+        sphinx_config = runpy.run_path(str(ROOT / "docs/conf.py"))
+        theme = sphinx_config["html_theme_options"]
+        self.assertEqual(theme["header_links_before_dropdown"], 5)
+        self.assertEqual(theme["header_dropdown_text"], "Resources")
+
+        css = (ROOT / "docs/_static/custom.css").read_text(encoding="utf-8")
+        desktop = re.search(
+            r"@media \(min-width: 992px\) \{(?P<body>.*)\}\s*\Z",
+            css,
+            flags=re.DOTALL,
+        )
+        self.assertIsNotNone(desktop)
+        self.assertIn("#pst-header .bd-header__inner", desktop.group("body"))
+        self.assertIn("#pst-header .bd-navbar-elements", desktop.group("body"))
+        self.assertIn("flex-wrap: nowrap", desktop.group("body"))
+
     def test_pages_and_release_workflows_are_checked_in(self):
         docs = ROOT / ".github/workflows/docs.yml"
         release = ROOT / ".github/workflows/release.yml"

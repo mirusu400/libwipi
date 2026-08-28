@@ -62,6 +62,8 @@ html_theme_options = {
     "navbar_align": "left",
     "navbar_center": ["navbar-nav"],
     "navbar_end": ["version-switcher", "theme-switcher", "navbar-icon-links"],
+    "header_links_before_dropdown": 5,
+    "header_dropdown_text": "Resources",
     "show_version_warning_banner": False,
     "switcher": {
         "json_url": "versions.json",

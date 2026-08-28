@@ -81,18 +81,18 @@ handset result.
 :hidden:
 :maxdepth: 2
 
-getting-started
-api-usage
-generated/api/1.2.1/index
-generated/api-coverage
-generated/examples/index
-generated/support-matrix
-testing
-generated/downloads
-architecture
-versioning
-ownership
-provenance
-ko/index
-llms-source
+Quickstart <getting-started>
+API Guide <api-usage>
+API Reference <generated/api/1.2.1/index>
+Examples <generated/examples/index>
+Downloads <generated/downloads>
+API Status <generated/api-coverage>
+Compatibility <generated/support-matrix>
+Testing <testing>
+Architecture <architecture>
+Versioning <versioning>
+Memory Model <ownership>
+Provenance <provenance>
+Korean <ko/index>
+LLM Index <llms-source>
 ```

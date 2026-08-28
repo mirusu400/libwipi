@@ -26,3 +26,26 @@ table code,
 .bd-article table {
   width: 100%;
 }
+
+/* Keep the full desktop navigation on one row; smaller screens use the
+   theme's collapsed navigation instead. */
+@media (min-width: 992px) {
+  #pst-header .bd-header__inner,
+  #pst-header .navbar-header-items,
+  #pst-header .navbar-header-items__center,
+  #pst-header .bd-navbar-elements {
+    flex-wrap: nowrap;
+  }
+
+  #pst-header .navbar-header-items__center {
+    min-width: 0;
+  }
+
+  #pst-header .bd-navbar-elements {
+    white-space: nowrap;
+  }
+
+  #pst-header .bd-navbar-elements > .nav-item {
+    flex: 0 0 auto;
+  }
+}
