@@ -43,41 +43,56 @@ class DocumentationPackageAssetTests(unittest.TestCase):
             "package": "out/libwipi-audio-player.zip",
         }
 
-    def test_stage_publishes_download_hash_and_manifest(self):
+    def rendered_site(self, site: Path, record: dict[str, str]) -> None:
+        version = site / "latest"
+        marker = docs_package_assets.package_marker(record)
+        (version / "generated/examples/audio-player").mkdir(
+            parents=True, exist_ok=True
+        )
+        (version / "index.html").write_text("home", encoding="utf-8")
+        (version / "generated/examples/audio-player/index.html").write_text(
+            marker, encoding="utf-8"
+        )
+        (version / "generated/examples/audio-player.md").write_text(
+            marker, encoding="utf-8"
+        )
+
+    def test_update_then_stage_uses_the_checked_in_package(self):
         with tempfile.TemporaryDirectory() as raw_directory:
             root = Path(raw_directory)
             repository = root / "repository"
             site = root / "site"
-            version = site / "latest"
             package = repository / "out/libwipi-audio-player.zip"
             self.package(package)
             record = self.record()
-            marker = docs_package_assets.package_marker(record)
+            docs_package_assets.update_static_package_set(
+                repository_root=repository,
+                built_from="build123",
+                records=[record],
+            )
+            static_package = repository / "docs" / docs_package_assets.package_site_path(
+                record
+            )
+            self.assertEqual(static_package.read_bytes(), package.read_bytes())
 
-            (version / "generated/examples/audio-player").mkdir(
-                parents=True, exist_ok=True
-            )
-            (version / "index.html").write_text("home", encoding="utf-8")
-            (version / "generated/examples/audio-player/index.html").write_text(
-                marker, encoding="utf-8"
-            )
-            (version / "generated/examples/audio-player.md").write_text(
-                marker, encoding="utf-8"
-            )
+            # Publication must not depend on ignored compiler output still existing.
+            package.unlink()
+            self.rendered_site(site, record)
 
             docs_package_assets.stage_package_assets(
                 repository_root=repository,
                 site_root=site,
                 version="latest",
                 base_url="https://example.invalid/libwipi",
-                source_revision="abc123",
+                documentation_revision="docs456",
                 records=[record],
             )
 
+            version = site / "latest"
             relative = docs_package_assets.package_site_path(record)
             published = version / relative
-            self.assertEqual(published.read_bytes(), package.read_bytes())
-            digest = hashlib.sha256(package.read_bytes()).hexdigest()
+            self.assertEqual(published.read_bytes(), static_package.read_bytes())
+            digest = hashlib.sha256(static_package.read_bytes()).hexdigest()
             rendered = (
                 version / "generated/examples/audio-player/index.html"
             ).read_text(encoding="utf-8")
@@ -87,12 +102,14 @@ class DocumentationPackageAssetTests(unittest.TestCase):
             )
             self.assertIn("download", rendered)
             self.assertIn(digest, rendered)
+            self.assertIn("build123", rendered)
             self.assertNotIn("data-package-key", rendered)
 
             manifest = json.loads(
                 (version / "packages/manifest.json").read_text(encoding="utf-8")
             )
-            self.assertEqual(manifest["source_revision"], "abc123")
+            self.assertEqual(manifest["documentation_revision"], "docs456")
+            self.assertEqual(manifest["built_from"], "build123")
             self.assertFalse(manifest["real_device"])
             self.assertEqual(manifest["packages"][0]["sha256"], digest)
             self.assertEqual(
@@ -100,22 +117,45 @@ class DocumentationPackageAssetTests(unittest.TestCase):
                 f"{digest}  {relative.relative_to('packages').as_posix()}\n",
             )
 
-    def test_stage_rejects_a_package_path_outside_the_repository(self):
+    def test_update_rejects_a_package_path_outside_the_repository(self):
+        with tempfile.TemporaryDirectory() as raw_directory:
+            root = Path(raw_directory)
+            repository = root / "repository"
+            record = self.record()
+            record["package"] = "../escape.zip"
+            with self.assertRaisesRegex(ValueError, "below repository"):
+                docs_package_assets.update_static_package_set(
+                    repository_root=repository,
+                    built_from="build123",
+                    records=[record],
+                )
+
+    def test_stage_rejects_a_modified_checked_in_package(self):
         with tempfile.TemporaryDirectory() as raw_directory:
             root = Path(raw_directory)
             repository = root / "repository"
             site = root / "site"
-            (site / "latest").mkdir(parents=True)
-            (site / "latest/index.html").write_text("home", encoding="utf-8")
+            package = repository / "out/libwipi-audio-player.zip"
+            self.package(package)
             record = self.record()
-            record["package"] = "../escape.zip"
-            with self.assertRaisesRegex(ValueError, "below repository"):
+            docs_package_assets.update_static_package_set(
+                repository_root=repository,
+                built_from="build123",
+                records=[record],
+            )
+            static_package = repository / "docs" / docs_package_assets.package_site_path(
+                record
+            )
+            static_package.write_bytes(static_package.read_bytes() + b"tampered")
+            self.rendered_site(site, record)
+
+            with self.assertRaisesRegex(ValueError, "SHA-256 mismatch"):
                 docs_package_assets.stage_package_assets(
                     repository_root=repository,
                     site_root=site,
                     version="latest",
                     base_url="https://example.invalid/libwipi",
-                    source_revision="abc123",
+                    documentation_revision="docs456",
                     records=[record],
                 )
 
@@ -140,10 +180,17 @@ class DocumentationPackageAssetTests(unittest.TestCase):
         for key in keys:
             self.assertEqual(generated.count(f'data-package-key="{key}"'), 1)
 
+    def test_checked_in_package_set_covers_every_compiled_variant(self):
+        records = docs_package_assets.repository_package_records()
+        manifest, entries = docs_package_assets.verify_static_package_set(ROOT, records)
+        self.assertEqual(len(entries), 22)
+        self.assertRegex(manifest["built_from"], r"\A[0-9a-f]{40}\Z")
+
     def test_download_page_points_to_profile_specific_example_packages(self):
         page = (ROOT / "docs/generated/downloads.md").read_text(encoding="utf-8")
         self.assertIn("[Compiled example gallery](examples/index.md)", page)
-        self.assertIn("profile-specific compiled ZIP", page)
+        self.assertIn("profile-specific checked-in compiled ZIP", page)
+        self.assertIn("checked-in", page)
 
 
 if __name__ == "__main__":

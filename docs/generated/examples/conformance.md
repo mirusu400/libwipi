@@ -11,11 +11,11 @@ A checked-in libwipi application example.
 
 | API level | ABI profile | Install profile | Package |
 |---|---|---|---|
-| `1.2.1` | `lgt-raptor` | `aram-wie-raptor` | <span class="libwipi-package-download" data-package-key="1.2.1::lgt-raptor::aram-wie-raptor::conformance">Compiled ZIP is added by the versioned documentation build.</span> |
+| `1.2.1` | `lgt-raptor` | `aram-wie-raptor` | <span class="libwipi-package-download" data-package-key="1.2.1::lgt-raptor::aram-wie-raptor::conformance">Checked-in ZIP is added by the versioned documentation build.</span> |
 
-> Compiled downloads are built from the same documentation revision,
-> inspected as Raptor packages, and published with SHA-256 hashes. They
-> are scoped emulator-profile artifacts, not real-device compatibility claims.
+> Compiled downloads are checked into the SDK with their exact build
+> revision, inspected as Raptor packages, and published with SHA-256
+> hashes. They are emulator-profile artifacts, not real-device claims.
 
 ## APIs demonstrated
 

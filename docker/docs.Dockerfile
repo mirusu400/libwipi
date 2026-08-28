@@ -3,14 +3,9 @@ FROM ubuntu@sha256:186072bba1b2f436cbb91ef2567abca677337cfc786c86e107d25b7072fee
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-       binutils-arm-none-eabi \
        ca-certificates \
        doxygen \
-       gcc \
-       gcc-arm-none-eabi \
        git \
-       libc6-dev \
-       make \
        python3 \
        python3-pip \
        python3-venv \

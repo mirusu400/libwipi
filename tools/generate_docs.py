@@ -611,9 +611,9 @@ def render_example_page(record: dict[str, object]) -> str:
             lines.extend(
                 [
                     "",
-                    "> Compiled downloads are built from the same documentation revision,",
-                    "> inspected as Raptor packages, and published with SHA-256 hashes. They",
-                    "> are scoped emulator-profile artifacts, not real-device compatibility claims.",
+                    "> Compiled downloads are checked into the SDK with their exact build",
+                    "> revision, inspected as Raptor packages, and published with SHA-256",
+                    "> hashes. They are emulator-profile artifacts, not real-device claims.",
                 ]
             )
     lines.extend(
@@ -658,9 +658,9 @@ def render_downloads(bundle_manifest: dict[str, object]) -> str:
         "## Individual compiled examples",
         "",
         "Each [Compiled example gallery](examples/index.md) page publishes a",
-        "profile-specific compiled ZIP from the same documentation revision, together",
-        "with its SHA-256 hash. Use the API, ABI, and install-profile columns to choose",
-        "the intended emulator contract.",
+        "profile-specific checked-in compiled ZIP together with its build revision and",
+        "SHA-256 hash. Use the API, ABI, and install-profile columns to choose the",
+        "intended emulator contract.",
         "",
         "## Download and verify",
         "",

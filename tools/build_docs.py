@@ -53,8 +53,6 @@ def build(
 ) -> None:
     run([sys.executable, "tools/generate.py", "--check"])
     run([sys.executable, "tools/generate_docs.py", "--check"])
-    if publish_packages:
-        run(["make", "clean", "all", "test-target"])
 
     build_root = (ROOT / "build" / "docs").resolve()
     doxygen_output = checked_output(build_root, build_root / "doxygen")

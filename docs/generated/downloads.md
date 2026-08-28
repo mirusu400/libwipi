@@ -10,9 +10,9 @@ Workflow artifacts are not the public distribution channel.
 ## Individual compiled examples
 
 Each [Compiled example gallery](examples/index.md) page publishes a
-profile-specific compiled ZIP from the same documentation revision, together
-with its SHA-256 hash. Use the API, ABI, and install-profile columns to choose
-the intended emulator contract.
+profile-specific checked-in compiled ZIP together with its build revision and
+SHA-256 hash. Use the API, ABI, and install-profile columns to choose the
+intended emulator contract.
 
 ## Download and verify
 

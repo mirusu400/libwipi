@@ -163,21 +163,29 @@ class DocumentationPipelineTests(unittest.TestCase):
         self.assertIn("REQUESTED_TAG:", release_text)
         self.assertIn('tag="$REQUESTED_TAG"', release_text)
 
-    def test_docs_build_publishes_exact_revision_target_packages(self):
+    def test_docs_build_publishes_checked_in_target_packages(self):
         dockerfile = (ROOT / "docker/docs.Dockerfile").read_text(encoding="utf-8")
-        self.assertIn("gcc-arm-none-eabi", dockerfile)
-        self.assertIn("binutils-arm-none-eabi", dockerfile)
+        self.assertNotIn("gcc-arm-none-eabi", dockerfile)
+        self.assertNotIn("binutils-arm-none-eabi", dockerfile)
 
         builder = (ROOT / "tools/build_docs.py").read_text(encoding="utf-8")
         self.assertIn('"--publish-packages"', builder)
-        self.assertIn('"make", "clean", "all", "test-target"', builder)
+        self.assertNotIn('"make", "clean", "all", "test-target"', builder)
         self.assertIn("tools/docs_package_assets.py", builder)
+
+        updater = (ROOT / "tools/update_docs_packages.py").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn('"make", "clean", "all", "test-target"', updater)
+        makefile = (ROOT / "Makefile").read_text(encoding="utf-8")
+        self.assertIn("docs-packages:", makefile)
 
         versions = (ROOT / "tools/build_docs_versions.py").read_text(
             encoding="utf-8"
         )
         self.assertIn('"--publish-packages"', versions)
         self.assertIn('"--source-revision"', versions)
+        self.assertIn('"docs" / "packages" / "manifest.json"', versions)
 
         workflow = (ROOT / ".github/workflows/docs.yml").read_text(encoding="utf-8")
         self.assertIn("--publish-packages", workflow)

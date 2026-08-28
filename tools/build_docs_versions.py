@@ -87,7 +87,7 @@ def build_tags(site_root: Path, base_url: str, tags: list[str]) -> None:
                 "--jobs",
                 "auto",
             ]
-            if (checkout / "tools" / "docs_package_assets.py").is_file():
+            if (checkout / "docs" / "packages" / "manifest.json").is_file():
                 command.extend(
                     [
                         "--publish-packages",

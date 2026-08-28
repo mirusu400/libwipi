@@ -52,7 +52,7 @@ HOST_LGT_INPUT_TEST := build/host/tests/lgt-input-semantics
 	test-target test-target-profile test-target-ktf test-target-lgt \
 	test-application-template test-platformer-example platformer \
 	sdk-examples test-sdk-examples aram-sdk-examples test-aram-sdk-examples \
-	docs docs-check docs-linkcheck release-bundles
+	docs docs-check docs-linkcheck docs-packages release-bundles
 
 SDK_VERSION ?= dev
 
@@ -74,6 +74,9 @@ docs-check: check-generated
 
 docs-linkcheck: check-generated
 	python3 tools/build_docs.py --builder linkcheck --jobs 1
+
+docs-packages:
+	python3 tools/update_docs_packages.py
 
 release-bundles:
 	python3 tools/build_release_bundles.py --version $(SDK_VERSION)

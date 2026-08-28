@@ -149,3 +149,18 @@ docker build -t libwipi-docs -f docker/docs.Dockerfile .
 docker run --rm -v "${PWD}:/work" -w /work libwipi-docs `
   python tools/build_docs.py
 ```
+
+Compiled example ZIPs are checked into `docs/packages`; ordinary documentation
+CI validates and copies them without invoking the Arm compiler. To refresh that
+static package set after an SDK or example change, first commit the source
+change, then run the explicit toolchain operation from a clean worktree:
+
+```powershell
+docker build -t libwipi-toolchain -f docker/toolchain.Dockerfile .
+docker run --rm -v "${PWD}:/work" -w /work libwipi-toolchain `
+  make docs-packages
+```
+
+Commit the resulting `docs/packages` update separately. Its manifest records
+the exact source commit in `built_from`; Pages CI only verifies package layout,
+hashes, and inventory before publishing it.
