@@ -5,6 +5,7 @@ import re
 import tempfile
 import unittest
 
+from tools import build_docs_versions
 from tools.finalize_docs_site import finalize
 
 
@@ -12,6 +13,13 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class DocumentationPipelineTests(unittest.TestCase):
+    def test_tag_builder_scopes_git_safe_directory_to_repository(self):
+        command = build_docs_versions.git_command("tag", "--list")
+        self.assertEqual(
+            command,
+            ["git", "-c", f"safe.directory={ROOT}", "tag", "--list"],
+        )
+
     def test_catalog_location_is_manifest_driven(self):
         generator = (ROOT / "tools/generate.py").read_text(encoding="utf-8")
         self.assertNotIn(

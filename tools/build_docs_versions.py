@@ -16,9 +16,14 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def git_command(*arguments: str) -> list[str]:
+    """Build a Git command that trusts only this mounted repository."""
+    return ["git", "-c", f"safe.directory={ROOT}", *arguments]
+
+
 def release_tags() -> list[str]:
     output = subprocess.run(
-        ["git", "tag", "--list", "v[0-9]*", "--sort=-version:refname"],
+        git_command("tag", "--list", "v[0-9]*", "--sort=-version:refname"),
         cwd=ROOT,
         check=True,
         capture_output=True,
@@ -29,7 +34,7 @@ def release_tags() -> list[str]:
 
 def export_tag(tag: str, destination: Path) -> None:
     archive = subprocess.run(
-        ["git", "archive", "--format=zip", tag],
+        git_command("archive", "--format=zip", tag),
         cwd=ROOT,
         check=True,
         capture_output=True,
