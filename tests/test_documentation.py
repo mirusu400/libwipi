@@ -16,6 +16,8 @@ class DocumentationTests(unittest.TestCase):
             "tools/verify_aram.py --build-probe",
             "tools/verify_wie.py --prepare",
             "tools/verify_aram_ktf.py",
+            "SKT is not an alias for `ktf-samsung`",
+            "SK Telecom SK-VM is a Java runtime",
             "no real-device claim",
         ):
             self.assertIn(required, readme)

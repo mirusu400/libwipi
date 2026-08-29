@@ -1,3 +1,17 @@
+4e839ed412d9f8170beab25287474c5bc1956346457faf9a84f85f7b7f3ed403  1.2.1/ktf-samsung/aram-ktf/audio-player/libwipi-audio-player.zip
+c6b717bdf6f34708ddcec7a616aa07f9941d40313a3b6e62daaed2695f663f8b  1.2.1/ktf-samsung/aram-ktf/conformance/libwipi-conformance.zip
+d7ad80d5ce99f6418b8c47d0a9aa17fc1bd163b53a2300a7a96cf9e759341636  1.2.1/ktf-samsung/aram-ktf/database-crud/libwipi-database-crud.zip
+7bd09dc8e2a0317101f9b885fa346237265f28f75fc519346655bb48142ad10d  1.2.1/ktf-samsung/aram-ktf/filesystem/libwipi-filesystem.zip
+6e9cffac8e7d70aee76a4a90809cf07e46dd204d212aeaec75912008f05745e7  1.2.1/ktf-samsung/aram-ktf/graphics-gallery/libwipi-graphics-gallery.zip
+82227f2304c825375e748a07624c203b6dce081ba0139592b62f7403a4e4733d  1.2.1/ktf-samsung/aram-ktf/hello/libwipi-hello.zip
+a1ae6eaa6c1bebfaa820a19c164a2ac5c506e41a5853221848edce87f27ecdfd  1.2.1/ktf-samsung/aram-ktf/image-pipeline/libwipi-image-pipeline.zip
+7bd401a9cc2f63e592c15b7243ebaeee7fc00a763198deb399cbd2316ccf8494  1.2.1/ktf-samsung/aram-ktf/media-suite/libwipi-media-suite.zip
+96add7633bc5311b53945df62e3e1062bf9914063f27e60da14c0773632c293c  1.2.1/ktf-samsung/aram-ktf/memory-resource/libwipi-memory-resource.zip
+6ec4f9523222bf8244ebae2595ccf8383478ea068a1c454f572c161674b74f71  1.2.1/ktf-samsung/aram-ktf/network-lifecycle/libwipi-network-lifecycle.zip
+05bd96499ab7d0a7fe7fddebc46cf3071809d620b86512f5a29dfa44874eb7c0  1.2.1/ktf-samsung/aram-ktf/platformer/libwipi-sky-hopper.zip
+1289211a4c8b2a0b3caa9428779b39c19a61d27f2a7c72be8ab152c5977d7247  1.2.1/ktf-samsung/aram-ktf/system-services/libwipi-system-services.zip
+09f1e02413eb100d26b9d50a660ae68143f93b1f8bbf89e334601a030205dc72  1.2.1/ktf-samsung/aram-ktf/template/libwipi-starter.zip
+e6ea2c370d2c9b6ce1bdae8c28b749797d0f5f1d4040e4ec9d8bae812502b91c  1.2.1/ktf-samsung/aram-ktf/vibrate/libwipi-vibrate.zip
 a9176ecdaa12f703c564e6831b23e5c6a290fae0dddf1c65d47e77314e0a9c23  1.2.1/lgt-raptor/aram-raptor/audio-player/libwipi-audio-player.zip
 fe901789b80080f95a3473311486c3504e787f6d8896323ff2b49fffb6cbaf34  1.2.1/lgt-raptor/aram-raptor/database-crud/libwipi-database-crud.zip
 0e0ef3a42c47344f56b7ebfdb7fd22b0a34eb4b3f05598c4d260e5d72885f264  1.2.1/lgt-raptor/aram-raptor/filesystem/libwipi-filesystem.zip

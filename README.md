@@ -26,6 +26,12 @@ downloads, and `llms.txt`/per-page Markdown representations.
 | `1.2.1/ktf-samsung/aram-ktf` | Compiles, links a raw ARM image, creates the observed KTF nested ZIP, loads, reaches entry, and reaches first frame for all 14 checked examples in pinned ARAM | ARAM-scoped MClass/start bridge; no interactive, handset installation, firmware, or real-device claim |
 | WIPI-C `2.0`, `2.0.1`, `2.1.0`, or `2.2.0` | Tracked as explicit future API levels | No catalog or SDK support claim; the build rejects them |
 
+SKT is not an alias for `ktf-samsung`. No native SKT WIPI-C ABI profile is
+currently implemented. SK Telecom SK-VM is a Java runtime, while the recovered
+SCH-W830 `MinigameQVGAOEM` EADS path is an exact-title OEM service ABI; neither
+provides a public WIPI-C import map. A native SKT profile needs authorized
+container, callsite, and provider evidence before an adapter can be generated.
+
 The checked-in 239-row WIPI-C 1.2.1 catalog is the current bootstrap catalog,
 not a claim that every WIPI-C API generation or every provider method is
 implemented. A declared API without a proven adapter fails at link time instead

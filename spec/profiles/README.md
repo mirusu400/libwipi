@@ -19,3 +19,10 @@ support a hardware compatibility claim by itself. A narrower install profile
 may enable an emulator-only target mapping when it carries separate, pinned
 black-box evidence and preserves the device claim as false. An unknown fact
 must fail explicitly if code requests behavior that depends on it.
+
+There is intentionally no `skt-*` native WIPI-C profile yet. The authorized
+SKT package corpus currently establishes an SK-VM Java container/runtime, not
+a native WIPI-C import ABI. The recovered SCH-W830 `MinigameQVGAOEM` EADS path
+is scoped to one exact embedded title and explicitly does not generalize its
+opaque OEM service slots to SKT WIPI. Creating an SKT profile requires a
+reviewed native container plus public-API callsites and provider mappings.
