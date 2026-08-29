@@ -4,6 +4,11 @@
 Every page below is backed by an ordinary application source that is compiled by
 the repository gates. API lists are derived from source and suite manifests.
 
+Use **Run in ARAM** beside a compiled package to open it in the nightly web
+emulator. The player downloads the published HTTPS package directly, verifies
+the documented SHA-256 digest, and passes the bytes to ARAM locally; the package is
+not uploaded to an application server.
+
 | Example | Cataloged APIs used | Tested install profiles |
 |---|---:|---|
 | [Synthetic Audio Player](audio-player.md) | 17 | `aram-raptor`, `aram-wie-raptor` |

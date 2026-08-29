@@ -12,6 +12,7 @@ import re
 import shutil
 import subprocess
 import sys
+from urllib.parse import urlencode
 import zipfile
 
 if __package__:
@@ -22,6 +23,7 @@ else:
 
 ROOT = Path(__file__).resolve().parents[1]
 STATIC_PACKAGE_ROOT = Path("docs/packages")
+ARAM_PLAYER_URL = "https://aram.mir.sh/player/"
 COMPONENT_RE = re.compile(r"[0-9A-Za-z][0-9A-Za-z._-]*\Z")
 PACKAGE_MARKER_RE = re.compile(
     r"<span\b"
@@ -322,10 +324,24 @@ def verify_static_package_set(
     return manifest, entries
 
 
+def aram_permalink(url: str, digest: str) -> str:
+    return ARAM_PLAYER_URL + "?" + urlencode(
+        {
+            "ch": "nightly",
+            "app": url,
+            "sha256": digest,
+        }
+    )
+
+
 def package_link(url: str, digest: str, size: int, built_from: str) -> str:
     build_url = f"https://github.com/mirusu400/libwipi/commit/{built_from}"
     build_label = escape(built_from[:12])
+    run_url = aram_permalink(url, digest)
     return (
+        f'<a class="reference external libwipi-run-aram" '
+        f'href="{escape(run_url, quote=True)}" target="_blank" rel="noopener">'
+        "Run in ARAM</a> &middot; "
         f'<a class="reference download internal" download href="{escape(url, quote=True)}">'
         "Download compiled ZIP</a><br>"
         f"<small>SHA-256: <code>{digest}</code> · {size} bytes<br>"

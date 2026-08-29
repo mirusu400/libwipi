@@ -1,8 +1,11 @@
 import hashlib
+from html import unescape
 import json
 from pathlib import Path
+import re
 import tempfile
 import unittest
+from urllib.parse import parse_qs, urlparse
 
 from tools import docs_package_assets
 from tools import package_raptor
@@ -101,9 +104,29 @@ class DocumentationPackageAssetTests(unittest.TestCase):
                 rendered,
             )
             self.assertIn("download", rendered)
+            self.assertIn("Run in ARAM", rendered)
             self.assertIn(digest, rendered)
             self.assertIn("build123", rendered)
             self.assertNotIn("data-package-key", rendered)
+
+            run_link = re.search(
+                r'<a class="reference external libwipi-run-aram" href="([^"]+)"'
+                r' target="_blank" rel="noopener">',
+                rendered,
+            )
+            self.assertIsNotNone(run_link)
+            permalink = urlparse(unescape(run_link.group(1)))
+            self.assertEqual(
+                f"{permalink.scheme}://{permalink.netloc}{permalink.path}",
+                "https://aram.mir.sh/player/",
+            )
+            query = parse_qs(permalink.query)
+            self.assertEqual(query["ch"], ["nightly"])
+            self.assertEqual(
+                query["app"],
+                [f"https://example.invalid/libwipi/latest/{relative.as_posix()}"],
+            )
+            self.assertEqual(query["sha256"], [digest])
 
             manifest = json.loads(
                 (version / "packages/manifest.json").read_text(encoding="utf-8")
@@ -191,6 +214,14 @@ class DocumentationPackageAssetTests(unittest.TestCase):
         self.assertIn("[Compiled example gallery](examples/index.md)", page)
         self.assertIn("profile-specific checked-in compiled ZIP", page)
         self.assertIn("checked-in", page)
+
+    def test_example_index_explains_integrity_checked_aram_launches(self):
+        page = (ROOT / "docs/generated/examples/index.md").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("Run in ARAM", page)
+        self.assertIn("SHA-256", page)
+        self.assertIn("not uploaded", page)
 
 
 if __name__ == "__main__":
