@@ -3,6 +3,7 @@ CROSS_COMPILE ?= arm-none-eabi-
 CC := $(CROSS_COMPILE)gcc
 AR := $(CROSS_COMPILE)ar
 OBJDUMP := $(CROSS_COMPILE)objdump
+OBJCOPY := $(CROSS_COMPILE)objcopy
 NM := $(CROSS_COMPILE)nm
 HOST_CC ?= cc
 

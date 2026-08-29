@@ -16,8 +16,9 @@ from urllib.parse import urlencode
 import zipfile
 
 if __package__:
-    from . import package_raptor
+    from . import package_ktf, package_raptor
 else:
+    import package_ktf
     import package_raptor
 
 
@@ -155,6 +156,17 @@ def package_entry(
     }
 
 
+def inspect_compiled_package(
+    record: dict[str, object], source: Path
+) -> dict[str, object]:
+    abi_profile = component(record, "abi_profile")
+    if abi_profile == "ktf-samsung":
+        return package_ktf.inspect_package(source)
+    if abi_profile == "lgt-raptor":
+        return package_raptor.inspect_package(source)
+    raise ValueError(f"no documentation package inspector for {abi_profile!r}")
+
+
 def checksum_text(entries: list[dict[str, object]]) -> str:
     lines = [
         f"{entry['sha256']}  "
@@ -192,7 +204,7 @@ def update_static_package_set(
         if site_relative in destinations:
             raise ValueError(f"duplicate static package path: {site_relative}")
         destinations.add(site_relative)
-        inspection = package_raptor.inspect_package(source)
+        inspection = inspect_compiled_package(record, source)
         prepared.append((record, site_relative, source.read_bytes(), inspection))
 
     static_root = checked_child(
@@ -306,7 +318,7 @@ def verify_static_package_set(
             raise ValueError(f"SHA-256 mismatch for checked-in package: {source}")
         if entry.get("size") != len(data):
             raise ValueError(f"size mismatch for checked-in package: {source}")
-        inspection = package_raptor.inspect_package(source)
+        inspection = inspect_compiled_package(record, source)
         for field in ("aid", "module", "resources"):
             if entry.get(field) != inspection[field]:
                 raise ValueError(

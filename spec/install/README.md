@@ -9,3 +9,8 @@ records the LGT/Raptor ELF and package layout, pinned ARAM and WIE revisions,
 their environment-specific method/return differences, the install-scoped
 memory rule, and the exact conformance evidence file. Its package and
 interactive emulator claims are true; its real-device claim is false.
+
+`aram-ktf.json` records the observed KTF distribution ZIP shape and ARAM's
+raw-image bootstrap contract for the `ktf-samsung` ABI. The libwipi MClass
+wrapper is explicitly emulator-scoped: the ZIP has the carrier archive shape,
+but no real handset/model/firmware installation claim is made.

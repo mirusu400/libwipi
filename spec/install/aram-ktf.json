@@ -1,0 +1,60 @@
+{
+  "schema": 1,
+  "id": "aram-ktf",
+  "status": "synthetic-emulator-contract",
+  "api_level": "1.2.1",
+  "abi_profile": "ktf-samsung",
+  "target_build": true,
+  "emulators": {
+    "aram": {
+      "repository": "aram-core",
+      "revision": "86d36b4c886cf594b3c9ead9142f09d7d98766cd"
+    }
+  },
+  "container": {
+    "outer_archive": "zip",
+    "metadata": "__adf__",
+    "inner_archive": "{aid}.jar",
+    "executable": "client.bin{decimal_bss_size}",
+    "executable_format": "raw-ARM-image",
+    "image_base": "0x00100000",
+    "entry_rule": "image_base | 1",
+    "bootstrap_argument": "declared BSS size",
+    "bootstrap_result": "WipiExe pointer",
+    "wipi_exe_words": 10,
+    "exe_interface_words": 8,
+    "exe_interface_function_words": 7
+  },
+  "imports": {
+    "lookup_source": "ExeInterfaceFunctions.init parameter 4 word 0",
+    "lookup_name": "WIPIC_knlInterface",
+    "master_vector_getter_offset": "0x84",
+    "master_vector_entries": 17,
+    "provider_abi": "samsung-packed-words"
+  },
+  "lifecycle": {
+    "main_class": "LibwipiClet",
+    "start_bridge": "startApp -> startClet",
+    "scope": "libwipi ARAM wrapper",
+    "device_abi_claim": false
+  },
+  "evidence": {
+    "aram_revision": "86d36b4c886cf594b3c9ead9142f09d7d98766cd",
+    "loader": "aram-core:loader/ktf/package.go",
+    "bootstrap": "aram-core:application/internal/ktf/ktf_boot.go and ktf_memory.go",
+    "provider_lookup": "anycall_magichole:docs/interfaces/dispatch.md",
+    "confidence": "confirmed",
+    "scope": "KTF archive and ARAM bootstrap/provider behavior"
+  },
+  "claims": {
+    "emulator_package": true,
+    "aram_runtime_verified": true,
+    "packages": true,
+    "loads": true,
+    "entry": true,
+    "first_frame": true,
+    "first_frame_evidence": "spec/evidence/ktf-aram-examples.json",
+    "handset_archive_shape": true,
+    "real_device": false
+  }
+}

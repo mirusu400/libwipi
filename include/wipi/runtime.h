@@ -33,6 +33,8 @@ typedef M_Int32 WipiKtfFamily;
 M_Int32 wipi_ktf_bind_table(WipiKtfFamily family, M_Addr table);
 M_Int32 wipi_ktf_bind_master_vector(const M_Addr *master_vector);
 M_Int32 wipi_ktf_bind_process_imports(M_Addr import_root);
+M_Int32 wipi_ktf_bind_kernel_interface(M_Addr kernel_table);
+M_Boolean wipi_ktf_imports_bound(void);
 M_Int32 wipi_ktf_bind_default_imports(void);
 #endif
 

@@ -14,6 +14,11 @@ That triple is the default, portable emulator contract. The separately tested
 testing. Neither is a generic LGT handset package or a real-device compatibility
 claim.
 
+The independent `1.2.1/ktf-samsung/aram-ktf` contract emits an observed
+KTF-style ZIP containing a raw ARM image. Its 14 checked examples load, enter,
+and reach first frame in pinned ARAM. The current MClass wrapper does not yet
+establish interactive input handling, and no named handset is claimed.
+
 ## Prerequisites
 
 Use either:
@@ -133,6 +138,20 @@ python ..\aram-test\libwipi_examples.py `
   --manifest examples\sdk-lab-aram.json --build-probe `
   --output ..\aram-test\build\libwipi-examples-aram
 ```
+
+For the KTF/Samsung ARAM path, build the package family and run the scoped
+first-frame verifier:
+
+```powershell
+docker run --rm -v "${PWD}:/work" -w /work libwipi-toolchain `
+  make test-ktf-examples
+python tools/verify_aram_ktf.py
+```
+
+Each package has an outer `__adf__`, an AID-named inner JAR, and one
+`client.bin<decimal-bss-size>` raw image. The verifier requires `ok_frame`, a
+Thumb entry, at least one framebuffer presentation, and zero unimplemented
+calls in the observed run.
 
 Memory allocation returns `M_MemID`, not a stable C pointer. Retain the ID and
 call `MC_GETDPTR(id)` whenever a pointer is needed. Do not retain a resolved

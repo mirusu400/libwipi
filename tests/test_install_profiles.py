@@ -201,5 +201,61 @@ class ARAMInstallProfileTests(unittest.TestCase):
         self.assertFalse(evidence["claims"]["real_device_verified"])
 
 
+class ARAMKTFInstallProfileTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.profile = json.loads(
+            (ROOT / "spec/install/aram-ktf.json").read_text(encoding="utf-8")
+        )
+
+    def test_profile_keeps_carrier_archive_and_emulator_claims_separate(self):
+        profile = self.profile
+        self.assertEqual(profile["id"], "aram-ktf")
+        self.assertEqual(profile["api_level"], "1.2.1")
+        self.assertEqual(profile["abi_profile"], "ktf-samsung")
+        self.assertEqual(set(profile["emulators"]), {"aram"})
+        self.assertTrue(profile["claims"]["emulator_package"])
+        self.assertTrue(profile["claims"]["aram_runtime_verified"])
+        self.assertTrue(profile["claims"]["packages"])
+        self.assertTrue(profile["claims"]["loads"])
+        self.assertTrue(profile["claims"]["entry"])
+        self.assertTrue(profile["claims"]["first_frame"])
+        self.assertFalse(profile["claims"]["real_device"])
+
+    def test_loader_and_bootstrap_contract_are_explicit(self):
+        container = self.profile["container"]
+        self.assertEqual(container["outer_archive"], "zip")
+        self.assertEqual(container["metadata"], "__adf__")
+        self.assertEqual(container["inner_archive"], "{aid}.jar")
+        self.assertEqual(container["executable"], "client.bin{decimal_bss_size}")
+        self.assertEqual(container["executable_format"], "raw-ARM-image")
+        self.assertEqual(container["image_base"], "0x00100000")
+        self.assertEqual(container["entry_rule"], "image_base | 1")
+        self.assertEqual(container["bootstrap_result"], "WipiExe pointer")
+
+        imports = self.profile["imports"]
+        self.assertEqual(imports["lookup_name"], "WIPIC_knlInterface")
+        self.assertEqual(imports["master_vector_getter_offset"], "0x84")
+        self.assertEqual(imports["provider_abi"], "samsung-packed-words")
+
+    def test_native_wrapper_scope_is_not_a_handset_verification_claim(self):
+        lifecycle = self.profile["lifecycle"]
+        self.assertEqual(lifecycle["main_class"], "LibwipiClet")
+        self.assertEqual(lifecycle["start_bridge"], "startApp -> startClet")
+        self.assertEqual(lifecycle["scope"], "libwipi ARAM wrapper")
+        self.assertFalse(lifecycle["device_abi_claim"])
+
+        evidence = json.loads(
+            (ROOT / self.profile["claims"]["first_frame_evidence"]).read_text(
+                encoding="utf-8"
+            )
+        )
+        self.assertEqual(evidence["install_profile"], "aram-ktf")
+        self.assertEqual(evidence["coverage"]["packages"], 14)
+        self.assertEqual(evidence["coverage"]["ok_frame"], 14)
+        self.assertEqual(evidence["coverage"]["unimplemented_calls"], 0)
+        self.assertFalse(evidence["claims"]["interactive_verified"])
+        self.assertFalse(evidence["claims"]["real_device_verified"])
+
 if __name__ == "__main__":
     unittest.main()

@@ -1,0 +1,35 @@
+{
+  "schema": 1,
+  "install_profile": "aram-ktf",
+  "runtime_profile": "wipi-1.2.1/ktf/generic",
+  "aram": {
+    "core_revision": "86d36b4c886cf594b3c9ead9142f09d7d98766cd",
+    "runner_revision": "cc124597b66219458e1cc9325428feee350e6413"
+  },
+  "coverage": {
+    "packages": 14,
+    "ok_frame": 14,
+    "unimplemented_calls": 0
+  },
+  "examples": [
+    {"id": "audio-player", "sha256": "4e839ed412d9f8170beab25287474c5bc1956346457faf9a84f85f7b7f3ed403", "size": 2573, "api_calls": 50, "instructions": 5079},
+    {"id": "conformance", "sha256": "c6b717bdf6f34708ddcec7a616aa07f9941d40313a3b6e62daaed2695f663f8b", "size": 2696, "api_calls": 47, "instructions": 6961},
+    {"id": "database-crud", "sha256": "d7ad80d5ce99f6418b8c47d0a9aa17fc1bd163b53a2300a7a96cf9e759341636", "size": 2319, "api_calls": 29, "instructions": 1306},
+    {"id": "filesystem", "sha256": "7bd09dc8e2a0317101f9b885fa346237265f28f75fc519346655bb48142ad10d", "size": 2313, "api_calls": 32, "instructions": 1373},
+    {"id": "graphics-gallery", "sha256": "6e9cffac8e7d70aee76a4a90809cf07e46dd204d212aeaec75912008f05745e7", "size": 2735, "api_calls": 83, "instructions": 2178},
+    {"id": "hello", "sha256": "82227f2304c825375e748a07624c203b6dce081ba0139592b62f7403a4e4733d", "size": 1444, "api_calls": 8, "instructions": 201},
+    {"id": "image-pipeline", "sha256": "a1ae6eaa6c1bebfaa820a19c164a2ac5c506e41a5853221848edce87f27ecdfd", "size": 2126, "api_calls": 28, "instructions": 1988},
+    {"id": "media-suite", "sha256": "7bd401a9cc2f63e592c15b7243ebaeee7fc00a763198deb399cbd2316ccf8494", "size": 2385, "api_calls": 43, "instructions": 1733},
+    {"id": "memory-resource", "sha256": "96add7633bc5311b53945df62e3e1062bf9914063f27e60da14c0773632c293c", "size": 2727, "api_calls": 44, "instructions": 7125},
+    {"id": "network-lifecycle", "sha256": "6ec4f9523222bf8244ebae2595ccf8383478ea068a1c454f572c161674b74f71", "size": 1710, "api_calls": 23, "instructions": 1024},
+    {"id": "platformer", "sha256": "05bd96499ab7d0a7fe7fddebc46cf3071809d620b86512f5a29dfa44874eb7c0", "size": 4036, "api_calls": 49, "instructions": 2846},
+    {"id": "system-services", "sha256": "1289211a4c8b2a0b3caa9428779b39c19a61d27f2a7c72be8ab152c5977d7247", "size": 2027, "api_calls": 33, "instructions": 1543},
+    {"id": "template", "sha256": "09f1e02413eb100d26b9d50a660ae68143f93b1f8bbf89e334601a030205dc72", "size": 1318, "api_calls": 11, "instructions": 208},
+    {"id": "vibrate", "sha256": "e6ea2c370d2c9b6ce1bdae8c28b749797d0f5f1d4040e4ec9d8bae812502b91c", "size": 2009, "api_calls": 25, "instructions": 615}
+  ],
+  "claims": {
+    "first_frame_verified": true,
+    "interactive_verified": false,
+    "real_device_verified": false
+  }
+}

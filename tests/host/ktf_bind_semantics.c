@@ -38,6 +38,7 @@ int main(void)
 {
     M_Addr master[17] = {0};
 
+    CHECK(wipi_ktf_imports_bound() == M_FALSE);
     __wipi_ktf_table_mc_knl = 0x1111u;
     CHECK(wipi_ktf_bind_table(WIPI_KTF_FAMILY_KNL, 0u) == M_E_ERROR);
     CHECK(__wipi_ktf_table_mc_knl == 0x1111u);
@@ -55,6 +56,7 @@ int main(void)
     CHECK(__wipi_ktf_table_mc_mda == 0x8000u);
     CHECK(__wipi_ktf_table_mc_net == 0x9000u);
     CHECK(__wipi_ktf_table_mc_phn == 0xa000u);
+    CHECK(wipi_ktf_imports_bound() == M_TRUE);
 
     __wipi_ktf_table_mc_util = 0xabcdu;
     master[10] = 0u;

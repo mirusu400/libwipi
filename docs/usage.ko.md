@@ -16,6 +16,11 @@ INSTALL_PROFILE=aram-wie-raptor
 메서드를 추가합니다. 어느 조합도 LGT 실기기 전체나 다른 WIPI 버전까지
 지원한다는 의미는 아닙니다.
 
+KTF/Samsung ABI는 `1.2.1/ktf-samsung/aram-ktf` 조합으로 별도 선택할 수
+있습니다. 이 경로는 KTF 형식 ZIP을 만들고, 현재 14개 예제가 고정된 ARAM에서
+로드, 엔트리 진입, 첫 프레임까지 도달한 상태입니다. 현재 MClass 래퍼는 입력
+생명주기까지 검증하지 않았으며 특정 KTF 휴대폰 설치 성공을 뜻하지 않습니다.
+
 ## 1. 준비물
 
 권장 빌드 방법은 Docker입니다.
@@ -216,6 +221,20 @@ examples/my-app/build/wipi-1.2.1/lgt-raptor/aram-wie-raptor/my-wipi-app.zip
 동일한 패키지 바이트가 생성됩니다.
 
 ## 8. ARAM에서 실행하기
+
+KTF/Samsung 예제 전체를 빌드하고 첫 프레임을 검증하려면 다음 명령을
+사용합니다.
+
+```powershell
+docker run --rm -v "${PWD}:/work" -w /work libwipi-toolchain `
+  make test-ktf-examples
+python tools/verify_aram_ktf.py
+```
+
+KTF ZIP은 바깥쪽 `__adf__`, AID 이름의 안쪽 JAR,
+`client.bin<10진수-BSS-크기>` 원시 ARM 이미지를 포함합니다. 검증기는
+`ok_frame`, Thumb 진입, 프레임버퍼 표시 1회 이상, 미구현 호출 0개를
+확인합니다. 이는 인터랙티브 또는 실기기 검증이 아닙니다.
 
 ARAM 개발 워크스페이스를 사용하는 경우 `aram-core`, `aram-frontend`,
 `aram-authd`, `aram-emu`와 `libwipi`를 같은 상위 디렉터리에 둡니다. 패키지

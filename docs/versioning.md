@@ -18,7 +18,7 @@ level.
 
 | API level | Standard/reference | Catalog state | SDK state |
 |---|---|---|---|
-| 1.2.1 | reconstructed WIPI 1.2.1 reference | checked in | headers and KTF ABI; LGT/Raptor interactive emulator target |
+| 1.2.1 | reconstructed WIPI 1.2.1 reference | checked in | headers and KTF/LGT ABI adapters; KTF first-frame and LGT/Raptor interactive emulator targets |
 | 2.0 | TTAS.KO-06.0036/R3 | reference indexed | planned |
 | 2.0.1 | TTAS.KO-06.0036/R4 | source acquisition needed | planned |
 | 2.1.0 | TTAS.KO-06.0036/R5 | source acquisition needed | planned |
@@ -30,11 +30,12 @@ surface. The Wiki-derived references are pinned there to the reviewed source
 revision rather than silently following future site changes.
 
 The build selects the source level independently from the ABI and install
-profiles. The three currently accepted triples are:
+profiles. The four currently accepted triples are:
 
 | API level | ABI profile | Install profile | Scope |
 |---|---|---|---|
 | `1.2.1` | `ktf-samsung` | `none` | Library and relocatable target evidence; no container/runtime claim |
+| `1.2.1` | `ktf-samsung` | `aram-ktf` | KTF-shaped archive and raw-image bootstrap verified through first frame in ARAM; no interactive or device claim |
 | `1.2.1` | `lgt-raptor` | `aram-raptor` | ARAM-only synthetic SDK lab with 100 mapped APIs; no WIE or device ABI claim |
 | `1.2.1` | `lgt-raptor` | `aram-wie-raptor` | ELF/package and interactive ARAM/WIE emulator verification |
 

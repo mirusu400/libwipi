@@ -103,6 +103,10 @@ class DocumentationPipelineTests(unittest.TestCase):
         self.assertIn("| 59 observed APIs |", text)
         self.assertNotIn("| 60 observed APIs |", text)
         self.assertIn(
+            "| `1.2.1/ktf-samsung/aram-ktf` | first frame on the named emulator contract | 14 first-frame packages | No |",
+            text,
+        )
+        self.assertIn(
             "| `1.2.1/lgt-raptor/aram-raptor` | interactive on the named emulator contract",
             text,
         )

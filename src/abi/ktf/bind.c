@@ -89,6 +89,41 @@ M_Int32 wipi_ktf_bind_master_vector(const M_Addr *master_vector)
     return M_SUCCESS;
 }
 
+M_Boolean wipi_ktf_imports_bound(void)
+{
+    return __wipi_ktf_table_mc_knl != 0u &&
+           __wipi_ktf_table_mc_util != 0u &&
+           __wipi_ktf_table_mc_misc != 0u &&
+           __wipi_ktf_table_mc_grp != 0u &&
+           __wipi_ktf_table_mc_db != 0u &&
+           __wipi_ktf_table_mc_fs != 0u &&
+           __wipi_ktf_table_mc_srl != 0u &&
+           __wipi_ktf_table_mc_uic != 0u &&
+           __wipi_ktf_table_mc_mda != 0u &&
+           __wipi_ktf_table_mc_net != 0u &&
+           __wipi_ktf_table_mc_phn != 0u ? M_TRUE : M_FALSE;
+}
+
+M_Int32 wipi_ktf_bind_kernel_interface(M_Addr kernel_table)
+{
+    typedef const M_Addr *(*MasterVectorGetter)(void);
+    M_Addr getter_address;
+    MasterVectorGetter getter;
+    const M_Addr *master_vector;
+
+    if (wipi_ktf_bind_table(WIPI_KTF_FAMILY_KNL, kernel_table) != M_SUCCESS) {
+        return M_E_ERROR;
+    }
+    getter_address = *(const volatile M_Addr *)(uintptr_t)
+        (kernel_table + WIPI_KTF_MASTER_GETTER_OFFSET);
+    if (getter_address == 0u) {
+        return M_E_ERROR;
+    }
+    getter = (MasterVectorGetter)(uintptr_t)getter_address;
+    master_vector = getter();
+    return wipi_ktf_bind_master_vector(master_vector);
+}
+
 M_Int32 wipi_ktf_bind_process_imports(M_Addr import_root)
 {
     const volatile M_Addr *fields;
@@ -115,24 +150,18 @@ M_Int32 wipi_ktf_bind_process_imports(M_Addr import_root)
 
 M_Int32 wipi_ktf_bind_default_imports(void)
 {
-    typedef const M_Addr *(*MasterVectorGetter)(void);
     const volatile M_Addr *process_pointer =
         (const volatile M_Addr *)(uintptr_t)WIPI_KTF_PROCESS_IMPORT_POINTER;
-    M_Addr import_root = *process_pointer;
-    M_Addr getter_address;
-    MasterVectorGetter getter;
-    const M_Addr *master_vector;
+    M_Addr import_root;
+
+    if (wipi_ktf_imports_bound() == M_TRUE) {
+        return M_SUCCESS;
+    }
+    import_root = *process_pointer;
 
     if (wipi_ktf_bind_process_imports(import_root) != M_SUCCESS ||
         __wipi_ktf_table_mc_knl == 0u) {
         return M_E_ERROR;
     }
-    getter_address = *(const volatile M_Addr *)(uintptr_t)
-        (__wipi_ktf_table_mc_knl + WIPI_KTF_MASTER_GETTER_OFFSET);
-    if (getter_address == 0u) {
-        return M_E_ERROR;
-    }
-    getter = (MasterVectorGetter)(uintptr_t)getter_address;
-    master_vector = getter();
-    return wipi_ktf_bind_master_vector(master_vector);
+    return wipi_ktf_bind_kernel_interface(__wipi_ktf_table_mc_knl);
 }

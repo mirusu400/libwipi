@@ -2,12 +2,16 @@
 LIBWIPI_KNOWN_API_LEVELS := 1.2.1 2.0 2.0.1 2.1.0 2.2.0
 LIBWIPI_IMPLEMENTED_API_LEVELS := 1.2.1
 LIBWIPI_KNOWN_PROFILES := host-sim ktf-samsung lgt-raptor
-LIBWIPI_KNOWN_INSTALL_PROFILES := none aram-raptor aram-wie-raptor
+LIBWIPI_KNOWN_INSTALL_PROFILES := none aram-ktf aram-raptor aram-wie-raptor
 LIBWIPI_AVAILABLE_API_PROFILE_PAIRS := 1.2.1/ktf-samsung 1.2.1/lgt-raptor
-LIBWIPI_AVAILABLE_BUILD_TRIPLES := 1.2.1/ktf-samsung/none 1.2.1/lgt-raptor/aram-raptor 1.2.1/lgt-raptor/aram-wie-raptor
+LIBWIPI_AVAILABLE_BUILD_TRIPLES := 1.2.1/ktf-samsung/none 1.2.1/ktf-samsung/aram-ktf 1.2.1/lgt-raptor/aram-raptor 1.2.1/lgt-raptor/aram-wie-raptor
 
 ifeq ($(API_LEVEL),1.2.1)
 WIPI_API_CPPFLAGS := -DLIBWIPI_API_LEVEL_1_2_1=1
+endif
+
+ifeq ($(INSTALL_PROFILE),aram-ktf)
+WIPI_INSTALL_CPPFLAGS := -DLIBWIPI_INSTALL_ARAM_KTF=1
 endif
 
 ifeq ($(INSTALL_PROFILE),aram-raptor)

@@ -7,7 +7,7 @@
       "headers": true,
       "target_build": true,
       "abi_adapter": "table-veneer-bootstrap",
-      "install_profiles": ["none"]
+      "install_profiles": ["none", "aram-ktf"]
     }
   },
   "architecture": {
@@ -112,8 +112,8 @@
   "claims": {
     "headers": true,
     "table_veneer": true,
-    "bootstrap": false,
-    "package": false,
+    "bootstrap": true,
+    "package": true,
     "real_device": false
   }
 }

@@ -14,9 +14,11 @@ This WIPI-C example checks program identity, monotonic time, mutable system prop
 |---|---|---|---|
 | `1.2.1` | `lgt-raptor` | `aram-wie-raptor` | <span class="libwipi-package-download" data-package-key="1.2.1::lgt-raptor::aram-wie-raptor::system-services">Checked-in ZIP is added by the versioned documentation build.</span> |
 | `1.2.1` | `lgt-raptor` | `aram-raptor` | <span class="libwipi-package-download" data-package-key="1.2.1::lgt-raptor::aram-raptor::system-services">Checked-in ZIP is added by the versioned documentation build.</span> |
+| `1.2.1` | `ktf-samsung` | `aram-ktf` | <span class="libwipi-package-download" data-package-key="1.2.1::ktf-samsung::aram-ktf::system-services">Checked-in ZIP is added by the versioned documentation build.</span> |
 
 > Compiled downloads are checked into the SDK with their exact build
-> revision, inspected as Raptor packages, and published with SHA-256
+> revision, inspected against the selected package profile, and published
+> with SHA-256
 > hashes. They are emulator-profile artifacts, not real-device claims.
 
 ## APIs demonstrated

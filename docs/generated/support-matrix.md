@@ -8,6 +8,7 @@ combination; no row implies compatibility with an unnamed handset.
 | API / ABI / install | Strongest current result | Observed or linkable surface | Real device |
 |---|---|---:|---|
 | `1.2.1/ktf-samsung/none` | Headers, generated adapter, relocatable link, and object-code tests; no package profile | 236 linkable APIs | No |
+| `1.2.1/ktf-samsung/aram-ktf` | first frame on the named emulator contract | 14 first-frame packages | No |
 | `1.2.1/lgt-raptor/aram-raptor` | interactive on the named emulator contract | 100 observed APIs | No |
 | `1.2.1/lgt-raptor/aram-wie-raptor` | interactive on the named emulator contract | 59 observed APIs | No |
 

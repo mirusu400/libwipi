@@ -54,6 +54,7 @@ describe libwipi implementation evidence, not platform-wide WIPI requirements.
 |---|---|---|
 | `host-sim` | `none` | headers only |
 | `ktf-samsung` | `none` | linkable generated veneer |
+| `ktf-samsung` | `aram-ktf` | linkable generated veneer |
 | `lgt-raptor` | `aram-raptor` | observed in the scoped emulator suite |
 | `lgt-raptor` | `aram-wie-raptor` | declared; no confirmed adapter |
 

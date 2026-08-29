@@ -45,12 +45,21 @@ The profile's shared-buffer kernel order is:
 This differs from some emulator-era public implementations and is pinned by
 tests.
 
-At runtime, `wipi_ktf_bind_default_imports()` reads the process-import pointer
-at `0x01001000`, binds the directly exposed tables, and invokes the confirmed
-kernel `+0x84` getter for the 17-entry non-kernel master vector. This is an
-in-process table binder; it is not yet a carrier package loader or CRT.
-Binding rejects null tables before changing state. A partial process root or
-master vector therefore returns `M_E_ERROR` instead of reporting success.
+For the library-only target, `wipi_ktf_bind_default_imports()` reads the
+process-import pointer at `0x01001000`, binds the directly exposed tables, and
+invokes the confirmed kernel `+0x84` getter for the 17-entry non-kernel master
+vector. Binding rejects null tables before changing state. A partial process
+root or master vector therefore returns `M_E_ERROR` instead of reporting
+success.
+
+The separate `aram-ktf` install profile supplies a raw-image CRT, WipiExe and
+ExeInterface metadata, and a minimal `LibwipiClet` MClass bridge. ARAM passes
+the interface lookup to that bridge; the runtime requests
+`WIPIC_knlInterface`, obtains the same `+0x84` master vector, and enters
+`startClet`. Its deterministic outer ZIP contains `__adf__` and an AID-named
+JAR whose executable is `client.bin<decimal-bss-size>`. This path is verified
+through first frame only and is not evidence for interactive lifecycle or a
+physical KTF handset.
 
 ### `lgt-raptor`
 

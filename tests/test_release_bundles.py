@@ -17,6 +17,9 @@ class ReleaseBundleTests(unittest.TestCase):
         )
         self.assertEqual(manifest["schema"], 1)
         self.assertTrue(manifest["bundles"])
+        self.assertIn(
+            "sdk-lab-ktf", {bundle["id"] for bundle in manifest["bundles"]}
+        )
         for bundle in manifest["bundles"]:
             self.assertTrue(bundle["api_level"])
             self.assertTrue(bundle["abi_profile"])

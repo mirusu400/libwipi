@@ -45,6 +45,7 @@ describe libwipi implementation evidence, not platform-wide WIPI requirements.
 |---|---|---|
 | `host-sim` | `none` | host semantic test |
 | `ktf-samsung` | `none` | linkable local implementation |
+| `ktf-samsung` | `aram-ktf` | linkable local implementation |
 | `lgt-raptor` | `aram-raptor` | declared; no confirmed adapter |
 | `lgt-raptor` | `aram-wie-raptor` | declared; no confirmed adapter |
 

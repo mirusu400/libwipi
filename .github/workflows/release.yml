@@ -52,7 +52,7 @@ jobs:
           'python3 tools/generate.py --check &&
           python3 tools/generate_docs.py --check &&
           python3 -m unittest discover -s tests -p "test_*.py" &&
-          make clean all test-target'
+          make clean all test-target test-ktf-examples'
 
       - name: Build deterministic test-suite bundles
         run: >-

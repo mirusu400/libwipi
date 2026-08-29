@@ -11,20 +11,20 @@ not uploaded to an application server.
 
 | Example | Cataloged APIs used | Tested install profiles |
 |---|---:|---|
-| [Synthetic Audio Player](audio-player.md) | 17 | `aram-raptor`, `aram-wie-raptor` |
-| [Conformance](conformance.md) | 27 | `aram-wie-raptor` |
-| [Database CRUD](database-crud.md) | 23 | `aram-raptor` |
-| [Filesystem](filesystem.md) | 27 | `aram-raptor` |
-| [Graphics Gallery](graphics-gallery.md) | 18 | `aram-raptor`, `aram-wie-raptor` |
-| [Hello](hello.md) | 6 | `aram-raptor`, `aram-wie-raptor` |
-| [Image Pipeline](image-pipeline.md) | 20 | `aram-raptor`, `aram-wie-raptor` |
-| [Media suite](media-suite.md) | 31 | `aram-raptor` |
-| [Memory and Resource](memory-resource.md) | 17 | `aram-raptor`, `aram-wie-raptor` |
-| [Network Lifecycle](network-lifecycle.md) | 11 | `aram-raptor`, `aram-wie-raptor` |
-| [Sky Hopper](platformer.md) | 15 | `aram-wie-raptor` |
-| [System Services](system-services.md) | 17 | `aram-raptor`, `aram-wie-raptor` |
-| [Template](template.md) | 8 | `aram-wie-raptor` |
-| [Vibration test](vibrate.md) | 12 | `aram-raptor`, `aram-wie-raptor` |
+| [Synthetic Audio Player](audio-player.md) | 17 | `aram-ktf`, `aram-raptor`, `aram-wie-raptor` |
+| [Conformance](conformance.md) | 27 | `aram-ktf`, `aram-wie-raptor` |
+| [Database CRUD](database-crud.md) | 23 | `aram-ktf`, `aram-raptor` |
+| [Filesystem](filesystem.md) | 27 | `aram-ktf`, `aram-raptor` |
+| [Graphics Gallery](graphics-gallery.md) | 18 | `aram-ktf`, `aram-raptor`, `aram-wie-raptor` |
+| [Hello](hello.md) | 6 | `aram-ktf`, `aram-raptor`, `aram-wie-raptor` |
+| [Image Pipeline](image-pipeline.md) | 20 | `aram-ktf`, `aram-raptor`, `aram-wie-raptor` |
+| [Media suite](media-suite.md) | 31 | `aram-ktf`, `aram-raptor` |
+| [Memory and Resource](memory-resource.md) | 17 | `aram-ktf`, `aram-raptor`, `aram-wie-raptor` |
+| [Network Lifecycle](network-lifecycle.md) | 11 | `aram-ktf`, `aram-raptor`, `aram-wie-raptor` |
+| [Sky Hopper](platformer.md) | 15 | `aram-ktf`, `aram-wie-raptor` |
+| [System Services](system-services.md) | 17 | `aram-ktf`, `aram-raptor`, `aram-wie-raptor` |
+| [Template](template.md) | 8 | `aram-ktf`, `aram-wie-raptor` |
+| [Vibration test](vibrate.md) | 12 | `aram-ktf`, `aram-raptor`, `aram-wie-raptor` |
 
 ```{toctree}
 :hidden:

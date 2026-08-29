@@ -1,0 +1,78 @@
+{
+  "schema": 1,
+  "suite": "libwipi-sdk-examples-ktf",
+  "api_level": "1.2.1",
+  "abi_profile": "ktf-samsung",
+  "install_profile": "aram-ktf",
+  "runtime_profile": "wipi-1.2.1/ktf/generic",
+  "aram": {
+    "core_revision": "86d36b4c886cf594b3c9ead9142f09d7d98766cd"
+  },
+  "claims": {
+    "first_frame": true,
+    "interactive": false,
+    "real_device": false
+  },
+  "examples": [
+    {
+      "id": "graphics-gallery",
+      "package": "examples/graphics-gallery/build/wipi-1.2.1/ktf-samsung/aram-ktf/libwipi-graphics-gallery.zip",
+      "probe": {"slices": 1024},
+      "expect": {"status": "ok_frame", "min_present_count": 1}
+    },
+    {
+      "id": "memory-resource",
+      "package": "examples/memory-resource/build/wipi-1.2.1/ktf-samsung/aram-ktf/libwipi-memory-resource.zip",
+      "probe": {"slices": 1024},
+      "expect": {"status": "ok_frame", "min_present_count": 1}
+    },
+    {
+      "id": "audio-player",
+      "package": "examples/audio-player/build/wipi-1.2.1/ktf-samsung/aram-ktf/libwipi-audio-player.zip",
+      "probe": {"slices": 1024},
+      "expect": {"status": "ok_frame", "min_present_count": 1}
+    },
+    {
+      "id": "vibrate",
+      "package": "examples/vibrate/build/wipi-1.2.1/ktf-samsung/aram-ktf/libwipi-vibrate.zip",
+      "probe": {"slices": 1024},
+      "expect": {"status": "ok_frame", "min_present_count": 1}
+    },
+    {
+      "id": "system-services",
+      "package": "examples/system-services/build/wipi-1.2.1/ktf-samsung/aram-ktf/libwipi-system-services.zip",
+      "probe": {"slices": 1024},
+      "expect": {"status": "ok_frame", "min_present_count": 1}
+    },
+    {
+      "id": "image-pipeline",
+      "package": "examples/image-pipeline/build/wipi-1.2.1/ktf-samsung/aram-ktf/libwipi-image-pipeline.zip",
+      "probe": {"slices": 1024},
+      "expect": {"status": "ok_frame", "min_present_count": 1}
+    },
+    {
+      "id": "network-lifecycle",
+      "package": "examples/network-lifecycle/build/wipi-1.2.1/ktf-samsung/aram-ktf/libwipi-network-lifecycle.zip",
+      "probe": {"slices": 1024},
+      "expect": {"status": "ok_frame", "min_present_count": 1}
+    },
+    {
+      "id": "database-crud",
+      "package": "examples/database-crud/build/wipi-1.2.1/ktf-samsung/aram-ktf/libwipi-database-crud.zip",
+      "probe": {"slices": 1024},
+      "expect": {"status": "ok_frame", "min_present_count": 1}
+    },
+    {
+      "id": "filesystem",
+      "package": "examples/filesystem/build/wipi-1.2.1/ktf-samsung/aram-ktf/libwipi-filesystem.zip",
+      "probe": {"slices": 1024},
+      "expect": {"status": "ok_frame", "min_present_count": 1}
+    },
+    {
+      "id": "media-suite",
+      "package": "examples/media-suite/build/wipi-1.2.1/ktf-samsung/aram-ktf/libwipi-media-suite.zip",
+      "probe": {"slices": 1024},
+      "expect": {"status": "ok_frame", "min_present_count": 1}
+    }
+  ]
+}

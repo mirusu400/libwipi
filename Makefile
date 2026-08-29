@@ -1,7 +1,7 @@
 include mk/wipi.mk
 
 ifeq ($(PROFILE),ktf-samsung)
-ABI_C_SOURCES := src/abi/ktf/bind.c
+ABI_C_SOURCES := src/abi/ktf/bind.c src/abi/ktf/runtime.c
 ABI_ASM_SOURCES := src/abi/ktf/generated_veneer.S
 else ifeq ($(PROFILE),lgt-raptor)
 ABI_C_SOURCES := src/abi/lgt/runtime.c src/abi/lgt/input.c
@@ -28,11 +28,14 @@ LIBRARY := $(BUILD_DIR)/lib/libwipi.a
 EXAMPLE_OBJECT := $(BUILD_DIR)/examples/hello/main.o
 EXAMPLE_RELOC := $(BUILD_DIR)/examples/hello/hello.rel
 EXAMPLE_ELF := $(BUILD_DIR)/examples/hello/binary.mod
+EXAMPLE_CLIENT := $(BUILD_DIR)/examples/hello/client.bin
 EXAMPLE_PACKAGE := $(BUILD_DIR)/examples/hello/libwipi-hello.zip
 CONFORMANCE_OBJECT := $(BUILD_DIR)/examples/conformance/main.o
 CONFORMANCE_ELF := $(BUILD_DIR)/examples/conformance/binary.mod
+CONFORMANCE_CLIENT := $(BUILD_DIR)/examples/conformance/client.bin
 CONFORMANCE_PACKAGE := $(BUILD_DIR)/examples/conformance/libwipi-conformance.zip
 RAPTOR_METADATA_OBJECT := $(BUILD_DIR)/src/container/raptor_metadata.o
+KTF_METADATA_OBJECT := $(BUILD_DIR)/src/container/ktf_metadata.o
 ifeq ($(PROFILE),ktf-samsung)
 VENEER_OBJECT := $(BUILD_DIR)/src/abi/ktf/generated_veneer.o
 else ifeq ($(PROFILE),lgt-raptor)
@@ -52,6 +55,7 @@ HOST_LGT_INPUT_TEST := build/host/tests/lgt-input-semantics
 	test-target test-target-profile test-target-ktf test-target-lgt \
 	test-application-template test-platformer-example platformer \
 	sdk-examples test-sdk-examples aram-sdk-examples test-aram-sdk-examples \
+	ktf-examples test-ktf-examples \
 	docs docs-check docs-linkcheck docs-packages release-bundles
 
 SDK_VERSION ?= dev
@@ -101,7 +105,42 @@ $(EXAMPLE_RELOC): $(EXAMPLE_OBJECT) $(LIBRARY)
 	$(CC) $(WIPI_ARCH_FLAGS) -nostdlib -Wl,-r -o $@ \
 		$(EXAMPLE_OBJECT) $(LIBRARY)
 
-ifneq ($(filter $(INSTALL_PROFILE),aram-raptor aram-wie-raptor),)
+ifeq ($(INSTALL_PROFILE),aram-ktf)
+$(EXAMPLE_ELF): $(EXAMPLE_OBJECT) $(KTF_METADATA_OBJECT) $(LIBRARY) ld/ktf.ld
+	$(CC) $(WIPI_ARCH_FLAGS) -nostdlib -Wl,--build-id=none \
+		-Wl,--gc-sections -Wl,--strip-debug -Wl,-u,_start \
+		-T ld/ktf.ld -o $@ $(EXAMPLE_OBJECT) $(KTF_METADATA_OBJECT) \
+		$(LIBRARY) -lgcc
+
+$(EXAMPLE_CLIENT): $(EXAMPLE_ELF)
+	$(OBJCOPY) -O binary $< $@
+
+$(EXAMPLE_PACKAGE): $(EXAMPLE_ELF) $(EXAMPLE_CLIENT) tools/package_ktf.py
+	python3 tools/package_ktf.py --client $(EXAMPLE_CLIENT) \
+		--elf $(EXAMPLE_ELF) --nm $(NM) --output $@ \
+		--aid libwipi-hello --name "libwipi hello"
+
+example: $(EXAMPLE_PACKAGE)
+
+$(CONFORMANCE_ELF): $(CONFORMANCE_OBJECT) $(KTF_METADATA_OBJECT) \
+		$(LIBRARY) ld/ktf.ld
+	$(CC) $(WIPI_ARCH_FLAGS) -nostdlib -Wl,--build-id=none \
+		-Wl,--gc-sections -Wl,--strip-debug -Wl,-u,_start \
+		-T ld/ktf.ld -o $@ $(CONFORMANCE_OBJECT) \
+		$(KTF_METADATA_OBJECT) $(LIBRARY) -lgcc
+
+$(CONFORMANCE_CLIENT): $(CONFORMANCE_ELF)
+	$(OBJCOPY) -O binary $< $@
+
+$(CONFORMANCE_PACKAGE): $(CONFORMANCE_ELF) $(CONFORMANCE_CLIENT) \
+		tools/package_ktf.py
+	python3 tools/package_ktf.py --client $(CONFORMANCE_CLIENT) \
+		--elf $(CONFORMANCE_ELF) --nm $(NM) --output $@ \
+		--aid libwipi-conformance --name "libwipi conformance"
+
+conformance: $(CONFORMANCE_PACKAGE)
+all: conformance
+else ifneq ($(filter $(INSTALL_PROFILE),aram-raptor aram-wie-raptor),)
 $(EXAMPLE_ELF): $(EXAMPLE_OBJECT) $(RAPTOR_METADATA_OBJECT) $(LIBRARY) ld/raptor.ld
 	$(CC) $(WIPI_ARCH_FLAGS) -nostdlib -Wl,--build-id=none \
 		-Wl,--gc-sections -Wl,-u,_start -T ld/raptor.ld -o $@ \
@@ -187,6 +226,21 @@ test-semantics: $(HOST_SEMANTICS_TEST) $(HOST_KTF_BIND_TEST) \
 	$(HOST_LGT_INPUT_TEST)
 
 ifeq ($(PROFILE),ktf-samsung)
+ifeq ($(INSTALL_PROFILE),aram-ktf)
+test-target-profile: $(LIBRARY) $(BUILD_DIR)/tests/layout-ktf.o \
+	$(BUILD_DIR)/tests/layout-lgt.o $(BUILD_DIR)/tests/headers.o \
+	$(VENEER_DISASSEMBLY) $(EXAMPLE_ELF) $(EXAMPLE_CLIENT) \
+	$(EXAMPLE_PACKAGE) $(CONFORMANCE_ELF) $(CONFORMANCE_CLIENT) \
+	$(CONFORMANCE_PACKAGE) test-semantics
+	python3 tests/check_disassembly.py $(VENEER_DISASSEMBLY)
+	python3 tests/check_archive.py $(LIBRARY) $(NM) ktf-samsung aram-ktf
+	python3 tests/check_ktf_image.py $(EXAMPLE_ELF) $(EXAMPLE_CLIENT) \
+		$(OBJDUMP) $(NM)
+	python3 tests/check_ktf_image.py $(CONFORMANCE_ELF) \
+		$(CONFORMANCE_CLIENT) $(OBJDUMP) $(NM)
+	python3 tools/package_ktf.py --inspect $(EXAMPLE_PACKAGE)
+	python3 tools/package_ktf.py --inspect $(CONFORMANCE_PACKAGE)
+else
 test-target-profile: $(LIBRARY) $(BUILD_DIR)/tests/layout-ktf.o \
 	$(BUILD_DIR)/tests/layout-lgt.o $(BUILD_DIR)/tests/headers.o \
 	$(VENEER_DISASSEMBLY) $(EXAMPLE_RELOC) test-semantics
@@ -194,6 +248,7 @@ test-target-profile: $(LIBRARY) $(BUILD_DIR)/tests/layout-ktf.o \
 	python3 tests/check_archive.py $(LIBRARY) $(NM) ktf-samsung
 	python3 tests/check_reloc.py $(EXAMPLE_RELOC) $(NM)
 	python3 tests/check_build_config.py
+endif
 else ifeq ($(PROFILE),lgt-raptor)
 test-target-profile: $(LIBRARY) $(BUILD_DIR)/tests/layout-ktf.o \
 	$(BUILD_DIR)/tests/layout-lgt.o $(BUILD_DIR)/tests/headers.o \
@@ -210,6 +265,8 @@ endif
 test-target-ktf:
 	$(MAKE) --no-print-directory API_LEVEL=1.2.1 PROFILE=ktf-samsung \
 		INSTALL_PROFILE=none test-target-profile
+	$(MAKE) --no-print-directory API_LEVEL=1.2.1 PROFILE=ktf-samsung \
+		INSTALL_PROFILE=aram-ktf test-target-profile
 
 test-target-lgt:
 	$(MAKE) --no-print-directory API_LEVEL=1.2.1 PROFILE=lgt-raptor \
@@ -287,6 +344,37 @@ aram-sdk-examples:
 
 test-aram-sdk-examples: aram-sdk-examples
 	python3 tests/check_aram_sdk_examples.py $(OBJDUMP)
+
+ktf-examples:
+	$(MAKE) --no-print-directory API_LEVEL=1.2.1 PROFILE=ktf-samsung \
+		INSTALL_PROFILE=aram-ktf all
+	$(MAKE) --no-print-directory -C examples/template PROFILE=ktf-samsung \
+		INSTALL_PROFILE=aram-ktf package inspect
+	$(MAKE) --no-print-directory -C examples/platformer PROFILE=ktf-samsung \
+		INSTALL_PROFILE=aram-ktf package inspect
+	$(MAKE) --no-print-directory -C examples/graphics-gallery PROFILE=ktf-samsung \
+		INSTALL_PROFILE=aram-ktf package inspect
+	$(MAKE) --no-print-directory -C examples/memory-resource PROFILE=ktf-samsung \
+		INSTALL_PROFILE=aram-ktf package inspect
+	$(MAKE) --no-print-directory -C examples/audio-player PROFILE=ktf-samsung \
+		INSTALL_PROFILE=aram-ktf package inspect
+	$(MAKE) --no-print-directory -C examples/vibrate PROFILE=ktf-samsung \
+		INSTALL_PROFILE=aram-ktf package inspect
+	$(MAKE) --no-print-directory -C examples/system-services PROFILE=ktf-samsung \
+		INSTALL_PROFILE=aram-ktf package inspect
+	$(MAKE) --no-print-directory -C examples/image-pipeline PROFILE=ktf-samsung \
+		INSTALL_PROFILE=aram-ktf package inspect
+	$(MAKE) --no-print-directory -C examples/network-lifecycle PROFILE=ktf-samsung \
+		INSTALL_PROFILE=aram-ktf package inspect
+	$(MAKE) --no-print-directory -C examples/database-crud PROFILE=ktf-samsung \
+		INSTALL_PROFILE=aram-ktf package inspect
+	$(MAKE) --no-print-directory -C examples/filesystem PROFILE=ktf-samsung \
+		INSTALL_PROFILE=aram-ktf package inspect
+	$(MAKE) --no-print-directory -C examples/media-suite PROFILE=ktf-samsung \
+		INSTALL_PROFILE=aram-ktf package inspect
+
+test-ktf-examples: ktf-examples
+	python3 tests/check_ktf_examples.py $(OBJDUMP) $(NM)
 
 test-target: test-target-ktf test-target-lgt
 

@@ -6,6 +6,7 @@ from tools.verify_aram import (
     validate_performance,
     validate_platformer,
 )
+from tools.verify_aram_ktf import validate_report as validate_ktf_report
 from tools.verify_wie import suite_config
 
 
@@ -91,6 +92,25 @@ class EmulatorVerifierTests(unittest.TestCase):
         audio["missing_frames"] = 1
         with self.assertRaisesRegex(ValueError, "missing_frames"):
             validate_performance(report)
+
+    def test_ktf_first_frame_contract_stays_below_interactive(self):
+        report = {
+            "status": "ok_frame",
+            "level": "boots",
+            "format": "ktf-wipi",
+            "profile_id": "wipi-1.2.1/ktf/generic",
+            "image": {"mode": "Thumb"},
+            "wipi": {
+                "present_count": 1,
+                "api_calls": 8,
+                "implemented_calls": 8,
+                "unimplemented_calls": 0,
+            },
+        }
+        validate_ktf_report(report)
+        report["wipi"]["unimplemented_calls"] = 1
+        with self.assertRaisesRegex(ValueError, "unimplemented"):
+            validate_ktf_report(report)
 
 
 if __name__ == "__main__":

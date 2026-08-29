@@ -599,6 +599,52 @@ def render_resolve_and_tail(row: dict[str, str], special_timer: bool) -> list[st
     return lines
 
 
+def render_ktf_aram_return_override(
+    row: dict[str, str], provider_success: int, public_success: int
+) -> list[str]:
+    slot = int(row["ktf_samsung_slot"][1:], 16)
+    lines = [
+        "    @ Preserve every public argument and the caller return address.",
+        "    push {r0-r4, lr}",
+        f"    ldr r0, ={table_symbol(row['family'])}",
+        "    ldr r0, [r0]",
+        "    cmp r0, #0",
+        "    beq 1f",
+    ]
+    if slot:
+        lines.append(f"    adds r0, #{slot}")
+    lines.extend(
+        [
+            "    ldr r0, [r0]",
+            "    cmp r0, #0",
+            "    beq 1f",
+            "    movs r4, r0",
+            "    pop {r0-r3}",
+            "    bl 2f",
+            f"    @ ARAM KTF provider success {provider_success} maps to public WIPI success {public_success}.",
+            f"    cmp r0, #{provider_success}",
+            "    bne 3f",
+            f"    movs r0, #{public_success}",
+            "3:",
+            "    pop {r4}",
+            "    pop {r1}",
+            "    bx r1",
+            "1:",
+            "    ldr r4, [sp, #20]",
+            "    mov lr, r4",
+            "    pop {r0-r4}",
+            "    add sp, #4",
+            "    ldr r3, =__wipi_missing_import",
+            "    mov ip, r3",
+            "    bx ip",
+            "2:",
+            "    @ ARMv4T provider-call thunk (BLX is ARMv5T).",
+            "    bx r4",
+        ]
+    )
+    return lines
+
+
 def render_ktf_veneer(rows: list[dict[str, str]]) -> str:
     eligible = [
         row
@@ -626,7 +672,14 @@ def render_ktf_veneer(rows: list[dict[str, str]]) -> str:
                 f"{name}:",
             ]
         )
-        lines.extend(render_resolve_and_tail(row, name == "MC_knlSetTimer"))
+        if name == "MC_grpGetDisplayInfo":
+            lines.append("#if defined(LIBWIPI_INSTALL_ARAM_KTF)")
+            lines.extend(render_ktf_aram_return_override(row, 1, 0))
+            lines.append("#else")
+            lines.extend(render_resolve_and_tail(row, False))
+            lines.append("#endif")
+        else:
+            lines.extend(render_resolve_and_tail(row, name == "MC_knlSetTimer"))
         lines.extend([f".size {name}, .-{name}", ".pool", ""])
     return "\n".join(lines)
 

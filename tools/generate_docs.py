@@ -68,6 +68,7 @@ def read_example_records(
     manifests = [
         load_json(ROOT / "examples" / "sdk-lab.json"),
         load_json(ROOT / "examples" / "sdk-lab-aram.json"),
+        load_json(ROOT / "examples" / "sdk-lab-ktf.json"),
     ]
     by_example: dict[str, list[dict[str, object]]] = defaultdict(list)
     for manifest in manifests:
@@ -133,7 +134,17 @@ def read_example_records(
                     f"{coverage['install_profile']}/examples/conformance/"
                     "libwipi-conformance.zip"
                 ),
-            }
+            },
+            {
+                "api_level": bootstrap_api_level,
+                "abi_profile": "ktf-samsung",
+                "install_profile": "aram-ktf",
+                "expected": {"required_apis": sorted(coverage_names & catalog_names)},
+                "package": (
+                    f"build/wipi-{bootstrap_api_level}/ktf-samsung/aram-ktf/"
+                    "examples/conformance/libwipi-conformance.zip"
+                ),
+            },
         ]
 
     defaults = {
@@ -148,20 +159,35 @@ def read_example_records(
                 f"build/wipi-{bootstrap_api_level}/lgt-raptor/aram-raptor/"
                 "examples/hello/libwipi-hello.zip",
             ),
+            (
+                "aram-ktf",
+                f"build/wipi-{bootstrap_api_level}/ktf-samsung/aram-ktf/"
+                "examples/hello/libwipi-hello.zip",
+            ),
         ],
         "template": [
             (
                 "aram-wie-raptor",
                 f"examples/template/build/wipi-{bootstrap_api_level}/lgt-raptor/"
                 "aram-wie-raptor/libwipi-starter.zip",
-            )
+            ),
+            (
+                "aram-ktf",
+                f"examples/template/build/wipi-{bootstrap_api_level}/ktf-samsung/"
+                "aram-ktf/libwipi-starter.zip",
+            ),
         ],
         "platformer": [
             (
                 "aram-wie-raptor",
                 f"examples/platformer/build/wipi-{bootstrap_api_level}/lgt-raptor/"
                 "aram-wie-raptor/libwipi-sky-hopper.zip",
-            )
+            ),
+            (
+                "aram-ktf",
+                f"examples/platformer/build/wipi-{bootstrap_api_level}/ktf-samsung/"
+                "aram-ktf/libwipi-sky-hopper.zip",
+            ),
         ],
     }
     for example_id, variants in defaults.items():
@@ -170,7 +196,9 @@ def read_example_records(
             record["variants"] = [
                 {
                     "api_level": bootstrap_api_level,
-                    "abi_profile": "lgt-raptor",
+                    "abi_profile": (
+                        "ktf-samsung" if install_profile == "aram-ktf" else "lgt-raptor"
+                    ),
                     "install_profile": install_profile,
                     "expected": {"required_apis": record["apis"]},
                     "package": package,
@@ -182,7 +210,7 @@ def read_example_records(
 
 def observed_by_install() -> dict[str, set[str]]:
     result: dict[str, set[str]] = {}
-    for name in ("sdk-lab.json", "sdk-lab-aram.json"):
+    for name in ("sdk-lab.json", "sdk-lab-aram.json", "sdk-lab-ktf.json"):
         manifest = load_json(ROOT / "examples" / name)
         result[str(manifest["install_profile"])] = manifest_api_names(manifest)
     coverage = load_json(ROOT / "examples" / "conformance" / "coverage.json")
@@ -507,9 +535,15 @@ def render_support_matrix(
             ]
         result = milestones[-1] if milestones else str(install.get("status", "scoped"))
         observed_count = len(observed.get(install_id, set()) & public_names)
+        surface = f"{observed_count} observed APIs"
+        if observed_count == 0 and isinstance(claims.get("first_frame_evidence"), str):
+            evidence = load_json(ROOT / str(claims["first_frame_evidence"]))
+            package_count = evidence.get("coverage", {}).get("packages")
+            if isinstance(package_count, int):
+                surface = f"{package_count} first-frame packages"
         lines.append(
             f"| {code(combination)} | "
-            f"{table(result)} on the named emulator contract | {observed_count} observed APIs | No |"
+            f"{table(result)} on the named emulator contract | {surface} | No |"
         )
     lines.extend(
         [
@@ -617,7 +651,8 @@ def render_example_page(record: dict[str, object]) -> str:
                 [
                     "",
                     "> Compiled downloads are checked into the SDK with their exact build",
-                    "> revision, inspected as Raptor packages, and published with SHA-256",
+                    "> revision, inspected against the selected package profile, and published",
+                    "> with SHA-256",
                     "> hashes. They are emulator-profile artifacts, not real-device claims.",
                 ]
             )
@@ -716,8 +751,9 @@ def render_downloads(bundle_manifest: dict[str, object]) -> str:
             "evidence manifests, a machine-readable bundle manifest, license, and SHA-256",
             "inventory. Compatibility orchestration remains owned by `aram-test`.",
             "",
-            "The current `ktf-samsung` profile has no executable/install profile, so no page",
-            "presents a KTF package as handset-ready.",
+            "The `ktf-samsung/aram-ktf` downloads use the observed KTF archive shape and",
+            "have reached first frame in the pinned ARAM runtime. They are emulator fixtures,",
+            "not interactive or real-device-verified handset packages.",
             "",
         ]
     )

@@ -732,6 +732,40 @@ MC_grpGetPixelFromRGB:
 .type MC_grpGetDisplayInfo, %function
 .thumb_func
 MC_grpGetDisplayInfo:
+#if defined(LIBWIPI_INSTALL_ARAM_KTF)
+    @ Preserve every public argument and the caller return address.
+    push {r0-r4, lr}
+    ldr r0, =__wipi_ktf_table_mc_grp
+    ldr r0, [r0]
+    cmp r0, #0
+    beq 1f
+    adds r0, #96
+    ldr r0, [r0]
+    cmp r0, #0
+    beq 1f
+    movs r4, r0
+    pop {r0-r3}
+    bl 2f
+    @ ARAM KTF provider success 1 maps to public WIPI success 0.
+    cmp r0, #1
+    bne 3f
+    movs r0, #0
+3:
+    pop {r4}
+    pop {r1}
+    bx r1
+1:
+    ldr r4, [sp, #20]
+    mov lr, r4
+    pop {r0-r4}
+    add sp, #4
+    ldr r3, =__wipi_missing_import
+    mov ip, r3
+    bx ip
+2:
+    @ ARMv4T provider-call thunk (BLX is ARMv5T).
+    bx r4
+#else
     push {r0}
     ldr r0, =__wipi_ktf_table_mc_grp
     ldr r0, [r0]
@@ -748,6 +782,7 @@ MC_grpGetDisplayInfo:
     pop {r0}
     ldr r0, =__wipi_missing_import
     bx r0
+#endif
 .size MC_grpGetDisplayInfo, .-MC_grpGetDisplayInfo
 .pool
 

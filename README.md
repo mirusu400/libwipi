@@ -2,8 +2,10 @@
 
 `libwipi` is a clean, freestanding C SDK for native WIPI applications. The
 currently usable emulator targets are WIPI-C 1.2.1 on the LGT/Raptor ABI with
-the `aram-wie-raptor` and `aram-raptor` install profiles. They build with an
-ordinary GNU Arm Embedded toolchain and do not require a proprietary WIPI SDK.
+the `aram-wie-raptor` and `aram-raptor` install profiles, plus the
+KTF/Samsung ABI with the ARAM-scoped `aram-ktf` install profile. They build
+with an ordinary GNU Arm Embedded toolchain and do not require a proprietary
+WIPI SDK.
 
 The source API, carrier/device ABI, and executable/install profile are separate
 contracts. In particular, an emulator result is not presented as a handset
@@ -20,7 +22,8 @@ downloads, and `llms.txt`/per-page Markdown representations.
 |---|---|---|
 | `1.2.1/lgt-raptor/aram-raptor` | Compiles, links, packages, loads, and passes 10 independent ARAM SDK examples | 100 public veneers are linkable and all 100 are observed: 49 established Raptor methods plus ARAM-only synthetic FS, DB, and MDA mappings; DB and filesystem restart persistence, PCM audio, and haptics are verified; no WIE, carrier, handset, or real-device claim |
 | `1.2.1/lgt-raptor/aram-wie-raptor` | Compiles, links an ELF `binary.mod`, packages, loads, reaches entry and first frame, and passes interactive graphics, font, system, memory, timer, input, audio, and haptics checks in pinned emulator revisions | 59 public numbered-import veneers are linkable and all 59 are exercised by the ARAM SDK lab; the smaller conformance app exercises 24; no real-device claim |
-| `1.2.1/ktf-samsung/none` | Generated headers, table binder, 205 generated veneers, special timer ABI adapter, freestanding C library, relocatable example, and object-code tests | No package/install profile and no emulator or real-device runtime claim |
+| `1.2.1/ktf-samsung/none` | Generated headers, table binder, 205 generated veneers, special timer ABI adapter, freestanding C library, relocatable example, and object-code tests | Library-only selection; no package or runtime claim |
+| `1.2.1/ktf-samsung/aram-ktf` | Compiles, links a raw ARM image, creates the observed KTF nested ZIP, loads, reaches entry, and reaches first frame for all 14 checked examples in pinned ARAM | ARAM-scoped MClass/start bridge; no interactive, handset installation, firmware, or real-device claim |
 | WIPI-C `2.0`, `2.0.1`, `2.1.0`, or `2.2.0` | Tracked as explicit future API levels | No catalog or SDK support claim; the build rejects them |
 
 The checked-in 239-row WIPI-C 1.2.1 catalog is the current bootstrap catalog,
@@ -51,6 +54,18 @@ The result is:
 ```text
 build/wipi-1.2.1/lgt-raptor/aram-wie-raptor/examples/conformance/libwipi-conformance.zip
 ```
+
+Build and inspect the corresponding KTF/Samsung ARAM package explicitly:
+
+```powershell
+docker run --rm -v "${PWD}:/work" -w /work libwipi-toolchain `
+  make API_LEVEL=1.2.1 PROFILE=ktf-samsung `
+       INSTALL_PROFILE=aram-ktf conformance
+```
+
+The resulting ZIP uses `__adf__`, an AID-named inner JAR, and
+`client.bin<decimal-bss-size>`. This is the KTF archive shape accepted by ARAM;
+it is not yet a package verified on a named KTF handset.
 
 With local `arm-none-eabi-gcc`, binutils, GNU Make, and Python 3 installed, the
 same `make` commands work without Docker.
@@ -84,6 +99,10 @@ the full 1.2.1 media family. Build the ARAM-only 100-API suite with
 ARAM/WIE common subset. Their ordinary application sources stay in this SDK, while
 the sibling `aram-test` repository owns automated ARAM execution and reports.
 
+Build every KTF/Samsung ARAM example with `make test-ktf-examples`. The checked
+evidence records 14 packages reaching first frame with zero unimplemented calls
+during those probes; input-driven interaction is not claimed for this wrapper.
+
 Run the full ARAM suite from the sibling test repository:
 
 ```powershell
@@ -107,6 +126,7 @@ After building the conformance package:
 ```powershell
 python tools/verify_aram.py --build-probe
 python tools/verify_wie.py --prepare
+python tools/verify_aram_ktf.py
 ```
 
 The ARAM command expects pinned `aram-core` and `aram-emu` sibling checkouts;

@@ -53,6 +53,9 @@ device ABI profile, observed milestone, and failures. Do not translate an ARAM
 or WIE result into a device claim, and do not infer a device ABI solely from
 the WIPI version printed by a handset.
 
-The current KTF/Samsung profile has target library and disassembly evidence but
-no checked-in executable/install profile. Therefore the release workflow does
-not manufacture a KTF handset package.
+The `ktf-samsung/aram-ktf` profile adds a checked-in executable/install
+contract for ARAM. Its deterministic ZIP follows the observed KTF archive
+shape, and 14 examples are recorded through the `first frame` milestone. This
+does not establish input-driven interaction or installation on any named KTF
+handset. A release bundle therefore labels these artifacts as emulator
+fixtures and keeps `real_device` false.

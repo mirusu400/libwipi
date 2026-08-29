@@ -8,6 +8,7 @@ import unittest
 from urllib.parse import parse_qs, urlparse
 
 from tools import docs_package_assets
+from tools import package_ktf
 from tools import package_raptor
 
 
@@ -45,6 +46,34 @@ class DocumentationPackageAssetTests(unittest.TestCase):
             "install_profile": "aram-wie-raptor",
             "package": "out/libwipi-audio-player.zip",
         }
+
+    def ktf_package(self, path: Path, aid: str = "libwipi-audio-player") -> None:
+        inner = package_ktf.make_zip(
+            [
+                ("META-INF/MANIFEST.MF", package_ktf.MANIFEST),
+                ("client.bin64", b"\x00\xb5\x00\xbd"),
+            ]
+        )
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(
+            package_ktf.make_zip(
+                [
+                    (
+                        "__adf__",
+                        package_ktf.descriptor(
+                            aid,
+                            "libwipi",
+                            "AudioPlayer",
+                            "01.00.00",
+                            "libwipi",
+                            "LibwipiClet",
+                            (240, 320),
+                        ),
+                    ),
+                    (f"{aid}.jar", inner),
+                ]
+            )
+        )
 
     def rendered_site(self, site: Path, record: dict[str, str]) -> None:
         version = site / "latest"
@@ -182,18 +211,37 @@ class DocumentationPackageAssetTests(unittest.TestCase):
                     records=[record],
                 )
 
-    def test_audio_page_declares_both_profile_package_markers(self):
+    def test_inspector_dispatches_ktf_packages_by_abi_profile(self):
+        with tempfile.TemporaryDirectory() as raw_directory:
+            package = Path(raw_directory) / "libwipi-audio-player.zip"
+            self.ktf_package(package)
+            record = self.record()
+            record["abi_profile"] = "ktf-samsung"
+            record["install_profile"] = "aram-ktf"
+
+            inspection = docs_package_assets.inspect_compiled_package(record, package)
+
+            self.assertEqual(inspection["aid"], "libwipi-audio-player")
+            self.assertEqual(inspection["module"], "client.bin64")
+            self.assertEqual(inspection["bss_size"], 64)
+
+    def test_audio_page_declares_all_profile_package_markers(self):
         page = (ROOT / "docs/generated/examples/audio-player.md").read_text(
             encoding="utf-8"
         )
-        for install_profile in ("aram-wie-raptor", "aram-raptor"):
+        for abi_profile, install_profile in (
+            ("lgt-raptor", "aram-wie-raptor"),
+            ("lgt-raptor", "aram-raptor"),
+            ("ktf-samsung", "aram-ktf"),
+        ):
             record = self.record()
+            record["abi_profile"] = abi_profile
             record["install_profile"] = install_profile
             self.assertIn(docs_package_assets.package_key(record), page)
 
     def test_every_compiled_example_variant_has_a_unique_marker(self):
         records = docs_package_assets.repository_package_records()
-        self.assertEqual(len(records), 22)
+        self.assertEqual(len(records), 36)
         keys = {docs_package_assets.package_key(record) for record in records}
         self.assertEqual(len(keys), len(records))
         generated = "\n".join(
@@ -206,7 +254,7 @@ class DocumentationPackageAssetTests(unittest.TestCase):
     def test_checked_in_package_set_covers_every_compiled_variant(self):
         records = docs_package_assets.repository_package_records()
         manifest, entries = docs_package_assets.verify_static_package_set(ROOT, records)
-        self.assertEqual(len(entries), 22)
+        self.assertEqual(len(entries), 36)
         self.assertRegex(manifest["built_from"], r"\A[0-9a-f]{40}\Z")
 
     def test_download_page_points_to_profile_specific_example_packages(self):

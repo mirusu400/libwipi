@@ -11,9 +11,11 @@ class DocumentationTests(unittest.TestCase):
         for required in (
             "1.2.1/lgt-raptor/aram-raptor",
             "1.2.1/lgt-raptor/aram-wie-raptor",
+            "1.2.1/ktf-samsung/aram-ktf",
             "docs/getting-started.md",
             "tools/verify_aram.py --build-probe",
             "tools/verify_wie.py --prepare",
+            "tools/verify_aram_ktf.py",
             "no real-device claim",
         ):
             self.assertIn(required, readme)
@@ -41,10 +43,12 @@ class DocumentationTests(unittest.TestCase):
         guide = (ROOT / "docs/usage.ko.md").read_text(encoding="utf-8")
         for required in (
             "1.2.1/lgt-raptor/aram-wie-raptor",
+            "1.2.1/ktf-samsung/aram-ktf",
             "include $(LIBWIPI_ROOT)/mk/application.mk",
             "make -C examples/my-app clean package inspect",
             "MC_GETDPTR",
             "tools/verify_aram.py --suite platformer --build-probe",
+            "tools/verify_aram_ktf.py",
             "실기기 검증",
         ):
             self.assertIn(required, guide)

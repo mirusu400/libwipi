@@ -83,11 +83,29 @@ Ten independent packages covering the scoped 100-method ARAM-only test contract,
 
 Release asset pattern: `libwipi-sdk-lab-aram-<sdk-version>.zip`.
 
+## ARAM KTF/Samsung SDK example lab
+
+Ten focused SDK packages using the observed KTF archive and raw-image bootstrap contract, verified through first frame in the pinned ARAM runtime.
+
+| Field | Value |
+|---|---|
+| Bundle ID | `sdk-lab-ktf` |
+| API level | `1.2.1` |
+| ABI profile | `ktf-samsung` |
+| Install profile | `aram-ktf` |
+| Build target | `test-ktf-examples` |
+| Suite manifest | [`examples/sdk-lab-ktf.json`](../../examples/sdk-lab-ktf.json) |
+| Evidence | [`spec/evidence/ktf-aram-examples.json`](../../spec/evidence/ktf-aram-examples.json) |
+| Real-device claim | `false` |
+
+Release asset pattern: `libwipi-sdk-lab-ktf-<sdk-version>.zip`.
+
 ## Bundle contract
 
 Each archive contains its WIPI packages, original fixture source, suite and
 evidence manifests, a machine-readable bundle manifest, license, and SHA-256
 inventory. Compatibility orchestration remains owned by `aram-test`.
 
-The current `ktf-samsung` profile has no executable/install profile, so no page
-presents a KTF package as handset-ready.
+The `ktf-samsung/aram-ktf` downloads use the observed KTF archive shape and
+have reached first frame in the pinned ARAM runtime. They are emulator fixtures,
+not interactive or real-device-verified handset packages.
