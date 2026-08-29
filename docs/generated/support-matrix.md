@@ -8,6 +8,7 @@ combination; no row implies compatibility with an unnamed handset.
 | API / ABI / install | Strongest current result | Observed or linkable surface | Real device |
 |---|---|---:|---|
 | `1.2.1/ktf-samsung/none` | Headers, generated adapter, relocatable link, and object-code tests; no package profile | 236 linkable APIs | No |
+| `1.2.1/skt-samsung-sch-w830-dl21/none` | Exact SCH-W830 DL21 fixed-root adapter, relocatable link, archive audit, and per-veneer object-code tests; no package/load claim | 100 linkable APIs | No |
 | `1.2.1/ktf-samsung/aram-ktf` | first frame on the named emulator contract | 14 first-frame packages | No |
 | `1.2.1/lgt-raptor/aram-raptor` | interactive on the named emulator contract | 100 observed APIs | No |
 | `1.2.1/lgt-raptor/aram-wie-raptor` | interactive on the named emulator contract | 59 observed APIs | No |

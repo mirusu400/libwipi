@@ -28,7 +28,7 @@ M_Int32 MC_mdaGetVolume(void);
 | Family | [`MC_MDA`](../families/media.md) |
 | Ordinal | 115 |
 | Documentation | `cataloged` |
-| Implementation class | `ktf-table` |
+| Implementation class | `table` |
 | ABI class | `word-tail` |
 
 ## Usage
@@ -48,6 +48,7 @@ describe libwipi implementation evidence, not platform-wide WIPI requirements.
 | `ktf-samsung` | `aram-ktf` | linkable generated veneer |
 | `lgt-raptor` | `aram-raptor` | observed in the scoped emulator suite |
 | `lgt-raptor` | `aram-wie-raptor` | declared; no confirmed adapter |
+| `skt-samsung-sch-w830-dl21` | `none` | declared; no direct SCH binding |
 
 ## Compiled examples
 

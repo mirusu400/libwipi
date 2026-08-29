@@ -264,6 +264,67 @@ def read_catalogs(
     return catalogs
 
 
+def read_skt_sch_w830_bindings(
+    profile: dict[str, object], rows: list[dict[str, str]]
+) -> list[dict[str, str]]:
+    path = repository_path(profile.get("bindings"), f"{profile['id']} bindings")
+    with path.open("r", encoding="utf-8", newline="") as stream:
+        bindings = list(csv.DictReader(stream))
+    required = {
+        "ordinal",
+        "family",
+        "name",
+        "root_field",
+        "slot",
+        "confidence",
+        "evidence",
+    }
+    if not bindings or set(bindings[0]) != required:
+        raise ValueError(f"profile {profile['id']} has invalid binding columns")
+
+    by_name = {row["name"]: row for row in rows}
+    root_fields = profile.get("direct_root_fields")
+    coverage = profile.get("coverage")
+    if not isinstance(root_fields, dict) or not isinstance(coverage, dict):
+        raise ValueError(f"profile {profile['id']} has no binding metadata")
+    seen: set[str] = set()
+    for binding in bindings:
+        name = binding["name"]
+        row = by_name.get(name)
+        if row is None or name in seen:
+            raise ValueError(f"profile {profile['id']} has invalid binding: {name}")
+        seen.add(name)
+        if binding["confidence"] != "confirmed":
+            raise ValueError(f"profile {profile['id']} compiles a non-confirmed binding")
+        if row["implementation"] != "table":
+            raise ValueError(f"profile {profile['id']} binds a non-table API: {name}")
+        if (
+            binding["ordinal"] != row["ordinal"]
+            or binding["family"] != row["family"]
+            or binding["slot"] != row["ktf_samsung_slot"]
+        ):
+            raise ValueError(f"profile {profile['id']} binding disagrees with catalog: {name}")
+        expected_field = root_fields.get(binding["family"])
+        if binding["root_field"] != expected_field:
+            raise ValueError(f"profile {profile['id']} root field disagrees: {name}")
+        if not re.fullmatch(r"0x[0-9a-f]+", binding["root_field"]):
+            raise ValueError(f"profile {profile['id']} has invalid root field: {name}")
+        if not binding["evidence"].startswith("anycall_magichole@"):
+            raise ValueError(f"profile {profile['id']} has unpinned evidence: {name}")
+
+    expected_bindings = coverage.get("confirmed_table_bindings")
+    if expected_bindings != len(bindings):
+        raise ValueError(f"profile {profile['id']} binding count is stale")
+    eligible = [
+        binding
+        for binding in bindings
+        if by_name[binding["name"]]["abi_class"] != "variadic-unverified"
+    ]
+    if coverage.get("generated_table_veneers") != len(eligible):
+        raise ValueError(f"profile {profile['id']} veneer count is stale")
+    return bindings
+
+
 def validate_catalog(
     api_level: str,
     rows: list[dict[str, str]],
@@ -649,7 +710,7 @@ def render_ktf_veneer(rows: list[dict[str, str]]) -> str:
     eligible = [
         row
         for row in rows
-        if row["implementation"] == "ktf-table"
+        if row["implementation"] == "table"
         and row["ktf_samsung_confidence"] == "confirmed"
         and row["abi_class"] != "variadic-unverified"
     ]
@@ -680,6 +741,93 @@ def render_ktf_veneer(rows: list[dict[str, str]]) -> str:
             lines.append("#endif")
         else:
             lines.extend(render_resolve_and_tail(row, name == "MC_knlSetTimer"))
+        lines.extend([f".size {name}, .-{name}", ".pool", ""])
+    return "\n".join(lines)
+
+
+def render_skt_resolve_and_tail(
+    row: dict[str, str], binding: dict[str, str]
+) -> list[str]:
+    root_field = int(binding["root_field"], 16)
+    slot = int(binding["slot"][1:], 16)
+    lines: list[str] = []
+    if row["name"] == "MC_knlSetTimer":
+        lines.extend(
+            [
+                "    @ AAPCS entry: r0=tm, r2:r3=timeout, [sp]=parm.",
+                "    @ SCH-W830 provider: r0=tm, r1:r2=timeout, r3=parm.",
+                "    movs r1, r2",
+                "    movs r2, r3",
+                "    ldr r3, [sp]",
+            ]
+        )
+    lines.extend(
+        [
+            "    push {r0}",
+            "    ldr r0, =0x01001000",
+            "    ldr r0, [r0]",
+            "    cmp r0, #0",
+            "    beq 1f",
+        ]
+    )
+    if root_field:
+        lines.append(f"    ldr r0, [r0, #{root_field}]")
+    else:
+        lines.append("    ldr r0, [r0]")
+    lines.extend(["    cmp r0, #0", "    beq 1f"])
+    if slot:
+        lines.append(f"    adds r0, #{slot}")
+    lines.extend(
+        [
+            "    ldr r0, [r0]",
+            "    cmp r0, #0",
+            "    beq 1f",
+            "    mov ip, r0",
+            "    pop {r0}",
+            "    bx ip",
+            "1:",
+            "    pop {r0}",
+            "    ldr r0, =__wipi_missing_import",
+            "    bx r0",
+        ]
+    )
+    return lines
+
+
+def render_skt_sch_w830_veneer(
+    rows: list[dict[str, str]], bindings: list[dict[str, str]]
+) -> str:
+    by_name = {row["name"]: row for row in rows}
+    eligible = [
+        (by_name[binding["name"]], binding)
+        for binding in bindings
+        if by_name[binding["name"]]["abi_class"] != "variadic-unverified"
+    ]
+    allowed_abi_classes = {"word-tail", "aapcs-to-packed-i64", "return-i64"}
+    for row, _ in eligible:
+        if row["abi_class"] not in allowed_abi_classes:
+            raise ValueError(f"unsupported SKT ABI class: {row['name']}")
+
+    lines = [
+        "/* Generated by tools/generate.py. Do not edit. */",
+        ".syntax unified",
+        ".cpu arm7tdmi",
+        ".thumb",
+        "",
+    ]
+    for row, binding in eligible:
+        name = row["name"]
+        lines.extend(
+            [
+                f'.section .text.{name}, "ax", %progbits',
+                ".align 1",
+                f".global {name}",
+                f".type {name}, %function",
+                ".thumb_func",
+                f"{name}:",
+            ]
+        )
+        lines.extend(render_skt_resolve_and_tail(row, binding))
         lines.extend([f".size {name}, .-{name}", ".pool", ""])
     return "\n".join(lines)
 
@@ -900,7 +1048,7 @@ def render_coverage(api_level: str, rows: list[dict[str, str]]) -> str:
     ]
     variadic = [row for row in rows if row["abi_class"] == "variadic-unverified"]
     veneer_count = sum(
-        row["implementation"] == "ktf-table"
+        row["implementation"] == "table"
         and row["ktf_samsung_confidence"] == "confirmed"
         and row["abi_class"] != "variadic-unverified"
         for row in rows
@@ -963,6 +1111,19 @@ def generated_files(
     result[ROOT / "src" / "abi" / "ktf" / "generated_veneer.S"] = (
         render_ktf_veneer(rows)
     )
+    skt_profile = next(
+        (
+            profile
+            for profile in profiles
+            if profile["id"] == "skt-samsung-sch-w830-dl21"
+        ),
+        None,
+    )
+    if skt_profile is not None:
+        skt_bindings = read_skt_sch_w830_bindings(skt_profile, rows)
+        result[ROOT / "src" / "abi" / "skt" / "generated_veneer.S"] = (
+            render_skt_sch_w830_veneer(rows, skt_bindings)
+        )
     for install in install_profiles:
         if install["abi_profile"] != "lgt-raptor":
             continue

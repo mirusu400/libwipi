@@ -28,7 +28,7 @@ M_Int32 MC_grpGetDisplayInfo(M_Int32 i, MC_GrpDisplayInfo *pi);
 | Family | [`MC_GRP`](../families/graphics.md) |
 | Ordinal | 30 |
 | Documentation | `reviewed` |
-| Implementation class | `ktf-table` |
+| Implementation class | `table` |
 | ABI class | `word-tail` |
 
 ## Usage
@@ -60,6 +60,7 @@ describe libwipi implementation evidence, not platform-wide WIPI requirements.
 | `ktf-samsung` | `aram-ktf` | linkable generated veneer |
 | `lgt-raptor` | `aram-raptor` | observed in the scoped emulator suite |
 | `lgt-raptor` | `aram-wie-raptor` | observed in the scoped emulator suite |
+| `skt-samsung-sch-w830-dl21` | `none` | linkable exact-device fixed-root veneer |
 
 ## Compiled examples
 

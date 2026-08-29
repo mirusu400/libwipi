@@ -61,7 +61,11 @@ class ApiVersionManifestTests(unittest.TestCase):
         }
         self.assertEqual(
             available,
-            {"1.2.1/ktf-samsung", "1.2.1/lgt-raptor"},
+            {
+                "1.2.1/ktf-samsung",
+                "1.2.1/lgt-raptor",
+                "1.2.1/skt-samsung-sch-w830-dl21",
+            },
         )
 
     def test_profile_abi_fact_groups_have_evidence(self):
@@ -82,6 +86,15 @@ class ApiVersionManifestTests(unittest.TestCase):
                 "container",
                 "import_module",
                 "known_public_methods",
+                "layouts",
+                "memory_resolution",
+            },
+            "skt-samsung-sch-w830-dl21": {
+                "architecture",
+                "process_import_pointer",
+                "direct_root_fields",
+                "bindings",
+                "coverage",
                 "layouts",
                 "memory_resolution",
             },

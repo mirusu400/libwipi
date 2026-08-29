@@ -28,7 +28,7 @@ int MC_knlSprintk(M_Char *buf, M_Char *format, ...);
 | Family | [`MC_KNL`](../families/kernel.md) |
 | Ordinal | 145 |
 | Documentation | `cataloged` |
-| Implementation class | `ktf-table` |
+| Implementation class | `table` |
 | ABI class | `variadic-unverified` |
 
 ## Usage
@@ -48,6 +48,7 @@ describe libwipi implementation evidence, not platform-wide WIPI requirements.
 | `ktf-samsung` | `aram-ktf` | declared; no verified veneer |
 | `lgt-raptor` | `aram-raptor` | declared; no confirmed adapter |
 | `lgt-raptor` | `aram-wie-raptor` | declared; no confirmed adapter |
+| `skt-samsung-sch-w830-dl21` | `none` | declared; variadic SCH call is not forwarded |
 
 ## Evidence boundary
 

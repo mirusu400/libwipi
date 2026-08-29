@@ -77,6 +77,31 @@ elif profile == "lgt-raptor":
             "__wipi_lgt_resolver",
         }
     )
+elif profile == "skt-samsung-sch-w830-dl21":
+    skt_profile = json.loads(
+        (root / "spec/profiles/skt-samsung-sch-w830-dl21.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    with (root / skt_profile["bindings"]).open(
+        encoding="utf-8", newline=""
+    ) as stream:
+        bindings = list(csv.DictReader(stream))
+    catalog = {row["name"]: row for row in rows}
+    eligible = {
+        binding["name"]
+        for binding in bindings
+        if catalog[binding["name"]]["abi_class"] != "variadic-unverified"
+    }
+    required.update(eligible)
+    table_symbols = {
+        row["name"] for row in rows if row["implementation"] == "table"
+    }
+    unexpected = sorted((table_symbols - eligible) & defined)
+    if unexpected:
+        raise AssertionError(f"unverified SKT table symbols were defined: {unexpected}")
+    if len(eligible) != skt_profile["coverage"]["generated_table_veneers"]:
+        raise AssertionError("SKT archive coverage metadata is stale")
 else:
     raise AssertionError(f"unknown archive profile: {profile}")
 

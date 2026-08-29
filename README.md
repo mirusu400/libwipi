@@ -7,6 +7,10 @@ KTF/Samsung ABI with the ARAM-scoped `aram-ktf` install profile. They build
 with an ordinary GNU Arm Embedded toolchain and do not require a proprietary
 WIPI SDK.
 
+There is also an exact, library-only research target for the SKT/Samsung
+SCH-W830 DL21 process-import ABI. It is intentionally narrower than a general
+SKT claim and has no install container or handset-execution claim.
+
 The source API, carrier/device ABI, and executable/install profile are separate
 contracts. In particular, an emulator result is not presented as a handset
 result and an LGT fact is not presented as a platform-wide WIPI requirement.
@@ -24,13 +28,14 @@ downloads, and `llms.txt`/per-page Markdown representations.
 | `1.2.1/lgt-raptor/aram-wie-raptor` | Compiles, links an ELF `binary.mod`, packages, loads, reaches entry and first frame, and passes interactive graphics, font, system, memory, timer, input, audio, and haptics checks in pinned emulator revisions | 59 public numbered-import veneers are linkable and all 59 are exercised by the ARAM SDK lab; the smaller conformance app exercises 24; no real-device claim |
 | `1.2.1/ktf-samsung/none` | Generated headers, table binder, 205 generated veneers, special timer ABI adapter, freestanding C library, relocatable example, and object-code tests | Library-only selection; no package or runtime claim |
 | `1.2.1/ktf-samsung/aram-ktf` | Compiles, links a raw ARM image, creates the observed KTF nested ZIP, loads, reaches entry, and reaches first frame for all 14 checked examples in pinned ARAM | ARAM-scoped MClass/start bridge; no interactive, handset installation, firmware, or real-device claim |
+| `1.2.1/skt-samsung-sch-w830-dl21/none` | Builds a deterministic `libwipi.a` with 69 fixed-root table veneers, 31 local CSTDLIB symbols, a relocatable example, and per-veneer object-code tests | Exact SCH-W830 DL21 research profile; no SKT-wide, package, load, `MC_GETDPTR`, interactive, firmware-installation, or real-device claim |
 | WIPI-C `2.0`, `2.0.1`, `2.1.0`, or `2.2.0` | Tracked as explicit future API levels | No catalog or SDK support claim; the build rejects them |
 
-SKT is not an alias for `ktf-samsung`. No native SKT WIPI-C ABI profile is
-currently implemented. SK Telecom SK-VM is a Java runtime, while the recovered
-SCH-W830 `MinigameQVGAOEM` EADS path is an exact-title OEM service ABI; neither
-provides a public WIPI-C import map. A native SKT profile needs authorized
-container, callsite, and provider evidence before an adapter can be generated.
+SKT is not an alias for `ktf-samsung`. The exact SCH-W830 profile is generated
+only from reviewed native WIPI application calls through the process pointer at
+`0x01001000`. Methods known only from the SPH/KTF provider are omitted.
+SK Telecom SK-VM is a Java runtime and remains separate; `MinigameQVGAOEM` is a
+title-specific EADS service ABI; neither is used as public WIPI-C evidence.
 
 The checked-in 239-row WIPI-C 1.2.1 catalog is the current bootstrap catalog,
 not a claim that every WIPI-C API generation or every provider method is
@@ -72,6 +77,19 @@ docker run --rm -v "${PWD}:/work" -w /work libwipi-toolchain `
 The resulting ZIP uses `__adf__`, an AID-named inner JAR, and
 `client.bin<decimal-bss-size>`. This is the KTF archive shape accepted by ARAM;
 it is not yet a package verified on a named KTF handset.
+
+Build the exact SCH-W830 DL21 SKT research library separately:
+
+```powershell
+docker run --rm -v "${PWD}:/work" -w /work libwipi-toolchain `
+  make API_LEVEL=1.2.1 PROFILE=skt-samsung-sch-w830-dl21 `
+       INSTALL_PROFILE=none library example
+```
+
+The archive is written to
+`build/wipi-1.2.1/skt-samsung-sch-w830-dl21/none/lib/libwipi.a`. APIs without a
+direct SCH binding remain undefined so use fails at link time. `MC_GETDPTR` is
+also deliberately unresolved until the SCH-W830 memory-handle path is proven.
 
 With local `arm-none-eabi-gcc`, binutils, GNU Make, and Python 3 installed, the
 same `make` commands work without Docker.

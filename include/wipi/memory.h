@@ -6,6 +6,9 @@
 
 #if defined(LIBWIPI_PROFILE_HOST_SIM)
 void *wipi_host_resolve_memid(M_MemID memory_id);
+#elif defined(LIBWIPI_PROFILE_SKT_SAMSUNG_SCH_W830_DL21)
+/* Deliberately undefined until the SCH-W830 memory-ID path is proven. */
+void *wipi_skt_sch_w830_resolve_memid(M_MemID memory_id);
 #elif defined(LIBWIPI_PROFILE_LGT_RAPTOR)
 #if !defined(LIBWIPI_INSTALL_ARAM_WIE_RAPTOR) && \
     !defined(LIBWIPI_INSTALL_ARAM_RAPTOR)
@@ -29,6 +32,8 @@ static inline void *wipi_resolve_memid(M_MemID memory_id)
         }
         return (void *)(uintptr_t)(indirect_head + 8u);
     }
+#elif defined(LIBWIPI_PROFILE_SKT_SAMSUNG_SCH_W830_DL21)
+    return wipi_skt_sch_w830_resolve_memid(memory_id);
 #elif defined(LIBWIPI_PROFILE_LGT_RAPTOR)
 #if defined(LIBWIPI_INSTALL_ARAM_WIE_RAPTOR) || \
     defined(LIBWIPI_INSTALL_ARAM_RAPTOR)

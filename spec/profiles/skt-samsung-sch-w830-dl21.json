@@ -1,0 +1,98 @@
+{
+  "schema": 2,
+  "id": "skt-samsung-sch-w830-dl21",
+  "status": "research",
+  "carrier": "SKT",
+  "oem": "Samsung",
+  "device": "SCH-W830",
+  "firmware": "DL21",
+  "api_level_mappings": {
+    "1.2.1": {
+      "headers": true,
+      "target_build": true,
+      "abi_adapter": "fixed-import-root-confirmed-subset",
+      "install_profiles": ["none"]
+    }
+  },
+  "architecture": {
+    "sdk_cpu_baseline": "arm7tdmi",
+    "isa": "armv4t",
+    "endianness": "little",
+    "float_abi": "soft",
+    "application_abi": "aapcs",
+    "provider_abi": "samsung-packed-words"
+  },
+  "process_import_pointer": "0x01001000",
+  "direct_root_fields": {
+    "MC_KNL": "0x00",
+    "MC_GRP": "0x04",
+    "MC_FS": "0x0c",
+    "MC_NET": "0x14"
+  },
+  "bindings": "spec/profiles/skt-samsung-sch-w830-dl21-bindings.csv",
+  "coverage": {
+    "confirmed_table_bindings": 71,
+    "generated_table_veneers": 69,
+    "local_cstdlib_symbols": 31,
+    "linkable_public_symbols": 100
+  },
+  "layouts": {
+    "MCTimer": 28,
+    "MC_FileInfo": 12,
+    "MC_GrpContext": 60,
+    "MC_GrpDisplayInfo": 36
+  },
+  "memory_resolution": {
+    "kind": "unknown"
+  },
+  "fact_evidence": {
+    "architecture": {
+      "profile": "skt-samsung-sch-w830-dl21",
+      "confidence": "confirmed",
+      "source": "anycall_magichole@ca5a91ad6392f62dd7428711e7a8dd9f621d3949:docs/maps/wipi_public_syscall_resolution_audit.csv#ordinal=163 plus mk/wipi.mk"
+    },
+    "process_import_pointer": {
+      "profile": "skt-samsung-sch-w830-dl21",
+      "confidence": "confirmed",
+      "source": "anycall_magichole@ca5a91ad6392f62dd7428711e7a8dd9f621d3949:docs/sch-dat-container.md#0x01001000-consumer-boundary"
+    },
+    "direct_root_fields": {
+      "profile": "skt-samsung-sch-w830-dl21",
+      "confidence": "confirmed",
+      "source": "anycall_magichole@ca5a91ad6392f62dd7428711e7a8dd9f621d3949:docs/maps/wipi_public_syscall_resolution_audit.csv"
+    },
+    "bindings": {
+      "profile": "skt-samsung-sch-w830-dl21",
+      "confidence": "confirmed",
+      "source": "spec/profiles/skt-samsung-sch-w830-dl21-bindings.csv"
+    },
+    "coverage": {
+      "profile": "skt-samsung-sch-w830-dl21",
+      "confidence": "confirmed",
+      "source": "spec/profiles/skt-samsung-sch-w830-dl21-bindings.csv plus spec/wipi-1.2.1/api.csv"
+    },
+    "layouts": {
+      "profile": "skt-samsung-sch-w830-dl21",
+      "confidence": "candidate",
+      "source": "wipi-wiki@d65e5a74174851d4cc733bdb2a4830693a7c1a7b:c-api types plus reviewed SCH application models",
+      "validation_need": "Pin every profile-specific offset with direct SCH-W830 guest writes or a named-device probe."
+    },
+    "memory_resolution": {
+      "profile": "skt-samsung-sch-w830-dl21",
+      "confidence": "unknown",
+      "source": "no reviewed SCH-W830 memory-handle resolution callsite",
+      "validation_need": "Recover the SCH-W830 memory-ID-to-pointer path before exposing MC_GETDPTR for this profile."
+    }
+  },
+  "claims": {
+    "headers": true,
+    "table_veneer": true,
+    "library": true,
+    "package": false,
+    "loads": false,
+    "entry": false,
+    "first_frame": false,
+    "interactive": false,
+    "real_device": false
+  }
+}

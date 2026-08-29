@@ -28,7 +28,7 @@ M_Int32 MC_fsOpen(M_Char *name, M_Int32 flag, M_Int32 aMode);
 | Family | [`MC_FS`](../families/filesystem.md) |
 | Ordinal | 46 |
 | Documentation | `draft` |
-| Implementation class | `ktf-table` |
+| Implementation class | `table` |
 | ABI class | `word-tail` |
 
 ## Usage
@@ -57,6 +57,7 @@ describe libwipi implementation evidence, not platform-wide WIPI requirements.
 | `ktf-samsung` | `aram-ktf` | linkable generated veneer |
 | `lgt-raptor` | `aram-raptor` | observed in the scoped emulator suite |
 | `lgt-raptor` | `aram-wie-raptor` | declared; no confirmed adapter |
+| `skt-samsung-sch-w830-dl21` | `none` | linkable exact-device fixed-root veneer |
 
 ## Compiled examples
 

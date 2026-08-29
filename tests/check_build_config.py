@@ -60,6 +60,20 @@ if "build/wipi-1.2.1/ktf-samsung/none/" not in supported.stdout.replace("\\", "/
 if "-DLIBWIPI_API_LEVEL_1_2_1=1" not in supported.stdout:
     raise AssertionError("build does not define the selected source API level")
 
+skt = run_make(
+    "API_LEVEL=1.2.1",
+    "PROFILE=skt-samsung-sch-w830-dl21",
+    "INSTALL_PROFILE=none",
+)
+if skt.returncode != 0:
+    raise AssertionError(f"SCH-W830 SKT library build failed:\n{skt.stdout}")
+if "build/wipi-1.2.1/skt-samsung-sch-w830-dl21/none/" not in skt.stdout.replace(
+    "\\", "/"
+):
+    raise AssertionError("SKT build output does not keep the exact profile axis")
+if "-DLIBWIPI_PROFILE_SKT_SAMSUNG_SCH_W830_DL21=1" not in skt.stdout:
+    raise AssertionError("SKT build does not define the exact device profile")
+
 emulator = run_make(
     "API_LEVEL=1.2.1",
     "PROFILE=lgt-raptor",
@@ -94,6 +108,14 @@ require_failure(
 require_failure(
     (
         "API_LEVEL=1.2.1",
+        "PROFILE=skt-samsung-sch-w830-dl21",
+        "INSTALL_PROFILE=aram-ktf",
+    ),
+    "unavailable build triple",
+)
+require_failure(
+    (
+        "API_LEVEL=1.2.1",
         "PROFILE=ktf-samsung",
         "INSTALL_PROFILE=aram-raptor",
     ),
@@ -122,6 +144,13 @@ if "select exactly one implemented libwipi API level" not in unselected_header.s
     raise AssertionError(
         f"public header reported the wrong selection failure:\n{unselected_header.stdout}"
     )
+
+skt_header = compile_header(
+    "-DLIBWIPI_API_LEVEL_1_2_1=1",
+    "-DLIBWIPI_PROFILE_SKT_SAMSUNG_SCH_W830_DL21=1",
+)
+if skt_header.returncode != 0:
+    raise AssertionError(f"SCH-W830 SKT selected header failed:\n{skt_header.stdout}")
 
 lgt_header = compile_header(
     "-DLIBWIPI_API_LEVEL_1_2_1=1",

@@ -28,7 +28,7 @@ M_Int32 MC_netSocketBind(M_Int32 fd, M_Uint32 addr, M_Uint16 port);
 | Family | [`MC_NET`](../families/network.md) |
 | Ordinal | 83 |
 | Documentation | `cataloged` |
-| Implementation class | `ktf-table` |
+| Implementation class | `table` |
 | ABI class | `word-tail` |
 
 ## Usage
@@ -48,6 +48,7 @@ describe libwipi implementation evidence, not platform-wide WIPI requirements.
 | `ktf-samsung` | `aram-ktf` | linkable generated veneer |
 | `lgt-raptor` | `aram-raptor` | declared; no confirmed adapter |
 | `lgt-raptor` | `aram-wie-raptor` | declared; no confirmed adapter |
+| `skt-samsung-sch-w830-dl21` | `none` | declared; no direct SCH binding |
 
 ## Evidence boundary
 

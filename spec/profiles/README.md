@@ -20,9 +20,16 @@ may enable an emulator-only target mapping when it carries separate, pinned
 black-box evidence and preserves the device claim as false. An unknown fact
 must fail explicitly if code requests behavior that depends on it.
 
-There is intentionally no `skt-*` native WIPI-C profile yet. The authorized
-SKT package corpus currently establishes an SK-VM Java container/runtime, not
-a native WIPI-C import ABI. The recovered SCH-W830 `MinigameQVGAOEM` EADS path
-is scoped to one exact embedded title and explicitly does not generalize its
-opaque OEM service slots to SKT WIPI. Creating an SKT profile requires a
-reviewed native container plus public-API callsites and provider mappings.
+`skt-samsung-sch-w830-dl21` is an exact, library-only research profile. Its
+checked binding inventory contains only public table calls directly established
+by SCH-W830 DL21 application code through `*0x01001000`; SPH/KTF provider-only
+slots are not promoted. The profile therefore emits 69 non-variadic veneers and
+links 31 local CSTDLIB symbols, while every other declared API fails at link
+time. Its install profile is `none`, and its package, load, handset, and
+real-device claims remain false.
+
+The authorized SKT package corpus still establishes an SK-VM Java runtime, not
+a native WIPI-C container. The recovered `MinigameQVGAOEM` EADS path remains
+scoped to one embedded title; its opaque OEM services are not used by the SKT
+WIPI-C profile. A handset package and `MC_GETDPTR` implementation require
+additional reviewed SCH evidence.

@@ -107,6 +107,11 @@ class DocumentationPipelineTests(unittest.TestCase):
             text,
         )
         self.assertIn(
+            "| `1.2.1/skt-samsung-sch-w830-dl21/none` | Exact SCH-W830 DL21 fixed-root adapter",
+            text,
+        )
+        self.assertIn("| 100 linkable APIs | No |", text)
+        self.assertIn(
             "| `1.2.1/lgt-raptor/aram-raptor` | interactive on the named emulator contract",
             text,
         )

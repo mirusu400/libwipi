@@ -28,7 +28,7 @@ void MC_grpDrawLine(MC_GrpFrameBuffer dst, M_Int32 x1, M_Int32 y1, M_Int32 x2, M
 | Family | [`MC_GRP`](../families/graphics.md) |
 | Ordinal | 16 |
 | Documentation | `cataloged` |
-| Implementation class | `ktf-table` |
+| Implementation class | `table` |
 | ABI class | `word-tail` |
 
 ## Usage
@@ -48,6 +48,7 @@ describe libwipi implementation evidence, not platform-wide WIPI requirements.
 | `ktf-samsung` | `aram-ktf` | linkable generated veneer |
 | `lgt-raptor` | `aram-raptor` | observed in the scoped emulator suite |
 | `lgt-raptor` | `aram-wie-raptor` | observed in the scoped emulator suite |
+| `skt-samsung-sch-w830-dl21` | `none` | linkable exact-device fixed-root veneer |
 
 ## Compiled examples
 

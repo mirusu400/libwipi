@@ -7,7 +7,8 @@ WIPI_STATIC_ASSERT(sizeof(MC_FileInfo) == 12, file_info_size);
 WIPI_STATIC_ASSERT(offsetof(MC_FileInfo, size) == 8, file_info_size_offset);
 WIPI_STATIC_ASSERT(sizeof(MC_GrpDisplayInfo) == 36, display_info_size);
 
-#if defined(LIBWIPI_PROFILE_KTF_SAMSUNG)
+#if defined(LIBWIPI_PROFILE_KTF_SAMSUNG) || \
+    defined(LIBWIPI_PROFILE_SKT_SAMSUNG_SCH_W830_DL21)
 WIPI_STATIC_ASSERT(sizeof(MCTimer) == 28, ktf_timer_size);
 WIPI_STATIC_ASSERT(offsetof(MCTimer, parm) == 4, ktf_timer_parm_offset);
 WIPI_STATIC_ASSERT(offsetof(MCTimer, deadline_ms) == 16,

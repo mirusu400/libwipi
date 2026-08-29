@@ -3,6 +3,9 @@ include mk/wipi.mk
 ifeq ($(PROFILE),ktf-samsung)
 ABI_C_SOURCES := src/abi/ktf/bind.c src/abi/ktf/runtime.c
 ABI_ASM_SOURCES := src/abi/ktf/generated_veneer.S
+else ifeq ($(PROFILE),skt-samsung-sch-w830-dl21)
+ABI_C_SOURCES :=
+ABI_ASM_SOURCES := src/abi/skt/generated_veneer.S
 else ifeq ($(PROFILE),lgt-raptor)
 ABI_C_SOURCES := src/abi/lgt/runtime.c src/abi/lgt/input.c
 ifeq ($(INSTALL_PROFILE),aram-raptor)
@@ -38,6 +41,8 @@ RAPTOR_METADATA_OBJECT := $(BUILD_DIR)/src/container/raptor_metadata.o
 KTF_METADATA_OBJECT := $(BUILD_DIR)/src/container/ktf_metadata.o
 ifeq ($(PROFILE),ktf-samsung)
 VENEER_OBJECT := $(BUILD_DIR)/src/abi/ktf/generated_veneer.o
+else ifeq ($(PROFILE),skt-samsung-sch-w830-dl21)
+VENEER_OBJECT := $(BUILD_DIR)/src/abi/skt/generated_veneer.o
 else ifeq ($(PROFILE),lgt-raptor)
 ifeq ($(INSTALL_PROFILE),aram-raptor)
 VENEER_OBJECT := $(BUILD_DIR)/src/abi/lgt/generated_veneer_aram_raptor.o
@@ -52,7 +57,7 @@ HOST_RUNTIME_TEST := build/host/tests/runtime-semantics
 HOST_LGT_INPUT_TEST := build/host/tests/lgt-input-semantics
 
 .PHONY: all clean library example conformance generate check-generated test test-host test-semantics \
-	test-target test-target-profile test-target-ktf test-target-lgt \
+	test-target test-target-profile test-target-ktf test-target-skt test-target-lgt \
 	test-application-template test-platformer-example platformer \
 	sdk-examples test-sdk-examples aram-sdk-examples test-aram-sdk-examples \
 	ktf-examples test-ktf-examples \
@@ -187,6 +192,12 @@ $(BUILD_DIR)/tests/layout-lgt.o: tests/target/layout.c
 	$(CC) $(WIPI_CPPFLAGS) -DLIBWIPI_PROFILE_LGT_RAPTOR=1 \
 		$(WIPI_CFLAGS) -c $< -o $@
 
+$(BUILD_DIR)/tests/layout-skt.o: tests/target/layout.c
+	@mkdir -p $(dir $@)
+	$(CC) $(WIPI_CPPFLAGS) \
+		-DLIBWIPI_PROFILE_SKT_SAMSUNG_SCH_W830_DL21=1 \
+		$(WIPI_CFLAGS) -c $< -o $@
+
 $(BUILD_DIR)/tests/headers.o: tests/target/headers.c
 	@mkdir -p $(dir $@)
 	$(CC) $(WIPI_CPPFLAGS) $(WIPI_PROFILE_CPPFLAGS) $(WIPI_CFLAGS) \
@@ -249,6 +260,16 @@ test-target-profile: $(LIBRARY) $(BUILD_DIR)/tests/layout-ktf.o \
 	python3 tests/check_reloc.py $(EXAMPLE_RELOC) $(NM)
 	python3 tests/check_build_config.py
 endif
+else ifeq ($(PROFILE),skt-samsung-sch-w830-dl21)
+test-target-profile: $(LIBRARY) $(BUILD_DIR)/tests/layout-ktf.o \
+	$(BUILD_DIR)/tests/layout-skt.o $(BUILD_DIR)/tests/layout-lgt.o \
+	$(BUILD_DIR)/tests/headers.o $(VENEER_DISASSEMBLY) $(EXAMPLE_RELOC) \
+	test-semantics
+	python3 tests/check_skt_disassembly.py $(VENEER_DISASSEMBLY)
+	python3 tests/check_archive.py $(LIBRARY) $(NM) \
+		skt-samsung-sch-w830-dl21 none
+	python3 tests/check_reloc.py $(EXAMPLE_RELOC) $(NM)
+	python3 tests/check_build_config.py
 else ifeq ($(PROFILE),lgt-raptor)
 test-target-profile: $(LIBRARY) $(BUILD_DIR)/tests/layout-ktf.o \
 	$(BUILD_DIR)/tests/layout-lgt.o $(BUILD_DIR)/tests/headers.o \
@@ -267,6 +288,11 @@ test-target-ktf:
 		INSTALL_PROFILE=none test-target-profile
 	$(MAKE) --no-print-directory API_LEVEL=1.2.1 PROFILE=ktf-samsung \
 		INSTALL_PROFILE=aram-ktf test-target-profile
+
+test-target-skt:
+	$(MAKE) --no-print-directory API_LEVEL=1.2.1 \
+		PROFILE=skt-samsung-sch-w830-dl21 INSTALL_PROFILE=none \
+		test-target-profile
 
 test-target-lgt:
 	$(MAKE) --no-print-directory API_LEVEL=1.2.1 PROFILE=lgt-raptor \
@@ -376,7 +402,7 @@ ktf-examples:
 test-ktf-examples: ktf-examples
 	python3 tests/check_ktf_examples.py $(OBJDUMP) $(NM)
 
-test-target: test-target-ktf test-target-lgt
+test-target: test-target-ktf test-target-skt test-target-lgt
 
 test: test-host test-target
 

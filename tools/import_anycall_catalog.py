@@ -86,7 +86,7 @@ def import_rows(source: Path) -> list[dict[str, str]]:
         prototype = source_row["c_prototype"].strip()
         selector_state = source_row["selector_state"].strip()
         confidence = selector_confidence(selector_state)
-        implementation = "local" if family == "CSTDLIB" else "ktf-table"
+        implementation = "local" if family == "CSTDLIB" else "table"
         slot = source_row["slot"].strip()
         if not re.fullmatch(r"\+0x[0-9a-fA-F]+", slot):
             raise ValueError(f"invalid slot for {name}: {slot!r}")

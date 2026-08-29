@@ -61,6 +61,23 @@ JAR whose executable is `client.bin<decimal-bss-size>`. This path is verified
 through first frame only and is not evidence for interactive lifecycle or a
 physical KTF handset.
 
+### `skt-samsung-sch-w830-dl21`
+
+This is an exact firmware-scoped research profile, not an SKT-wide ABI. SCH-W830
+DL21 application code dereferences the process pointer at `0x01001000` and then
+dispatches through directly observed kernel, graphics, filesystem, and network
+tables. The checked binding inventory records 71 such public calls. Two are
+variadic and are deliberately not forwarded, leaving 69 generated veneers;
+the freestanding archive also supplies all 31 local CSTDLIB symbols.
+
+Every generated veneer is disassembled and checked for its fixed import
+pointer, family field, method slot, absent-import branch, and, for
+`MC_knlSetTimer`, the 64-bit argument register shuffle. Slots established only
+by an SPH/KTF provider are not generated for this profile. Unavailable APIs and
+the unknown SCH memory-ID resolver fail at link time. The only install profile
+is `none`; no native SKT package, load, entry, interaction, or device result is
+claimed.
+
 ### `lgt-raptor`
 
 LGT uses an ELF32 ARM `binary.mod` and numbered imports from module `0x1fb`.

@@ -69,7 +69,7 @@
     "architecture": {
       "profile": "ktf-samsung",
       "confidence": "confirmed",
-      "source": "anycall_magichole:analysis/wipi_mc_knl_set_timer_boundary_recheck.md"
+      "source": "anycall_magichole@ca5a91ad6392f62dd7428711e7a8dd9f621d3949:docs/maps/wipi_public_syscall_resolution_audit.csv#ordinal=163 plus mk/wipi.mk"
     },
     "process_import_root": {
       "profile": "ktf-samsung",

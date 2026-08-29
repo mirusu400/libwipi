@@ -28,7 +28,7 @@ M_Int32 MC_knlExecute(M_Char *execName, M_Int32 parmCnt, ...);
 | Family | [`MC_KNL`](../families/kernel.md) |
 | Ordinal | 147 |
 | Documentation | `cataloged` |
-| Implementation class | `ktf-table` |
+| Implementation class | `table` |
 | ABI class | `variadic-unverified` |
 
 ## Usage
@@ -48,6 +48,7 @@ describe libwipi implementation evidence, not platform-wide WIPI requirements.
 | `ktf-samsung` | `aram-ktf` | declared; no verified veneer |
 | `lgt-raptor` | `aram-raptor` | declared; no confirmed adapter |
 | `lgt-raptor` | `aram-wie-raptor` | declared; no confirmed adapter |
+| `skt-samsung-sch-w830-dl21` | `none` | declared; no direct SCH binding |
 
 ## Evidence boundary
 

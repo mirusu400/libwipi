@@ -19,6 +19,11 @@ KTF-style ZIP containing a raw ARM image. Its 14 checked examples load, enter,
 and reach first frame in pinned ARAM. The current MClass wrapper does not yet
 establish interactive input handling, and no named handset is claimed.
 
+The independent `1.2.1/skt-samsung-sch-w830-dl21/none` selection is an exact,
+library-only research target. It links 69 directly evidenced fixed-root
+veneers plus 31 local CSTDLIB functions. It has no package target and does not
+implement `MC_GETDPTR`; methods without direct SCH evidence fail at link time.
+
 ## Prerequisites
 
 Use either:

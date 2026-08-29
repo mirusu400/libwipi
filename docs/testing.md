@@ -59,3 +59,9 @@ shape, and 14 examples are recorded through the `first frame` milestone. This
 does not establish input-driven interaction or installation on any named KTF
 handset. A release bundle therefore labels these artifacts as emulator
 fixtures and keeps `real_device` false.
+
+The `skt-samsung-sch-w830-dl21/none` target is a library/object-code gate, not
+an install fixture. `make test-target-skt` builds its deterministic archive,
+pins all 69 fixed-root veneers in disassembly, confirms unverified provider-only
+symbols are absent, and relocatably links the supported hello example. It does
+not prove a package format, loader path, or execution on an SCH-W830 handset.

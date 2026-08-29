@@ -95,12 +95,15 @@ typedef void (*NETHTTPCB)(M_Int32 fd, M_Int32 sd, M_Int32 error,
 WIPI_STATIC_ASSERT(sizeof(TIMERCB) == 4, timer_callback_is_four_bytes);
 WIPI_STATIC_ASSERT(sizeof(MC_FileInfo) == 12, file_info_layout);
 WIPI_STATIC_ASSERT(sizeof(MC_GrpDisplayInfo) == 36, display_info_layout);
-#if defined(LIBWIPI_PROFILE_KTF_SAMSUNG)
-WIPI_STATIC_ASSERT(sizeof(MCTimer) == 28, ktf_timer_layout);
-WIPI_STATIC_ASSERT(offsetof(MCTimer, timeout_ms) == 8, ktf_timer_timeout_offset);
-WIPI_STATIC_ASSERT(sizeof(MC_GrpContext) == 60, ktf_graphics_context_layout);
+#if defined(LIBWIPI_PROFILE_KTF_SAMSUNG) || \
+    defined(LIBWIPI_PROFILE_SKT_SAMSUNG_SCH_W830_DL21)
+WIPI_STATIC_ASSERT(sizeof(MCTimer) == 28, samsung_timer_layout);
+WIPI_STATIC_ASSERT(offsetof(MCTimer, timeout_ms) == 8,
+                   samsung_timer_timeout_offset);
+WIPI_STATIC_ASSERT(sizeof(MC_GrpContext) == 60,
+                   samsung_graphics_context_layout);
 WIPI_STATIC_ASSERT(offsetof(MC_GrpContext, fg_pixel) == 20,
-                   ktf_graphics_fg_offset);
+                   samsung_graphics_fg_offset);
 #else
 WIPI_STATIC_ASSERT(sizeof(MCTimer) == 4, lgt_timer_layout);
 WIPI_STATIC_ASSERT(sizeof(MC_GrpContext) == 56, lgt_graphics_context_layout);

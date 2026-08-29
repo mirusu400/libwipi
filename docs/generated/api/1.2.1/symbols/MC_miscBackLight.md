@@ -28,7 +28,7 @@ M_Int32 MC_miscBackLight(M_Int32 id, MC_BackLight on_off, M_Int32 color, M_Int32
 | Family | [`MC_MISC`](../families/misc.md) |
 | Ordinal | 120 |
 | Documentation | `cataloged` |
-| Implementation class | `ktf-table` |
+| Implementation class | `table` |
 | ABI class | `word-tail` |
 
 ## Usage
@@ -48,6 +48,7 @@ describe libwipi implementation evidence, not platform-wide WIPI requirements.
 | `ktf-samsung` | `aram-ktf` | linkable generated veneer |
 | `lgt-raptor` | `aram-raptor` | observed in the scoped emulator suite |
 | `lgt-raptor` | `aram-wie-raptor` | observed in the scoped emulator suite |
+| `skt-samsung-sch-w830-dl21` | `none` | declared; no direct SCH binding |
 
 ## Compiled examples
 

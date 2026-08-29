@@ -28,7 +28,7 @@ M_Int32 MC_knlSetTimer(MCTimer *tm, M_Int64 timeout, void *parm);
 | Family | [`MC_KNL`](../families/kernel.md) |
 | Ordinal | 163 |
 | Documentation | `reviewed` |
-| Implementation class | `ktf-table` |
+| Implementation class | `table` |
 | ABI class | `aapcs-to-packed-i64` |
 
 ## Usage
@@ -61,6 +61,7 @@ describe libwipi implementation evidence, not platform-wide WIPI requirements.
 | `ktf-samsung` | `aram-ktf` | linkable generated veneer |
 | `lgt-raptor` | `aram-raptor` | observed in the scoped emulator suite |
 | `lgt-raptor` | `aram-wie-raptor` | observed in the scoped emulator suite |
+| `skt-samsung-sch-w830-dl21` | `none` | linkable exact-device fixed-root veneer |
 
 ## Compiled examples
 

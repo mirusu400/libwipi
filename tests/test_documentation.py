@@ -12,6 +12,7 @@ class DocumentationTests(unittest.TestCase):
             "1.2.1/lgt-raptor/aram-raptor",
             "1.2.1/lgt-raptor/aram-wie-raptor",
             "1.2.1/ktf-samsung/aram-ktf",
+            "1.2.1/skt-samsung-sch-w830-dl21/none",
             "docs/getting-started.md",
             "tools/verify_aram.py --build-probe",
             "tools/verify_wie.py --prepare",
