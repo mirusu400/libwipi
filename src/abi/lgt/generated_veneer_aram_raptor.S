@@ -1252,15 +1252,7 @@ MC_grpDrawString:
     movs r0, #0x1
     lsls r0, r0, #8
     adds r0, #0xfb
-    ldr r2, =__wipi_lgt_environment
-    ldr r2, [r2]
-    cmp r2, #1
-    bne 4f
-    movs r1, #0xd9
-    b 5f
-4:
     movs r1, #0xda
-5:
     ldr r3, =__wipi_lgt_resolver
     ldr r3, [r3]
     cmp r3, #0
@@ -1299,15 +1291,7 @@ MC_grpGetRGBPixels:
     movs r0, #0x1
     lsls r0, r0, #8
     adds r0, #0xfb
-    ldr r2, =__wipi_lgt_environment
-    ldr r2, [r2]
-    cmp r2, #1
-    bne 4f
-    movs r1, #0xdb
-    b 5f
-4:
     movs r1, #0xdc
-5:
     ldr r3, =__wipi_lgt_resolver
     ldr r3, [r3]
     cmp r3, #0
@@ -1346,15 +1330,7 @@ MC_grpSetRGBPixels:
     movs r0, #0x1
     lsls r0, r0, #8
     adds r0, #0xfb
-    ldr r2, =__wipi_lgt_environment
-    ldr r2, [r2]
-    cmp r2, #1
-    bne 4f
-    movs r1, #0xdc
-    b 5f
-4:
     movs r1, #0xdd
-5:
     ldr r3, =__wipi_lgt_resolver
     ldr r3, [r3]
     cmp r3, #0

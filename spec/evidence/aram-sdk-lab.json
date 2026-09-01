@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "verified_on": "2026-08-28",
+  "verified_on": "2026-09-01",
   "scope": "synthetic ARAM SDK lab; no WIE, carrier, handset, or real-device claim",
   "api_level": "1.2.1",
   "abi_profile": "lgt-raptor",
@@ -8,9 +8,9 @@
   "contract": "spec/install/aram-raptor.json",
   "manifest": "examples/sdk-lab-aram.json",
   "revisions": {
-    "aram_core": "d71fc837c1c2eed2342a0bcb340d08ce338a1cf3",
-    "aram_runner": "7bc29d5c7d55c5c9a93948883769fb2493c69669",
-    "aram_test": "f387aaf1d596fa879c48ca9331a9f81e6a75448f"
+    "aram_core": "34d71654c18275a391c764dd1f3a149b99359df0",
+    "aram_runner": "d9db8d55f81a5eb9d8e4f6e180f23df19d2644b7",
+    "aram_test": "7eb17244f85453c254969a54f97057b236e39593"
   },
   "coverage": {
     "cataloged_apis": 239,
@@ -23,32 +23,32 @@
   "examples": [
     {
       "id": "graphics-gallery",
-      "sha256": "e26715a1b4f88d45837e9bef8a3091b54cba3888708f0f21fcc88ce63ab713c2",
+      "sha256": "8e767363d8523b6b24282c44fafbcb40f1595a4bc76d3b220bb8d49d095557b6",
       "runs": 1,
       "observed_apis": 18
     },
     {
       "id": "memory-resource",
-      "sha256": "caa8f7d05f7f7242e379337841dd22e1775e24a41218499a682bd166f407396c",
+      "sha256": "2091700fbfbb937911b3903387eb70ff71537e6076145bcc6ddfa48cecff5433",
       "runs": 1,
       "observed_apis": 16
     },
     {
       "id": "audio-player",
-      "sha256": "a9176ecdaa12f703c564e6831b23e5c6a290fae0dddf1c65d47e77314e0a9c23",
+      "sha256": "667d33cb4114b2ec6e0eab017c38e4062cd2f4727694490a54e2448e6ceb3292",
       "runs": 1,
       "observed_apis": 16,
       "audio": {
         "channels": 2,
         "chunks": 90,
         "frames": 63504,
-        "measured_frames": 111,
+        "measured_frames": 117,
         "sample_rate": 44100
       }
     },
     {
       "id": "vibrate",
-      "sha256": "c196a93776d9f01ad6974f63be583ff822774c2ac4c590803d073650f37ba536",
+      "sha256": "fb6cd69f20d0f1b7234a3b1ca67de74c56da48332340cd15e9c9ceea8556483f",
       "runs": 1,
       "observed_apis": 12,
       "haptics": {
@@ -60,25 +60,25 @@
     },
     {
       "id": "system-services",
-      "sha256": "06bcb35899c50dc238519d5816b3f4b888b9440b6f44070d19023e03c70cd69e",
+      "sha256": "c5c34dc319952c3ab3befe4264a6bdf2aad9d0d04e2aaafa342e407735ee5308",
       "runs": 1,
       "observed_apis": 17
     },
     {
       "id": "image-pipeline",
-      "sha256": "902cdbcfe35e22b3dc31a7e35ceb2ee21037c92a45a9e6417ee65f965d0abcc0",
+      "sha256": "f7f8858936825a405608fdcfb1717185f4f87a5aa715a4af25766b8d46e6faef",
       "runs": 1,
       "observed_apis": 20
     },
     {
       "id": "network-lifecycle",
-      "sha256": "941c0d75c00f238436d1c14c0189e1fda4bf63ca94fabb0017e06edc5d271ae2",
+      "sha256": "686a6789ec8ab48652db6e563a85a701b841d8cf6b7544be7cad6ec6b212ebc1",
       "runs": 1,
       "observed_apis": 11
     },
     {
       "id": "database-crud",
-      "sha256": "fe901789b80080f95a3473311486c3504e787f6d8896323ff2b49fffb6cbaf34",
+      "sha256": "6fd5d0faf7f083222159c2021a681b6bdf9acd256f5bc7bbc951edae9cc8635b",
       "runs": 2,
       "observed_apis": 22,
       "restart": {
@@ -93,7 +93,7 @@
     },
     {
       "id": "filesystem",
-      "sha256": "0e0ef3a42c47344f56b7ebfdb7fd22b0a34eb4b3f05598c4d260e5d72885f264",
+      "sha256": "3aec7193bff906e98ed4e6f4a01d9c7928cac3f05a71e010e0f3031a1ec9427d",
       "runs": 2,
       "observed_apis": 26,
       "restart": {
@@ -108,14 +108,14 @@
     },
     {
       "id": "media-suite",
-      "sha256": "f14b5bd2e6724c29df94533eef80fb9467fddf2c5d589d02e273c80501507cef",
+      "sha256": "fdfe96768681ee748c42024aaf065a1349284f083d7f78dfa4a5a514ebbe76b6",
       "runs": 1,
       "observed_apis": 30,
       "audio": {
         "channels": 2,
-        "chunks": 116,
-        "frames": 81850,
-        "measured_frames": 116,
+        "chunks": 120,
+        "frames": 84672,
+        "measured_frames": 120,
         "sample_rate": 44100
       },
       "haptics": {
@@ -143,7 +143,7 @@
     "api_family_coverage": "21/21",
     "sample_rate": 44100,
     "channels": 2,
-    "audio_frames": 81850,
+    "audio_frames": 84672,
     "haptics_peak_level": 85,
     "haptics_max_duration_ms": 334
   },

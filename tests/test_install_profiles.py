@@ -183,13 +183,55 @@ class ARAMInstallProfileTests(unittest.TestCase):
             self.profile["emulators"]["aram"]["revision"], r"^[0-9a-f]{40}$"
         )
 
+    def test_current_aram_graphics_methods_keep_only_real_numbering_deltas(self):
+        imports = self.profile["imports"]
+        self.assertEqual(
+            imports["aram_method_overrides"],
+            {
+                "MC_grpCopyArea": "0xd6",
+                "MC_grpDrawArc": "0xd7",
+                "MC_grpFillArc": "0xd8",
+            },
+        )
+        methods = imports["confirmed_public_methods"]
+        self.assertEqual(methods["MC_grpDrawString"], "0xda")
+        self.assertEqual(methods["MC_grpGetRGBPixels"], "0xdc")
+        self.assertEqual(methods["MC_grpSetRGBPixels"], "0xdd")
+
     def test_sdk_lab_evidence_records_exact_coverage_and_restart_checks(self):
         evidence = json.loads(
             (ROOT / self.profile["claims"]["sdk_lab_evidence"]).read_text(
                 encoding="utf-8"
             )
         )
+        manifest = json.loads(
+            (ROOT / "examples/sdk-lab-aram.json").read_text(encoding="utf-8")
+        )
         self.assertEqual(evidence["install_profile"], "aram-raptor")
+        self.assertEqual(
+            self.profile["emulators"]["aram"]["revision"],
+            evidence["revisions"]["aram_core"],
+        )
+        self.assertEqual(
+            self.profile["emulators"]["aram"]["runner_revision"],
+            evidence["revisions"]["aram_runner"],
+        )
+        self.assertEqual(
+            self.profile["evidence"]["aram_revision"],
+            evidence["revisions"]["aram_core"],
+        )
+        self.assertEqual(
+            self.profile["evidence"]["aram_runner_revision"],
+            evidence["revisions"]["aram_runner"],
+        )
+        self.assertEqual(
+            manifest["aram"]["core_revision"],
+            evidence["revisions"]["aram_core"],
+        )
+        self.assertEqual(
+            manifest["aram"]["runner_revision"],
+            evidence["revisions"]["aram_runner"],
+        )
         self.assertEqual(evidence["coverage"]["confirmed_imports"], 100)
         self.assertEqual(evidence["coverage"]["declared_required"], 100)
         self.assertEqual(evidence["coverage"]["observed_confirmed"], 100)

@@ -6,8 +6,8 @@
   "install_profile": "aram-raptor",
   "runtime_profile": "wipi-1.2.1/lgt/raptor",
   "aram": {
-    "core_revision": "d71fc837c1c2eed2342a0bcb340d08ce338a1cf3",
-    "runner_revision": "7bc29d5c7d55c5c9a93948883769fb2493c69669"
+    "core_revision": "34d71654c18275a391c764dd1f3a149b99359df0",
+    "runner_revision": "d9db8d55f81a5eb9d8e4f6e180f23df19d2644b7"
   },
   "examples": [
     {
