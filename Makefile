@@ -312,6 +312,7 @@ test-sch-w8300-qpst-probe:
 	python3 tests/check_handset_probe.py \
 		examples/handset-probe/build/wipi-1.2.1/ktf-samsung/sch-w8300-qpst-probe/main.o \
 		examples/handset-probe/build/wipi-1.2.1/ktf-samsung/sch-w8300-qpst-probe/client.elf \
+		examples/handset-probe/build/wipi-1.2.1/ktf-samsung/sch-w8300-qpst-probe/010100D5.zip \
 		$(NM)
 
 test-target-lgt:

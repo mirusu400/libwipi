@@ -10,7 +10,7 @@
     "oem": "Samsung",
     "model": "SCH-W8300",
     "firmware": "unknown",
-    "install_transport": "QPST ZIP installation",
+    "install_transport": "QPST EFS slot replacement",
     "identity_source": "device-owner report",
     "identity_confidence": "reported-not-independently-verified",
     "identity_validation_need": "Record the handset label and firmware. The pinned live KTF sibling evidence is SPH-W8300, not the owner-reported SCH-W8300."
@@ -30,6 +30,17 @@
     "class_lookup_offset": "+0x14",
     "shape_confidence": "candidate",
     "validation_need": "Inspect a known-good SCH-W8300 QPST-installable ZIP and record its hash before promoting this shape."
+  },
+  "qpst_slot": {
+    "aid": "010100D5",
+    "directory": "/brew/mod/wipiplayer/W/apps/010100D5",
+    "payload_archive": "010100D5.zip",
+    "payload_files": ["__adf__", "010100D5.jar"],
+    "preserve_existing": ["__env__", "__class__", "*.icon", "P"],
+    "cache_file_after_copy": "/brew/mod/wipiplayer/W/exe_info",
+    "wipi_manager_required": false,
+    "confidence": "candidate-public-procedure",
+    "validation_need": "Back up the existing slot, then determine whether this firmware can retain its existing __class__ and icon metadata or requires newly generated device-specific files."
   },
   "imports": {
     "strategy": "named KTF provider lookup",
@@ -66,7 +77,9 @@
     "archive_shape": "observed Samsung/KTF nested ZIP shape implemented by tools/package_ktf.py",
     "native_tables": "anycall_magichole@ca5a91ad6392f62dd7428711e7a8dd9f621d3949:tools/rechecks/fixtures/sph_w8300_ktf_client_registry_boundary.json; SPH-W8300 live client at WipiExe 0x03E8E5A4, ExeInterface 0x03E8E584, functions 0x03E8E568; active word positions and class lookup +0x14 reproduced with original libwipi code",
     "abi_candidate": "anycall_magichole@ca5a91ad6392f62dd7428711e7a8dd9f621d3949:docs/interfaces/dispatch.md#loaded-ktf-client-consumer; init parameter 4 resolves WIPIC_knlInterface and kernel +0x84 returns the 17-word master vector in the SPH-W8300 dump (SHA-256 1ad5131df38f197363b826543128d214fff7d1ecf1af0652d8a3e31217fd4225)",
-    "install_transport": "device-owner report that SCH-W8300 accepts ZIP installation through QPST",
+    "install_transport": "device-owner report plus https://dubigame.tistory.com/274 (accessed 2026-09-02): public KTF QPST procedure using /brew/mod/wipiplayer/W/apps/010100D2..D5; procedural evidence only",
+    "slot_payload_layout": "public KTF replacement archive at https://dubigame.tistory.com/426 (accessed 2026-09-02, SHA-256 d448aee681574bffb97907e5ed5cdcf6676825e49711633ebe8ee675a76c4cb9) contains an eight-hex-digit AID-named JAR, __adf__, __class__, icons, and private data; only names and metadata layout were inspected and no commercial bytes are copied",
+    "wipi_manager": "prjWIPIMgr.exe linked from https://dubigame.tistory.com/275 (accessed 2026-09-02, SHA-256 2948cd43309ca55d6811670a066a64baac1f3f9b23622feffe4c883e9f616057) was inspected without execution; it reads __adf__, validates a hexadecimal AID, and renames the AID-named JAR",
     "confidence": "candidate",
     "scope": "buildable first-device probe, not compatibility evidence"
   },

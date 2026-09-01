@@ -226,7 +226,7 @@ def read_example_records(
                 "package": (
                     f"examples/handset-probe/build/wipi-{bootstrap_api_level}/"
                     "ktf-samsung/sch-w8300-qpst-probe/"
-                    "libwipi-sch-w8300-probe.zip"
+                    "010100D5.zip"
                 ),
             }
         ]

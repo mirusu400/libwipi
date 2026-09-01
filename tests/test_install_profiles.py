@@ -339,6 +339,21 @@ class SCHW8300QPSTProbeInstallProfileTests(unittest.TestCase):
         self.assertEqual(imports["provider_abi"], "samsung-packed-words")
         self.assertFalse(self.profile["lifecycle"]["fixed_import_root"])
 
+    def test_qpst_payload_is_prebound_to_the_reported_d5_slot(self):
+        slot = self.profile["qpst_slot"]
+        self.assertEqual(slot["aid"], "010100D5")
+        self.assertEqual(
+            slot["directory"],
+            "/brew/mod/wipiplayer/W/apps/010100D5",
+        )
+        self.assertEqual(slot["payload_archive"], "010100D5.zip")
+        self.assertEqual(slot["payload_files"], ["__adf__", "010100D5.jar"])
+        self.assertIn("__env__", slot["preserve_existing"])
+        self.assertEqual(
+            slot["cache_file_after_copy"],
+            "/brew/mod/wipiplayer/W/exe_info",
+        )
+
     def test_package_shape_and_minimal_probe_surface_are_pinned(self):
         container = self.profile["container"]
         self.assertEqual(container["metadata"], "__adf__")
