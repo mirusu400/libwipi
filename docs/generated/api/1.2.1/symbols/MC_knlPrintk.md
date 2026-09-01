@@ -49,6 +49,7 @@ describe libwipi implementation evidence, not platform-wide WIPI requirements.
 | `lgt-raptor` | `aram-raptor` | declared; no confirmed adapter |
 | `lgt-raptor` | `aram-wie-raptor` | declared; no confirmed adapter |
 | `skt-samsung-sch-w830-dl21` | `none` | declared; variadic SCH call is not forwarded |
+| `skt-samsung-sch-w830-dl21` | `sch-w8300-qpst-probe` | declared; variadic SCH call is not forwarded |
 
 ## Evidence boundary
 

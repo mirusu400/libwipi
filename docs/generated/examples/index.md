@@ -16,6 +16,7 @@ not uploaded to an application server.
 | [Database CRUD](database-crud.md) | 23 | `aram-ktf`, `aram-raptor` |
 | [Filesystem](filesystem.md) | 27 | `aram-ktf`, `aram-raptor` |
 | [Graphics Gallery](graphics-gallery.md) | 18 | `aram-ktf`, `aram-raptor`, `aram-wie-raptor` |
+| [SCH-W8300 QPST handset probe](handset-probe.md) | 11 | `sch-w8300-qpst-probe` |
 | [Hello](hello.md) | 6 | `aram-ktf`, `aram-raptor`, `aram-wie-raptor` |
 | [Image Pipeline](image-pipeline.md) | 20 | `aram-ktf`, `aram-raptor`, `aram-wie-raptor` |
 | [Media suite](media-suite.md) | 31 | `aram-ktf`, `aram-raptor` |
@@ -34,6 +35,7 @@ conformance
 database-crud
 filesystem
 graphics-gallery
+handset-probe
 hello
 image-pipeline
 media-suite

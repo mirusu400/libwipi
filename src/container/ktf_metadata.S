@@ -31,6 +31,16 @@ _start:
 __wipi_ktf_wipi_exe:
     .long __wipi_ktf_exe_interface
     .long __wipi_ktf_executable_name
+#if defined(LIBWIPI_INSTALL_SCH_W8300_QPST_PROBE)
+    .long 1
+    .long 0
+    .long __wipi_ktf_executable_init
+    .long __wipi_ktf_executable_init
+    .long 0
+    .long 0
+    .long __wipi_ktf_executable_fini
+    .long 0
+#else
     .long 0
     .long 0
     .long 0
@@ -39,13 +49,18 @@ __wipi_ktf_wipi_exe:
     .long 0
     .long 0
     .long 0
+#endif
 .size __wipi_ktf_wipi_exe, .-__wipi_ktf_wipi_exe
 
 .type __wipi_ktf_exe_interface, %object
 __wipi_ktf_exe_interface:
     .long __wipi_ktf_exe_functions
     .long __wipi_ktf_executable_name
+#if defined(LIBWIPI_INSTALL_SCH_W8300_QPST_PROBE)
+    .long 1
+#else
     .long 0
+#endif
     .long 0
     .long 0
     .long 0
@@ -58,10 +73,17 @@ __wipi_ktf_exe_functions:
     .long 0
     .long 0
     .long __wipi_ktf_interface_init
+#if defined(LIBWIPI_INSTALL_SCH_W8300_QPST_PROBE)
+    .long __wipi_ktf_get_state
+    .long __wipi_ktf_set_state
+    .long __wipi_ktf_get_class
+    .long __wipi_ktf_contains_address
+#else
     .long 0
     .long __wipi_ktf_get_class
     .long 0
     .long 0
+#endif
 .size __wipi_ktf_exe_functions, .-__wipi_ktf_exe_functions
 
 .global __wipi_ktf_main_class
@@ -123,7 +145,11 @@ __wipi_ktf_start_method:
 
 .type __wipi_ktf_executable_name, %object
 __wipi_ktf_executable_name:
+#if defined(LIBWIPI_INSTALL_SCH_W8300_QPST_PROBE)
+    .asciz "libwipi SCH-W8300 probe"
+#else
     .asciz "libwipi KTF executable"
+#endif
 
 .type __wipi_ktf_class_name, %object
 __wipi_ktf_class_name:

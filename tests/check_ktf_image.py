@@ -95,7 +95,25 @@ def main() -> int:
         raise AssertionError("ExeInterface does not point at its function table")
     if word(image, functions + 2 * 4) != names["__wipi_ktf_interface_init"] | 1:
         raise AssertionError("ExeInterface init slot is not pinned")
-    if word(image, functions + 4 * 4) != names["__wipi_ktf_get_class"] | 1:
+    if word(image, interface + 2 * 4) == 1:
+        candidate_required = {
+            "__wipi_ktf_executable_fini",
+            "__wipi_ktf_get_state",
+            "__wipi_ktf_set_state",
+            "__wipi_ktf_contains_address",
+        }
+        candidate_missing = sorted(candidate_required.difference(names))
+        if candidate_missing:
+            raise AssertionError(
+                f"device-candidate ELF is missing symbols: {candidate_missing}"
+            )
+        if word(image, functions + 5 * 4) != names["__wipi_ktf_get_class"] | 1:
+            raise AssertionError("device-candidate class slot is not +0x14")
+        if word(image, executable + 4 * 4) != names["__wipi_ktf_executable_init"] | 1:
+            raise AssertionError("device-candidate WipiExe +0x10 is not active")
+        if word(image, executable + 8 * 4) != names["__wipi_ktf_executable_fini"] | 1:
+            raise AssertionError("device-candidate WipiExe +0x20 is not active")
+    elif word(image, functions + 4 * 4) != names["__wipi_ktf_get_class"] | 1:
         raise AssertionError("ExeInterface class slot is not pinned")
 
     disassembly = run(objdump, "-d", str(elf)).lower()

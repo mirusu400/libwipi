@@ -4,7 +4,11 @@ ifeq ($(PROFILE),ktf-samsung)
 ABI_C_SOURCES := src/abi/ktf/bind.c src/abi/ktf/runtime.c
 ABI_ASM_SOURCES := src/abi/ktf/generated_veneer.S
 else ifeq ($(PROFILE),skt-samsung-sch-w830-dl21)
+ifeq ($(INSTALL_PROFILE),sch-w8300-qpst-probe)
+ABI_C_SOURCES := src/abi/ktf/runtime.c
+else
 ABI_C_SOURCES :=
+endif
 ABI_ASM_SOURCES := src/abi/skt/generated_veneer.S
 else ifeq ($(PROFILE),lgt-raptor)
 ABI_C_SOURCES := src/abi/lgt/runtime.c src/abi/lgt/input.c
@@ -60,7 +64,7 @@ HOST_LGT_INPUT_TEST := build/host/tests/lgt-input-semantics
 	test-target test-target-profile test-target-ktf test-target-skt test-target-lgt \
 	test-application-template test-platformer-example platformer \
 	sdk-examples test-sdk-examples aram-sdk-examples test-aram-sdk-examples \
-	ktf-examples test-ktf-examples \
+	ktf-examples test-ktf-examples test-sch-w8300-qpst-probe \
 	docs docs-check docs-linkcheck docs-packages release-bundles
 
 SDK_VERSION ?= dev
@@ -110,7 +114,7 @@ $(EXAMPLE_RELOC): $(EXAMPLE_OBJECT) $(LIBRARY)
 	$(CC) $(WIPI_ARCH_FLAGS) -nostdlib -Wl,-r -o $@ \
 		$(EXAMPLE_OBJECT) $(LIBRARY)
 
-ifeq ($(INSTALL_PROFILE),aram-ktf)
+ifneq ($(filter $(INSTALL_PROFILE),aram-ktf sch-w8300-qpst-probe),)
 $(EXAMPLE_ELF): $(EXAMPLE_OBJECT) $(KTF_METADATA_OBJECT) $(LIBRARY) ld/ktf.ld
 	$(CC) $(WIPI_ARCH_FLAGS) -nostdlib -Wl,--build-id=none \
 		-Wl,--gc-sections -Wl,--strip-debug -Wl,-u,_start \
@@ -143,8 +147,14 @@ $(CONFORMANCE_PACKAGE): $(CONFORMANCE_ELF) $(CONFORMANCE_CLIENT) \
 		--elf $(CONFORMANCE_ELF) --nm $(NM) --output $@ \
 		--aid libwipi-conformance --name "libwipi conformance"
 
+ifeq ($(INSTALL_PROFILE),aram-ktf)
 conformance: $(CONFORMANCE_PACKAGE)
 all: conformance
+else
+conformance:
+	@echo "conformance is unavailable for the minimal SCH-W8300 QPST probe"
+	@false
+endif
 else ifneq ($(filter $(INSTALL_PROFILE),aram-raptor aram-wie-raptor),)
 $(EXAMPLE_ELF): $(EXAMPLE_OBJECT) $(RAPTOR_METADATA_OBJECT) $(LIBRARY) ld/raptor.ld
 	$(CC) $(WIPI_ARCH_FLAGS) -nostdlib -Wl,--build-id=none \
@@ -293,6 +303,18 @@ test-target-skt:
 	$(MAKE) --no-print-directory API_LEVEL=1.2.1 \
 		PROFILE=skt-samsung-sch-w830-dl21 INSTALL_PROFILE=none \
 		test-target-profile
+	$(MAKE) --no-print-directory test-sch-w8300-qpst-probe
+
+test-sch-w8300-qpst-probe:
+	$(MAKE) --no-print-directory -C examples/handset-probe package inspect
+	python3 tests/check_ktf_image.py \
+		examples/handset-probe/build/wipi-1.2.1/skt-samsung-sch-w830-dl21/sch-w8300-qpst-probe/client.elf \
+		examples/handset-probe/build/wipi-1.2.1/skt-samsung-sch-w830-dl21/sch-w8300-qpst-probe/client.bin \
+		$(OBJDUMP) $(NM)
+	python3 tests/check_handset_probe.py \
+		examples/handset-probe/build/wipi-1.2.1/skt-samsung-sch-w830-dl21/sch-w8300-qpst-probe/main.o \
+		examples/handset-probe/build/wipi-1.2.1/skt-samsung-sch-w830-dl21/sch-w8300-qpst-probe/client.elf \
+		$(NM)
 
 test-target-lgt:
 	$(MAKE) --no-print-directory API_LEVEL=1.2.1 PROFILE=lgt-raptor \
@@ -433,4 +455,5 @@ clean:
 	$(MAKE) --no-print-directory -C examples/database-crud clean
 	$(MAKE) --no-print-directory -C examples/filesystem clean
 	$(MAKE) --no-print-directory -C examples/media-suite clean
+	$(MAKE) --no-print-directory -C examples/handset-probe clean
 	rm -rf build

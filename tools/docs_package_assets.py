@@ -159,12 +159,14 @@ def package_entry(
 def inspect_compiled_package(
     record: dict[str, object], source: Path
 ) -> dict[str, object]:
-    abi_profile = component(record, "abi_profile")
-    if abi_profile == "ktf-samsung":
+    install_profile = component(record, "install_profile")
+    if install_profile in {"aram-ktf", "sch-w8300-qpst-probe"}:
         return package_ktf.inspect_package(source)
-    if abi_profile == "lgt-raptor":
+    if install_profile in {"aram-raptor", "aram-wie-raptor"}:
         return package_raptor.inspect_package(source)
-    raise ValueError(f"no documentation package inspector for {abi_profile!r}")
+    raise ValueError(
+        f"no documentation package inspector for {install_profile!r}"
+    )
 
 
 def checksum_text(entries: list[dict[str, object]]) -> str:

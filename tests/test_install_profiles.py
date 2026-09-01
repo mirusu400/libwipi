@@ -271,6 +271,9 @@ class ARAMKTFInstallProfileTests(unittest.TestCase):
         self.assertEqual(container["inner_archive"], "{aid}.jar")
         self.assertEqual(container["executable"], "client.bin{decimal_bss_size}")
         self.assertEqual(container["executable_format"], "raw-ARM-image")
+        self.assertEqual(container["wipi_exe_words"], 10)
+        self.assertEqual(container["exe_interface_words"], 8)
+        self.assertEqual(container["exe_interface_function_words"], 7)
         self.assertEqual(container["image_base"], "0x00100000")
         self.assertEqual(container["entry_rule"], "image_base | 1")
         self.assertEqual(container["bootstrap_result"], "WipiExe pointer")
@@ -298,6 +301,72 @@ class ARAMKTFInstallProfileTests(unittest.TestCase):
         self.assertEqual(evidence["coverage"]["unimplemented_calls"], 0)
         self.assertFalse(evidence["claims"]["interactive_verified"])
         self.assertFalse(evidence["claims"]["real_device_verified"])
+
+
+class SCHW8300QPSTProbeInstallProfileTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.profile = json.loads(
+            (ROOT / "spec/install/sch-w8300-qpst-probe.json").read_text(
+                encoding="utf-8"
+            )
+        )
+
+    def test_target_and_evidence_are_explicitly_candidate(self):
+        profile = self.profile
+        self.assertEqual(profile["id"], "sch-w8300-qpst-probe")
+        self.assertEqual(profile["api_level"], "1.2.1")
+        self.assertEqual(
+            profile["abi_profile"], "skt-samsung-sch-w830-dl21"
+        )
+        self.assertEqual(profile["target_device"]["model"], "SCH-W8300")
+        self.assertEqual(profile["target_device"]["firmware"], "unknown")
+        self.assertEqual(profile["container"]["shape_confidence"], "candidate")
+        self.assertEqual(
+            profile["imports"]["target_device_confidence"],
+            "candidate-cross-device",
+        )
+
+    def test_package_shape_and_minimal_probe_surface_are_pinned(self):
+        container = self.profile["container"]
+        self.assertEqual(container["metadata"], "__adf__")
+        self.assertEqual(container["inner_archive"], "{aid}.jar")
+        self.assertEqual(container["executable"], "client.bin{decimal_bss_size}")
+        self.assertEqual(container["executable_format"], "raw-ARM-image")
+        self.assertEqual(container["wipi_exe_words"], 10)
+        self.assertEqual(container["exe_interface_words"], 8)
+        self.assertEqual(container["exe_interface_function_words"], 7)
+        self.assertEqual(container["class_lookup_offset"], "+0x14")
+        self.assertEqual(
+            set(self.profile["imports"]["required_public_apis"]),
+            {
+                "MC_grpGetScreenFrameBuffer",
+                "MC_grpInitContext",
+                "MC_grpDrawRect",
+                "MC_grpFillRect",
+                "MC_grpDrawString",
+                "MC_grpFlushLcd",
+                "MC_grpGetPixelFromRGB",
+                "MC_grpGetFont",
+                "MC_knlDefTimer",
+                "MC_knlSetTimer",
+                "MC_knlUnsetTimer",
+            },
+        )
+
+    def test_no_unobserved_hardware_milestone_is_claimed(self):
+        claims = self.profile["claims"]
+        self.assertTrue(claims["package_candidate"])
+        for milestone in (
+            "qpst_installable",
+            "loads",
+            "entry",
+            "first_frame",
+            "timer",
+            "interactive",
+            "real_device",
+        ):
+            self.assertFalse(claims[milestone])
 
 if __name__ == "__main__":
     unittest.main()

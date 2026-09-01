@@ -49,6 +49,7 @@ describe libwipi implementation evidence, not platform-wide WIPI requirements.
 | `lgt-raptor` | `aram-raptor` | observed in the scoped emulator suite |
 | `lgt-raptor` | `aram-wie-raptor` | observed in the scoped emulator suite |
 | `skt-samsung-sch-w830-dl21` | `none` | linkable exact-device fixed-root veneer |
+| `skt-samsung-sch-w830-dl21` | `sch-w8300-qpst-probe` | linkable cross-device candidate fixed-root veneer |
 
 ## Compiled examples
 
@@ -57,6 +58,7 @@ describe libwipi implementation evidence, not platform-wide WIPI requirements.
 - [Database CRUD](../../../examples/database-crud.md)
 - [Filesystem](../../../examples/filesystem.md)
 - [Graphics Gallery](../../../examples/graphics-gallery.md)
+- [SCH-W8300 QPST handset probe](../../../examples/handset-probe.md)
 - [Media suite](../../../examples/media-suite.md)
 - [Memory and Resource](../../../examples/memory-resource.md)
 - [Sky Hopper](../../../examples/platformer.md)

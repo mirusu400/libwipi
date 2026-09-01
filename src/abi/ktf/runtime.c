@@ -3,14 +3,25 @@
 #include <wipi/runtime.h>
 #include <wipi/types.h>
 
-typedef M_Addr (*WipiKtfGetInterface)(const M_Char *name);
-
 extern const M_Addr __wipi_ktf_main_class[];
 extern void startClet(M_Int32 argc, M_Char *argv[]);
 
+#if defined(LIBWIPI_PROFILE_KTF_SAMSUNG)
+typedef M_Addr (*WipiKtfGetInterface)(const M_Char *name);
+
 static const M_Char wipi_ktf_kernel_interface_name[] =
     "WIPIC_knlInterface";
+#elif !defined(LIBWIPI_INSTALL_SCH_W8300_QPST_PROBE)
+#error "KTF runtime requires the KTF ABI or SCH-W8300 probe install profile"
+#endif
+
 static const M_Char wipi_ktf_main_class_name[] = "LibwipiClet";
+
+#if defined(LIBWIPI_INSTALL_SCH_W8300_QPST_PROBE)
+extern const M_Byte _start[];
+extern const M_Byte __bss_end[];
+static M_Addr wipi_ktf_exe_state;
+#endif
 
 static M_Boolean wipi_ktf_string_equal(const M_Char *left,
                                        const M_Char *right)
@@ -29,6 +40,7 @@ M_Int32 __wipi_ktf_interface_init(M_Addr parameter0, M_Addr parameter1,
                                   M_Addr parameter2, M_Addr parameter3,
                                   M_Addr parameter4)
 {
+#if defined(LIBWIPI_PROFILE_KTF_SAMSUNG)
     const volatile M_Addr *host;
     WipiKtfGetInterface get_interface;
     M_Addr kernel_table;
@@ -47,12 +59,50 @@ M_Int32 __wipi_ktf_interface_init(M_Addr parameter0, M_Addr parameter1,
     get_interface = (WipiKtfGetInterface)(uintptr_t)host[0];
     kernel_table = get_interface(wipi_ktf_kernel_interface_name);
     return wipi_ktf_bind_kernel_interface(kernel_table);
+#else
+    /*
+     * The experimental SCH-W8300 package uses the SCH fixed import root.
+     * Its veneers resolve 0x01001000 on each call, so there is no dynamic
+     * provider table to install here. This remains a container candidate,
+     * not a device ABI claim.
+     */
+    (void)parameter0;
+    (void)parameter1;
+    (void)parameter2;
+    (void)parameter3;
+    (void)parameter4;
+    return M_SUCCESS;
+#endif
 }
 
 M_Int32 __wipi_ktf_executable_init(void)
 {
     return M_SUCCESS;
 }
+
+#if defined(LIBWIPI_INSTALL_SCH_W8300_QPST_PROBE)
+void __wipi_ktf_executable_fini(void)
+{
+}
+
+M_Addr __wipi_ktf_get_state(void)
+{
+    return (M_Addr)(uintptr_t)&wipi_ktf_exe_state;
+}
+
+M_Int32 __wipi_ktf_set_state(M_Addr state)
+{
+    wipi_ktf_exe_state = state;
+    return M_SUCCESS;
+}
+
+M_Int32 __wipi_ktf_contains_address(M_Addr address)
+{
+    M_Addr first = (M_Addr)(uintptr_t)_start;
+    M_Addr end = (M_Addr)(uintptr_t)__bss_end;
+    return address >= first && address < end ? M_TRUE : M_FALSE;
+}
+#endif
 
 M_Addr __wipi_ktf_get_class(const M_Char *name)
 {

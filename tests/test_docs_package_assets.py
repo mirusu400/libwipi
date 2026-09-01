@@ -211,7 +211,7 @@ class DocumentationPackageAssetTests(unittest.TestCase):
                     records=[record],
                 )
 
-    def test_inspector_dispatches_ktf_packages_by_abi_profile(self):
+    def test_inspector_dispatches_ktf_packages_by_install_profile(self):
         with tempfile.TemporaryDirectory() as raw_directory:
             package = Path(raw_directory) / "libwipi-audio-player.zip"
             self.ktf_package(package)
@@ -224,6 +224,14 @@ class DocumentationPackageAssetTests(unittest.TestCase):
             self.assertEqual(inspection["aid"], "libwipi-audio-player")
             self.assertEqual(inspection["module"], "client.bin64")
             self.assertEqual(inspection["bss_size"], 64)
+
+            record["abi_profile"] = "skt-samsung-sch-w830-dl21"
+            record["install_profile"] = "sch-w8300-qpst-probe"
+            inspection = docs_package_assets.inspect_compiled_package(
+                record, package
+            )
+            self.assertEqual(inspection["aid"], "libwipi-audio-player")
+            self.assertEqual(inspection["module"], "client.bin64")
 
     def test_audio_page_declares_all_profile_package_markers(self):
         page = (ROOT / "docs/generated/examples/audio-player.md").read_text(
@@ -241,7 +249,7 @@ class DocumentationPackageAssetTests(unittest.TestCase):
 
     def test_every_compiled_example_variant_has_a_unique_marker(self):
         records = docs_package_assets.repository_package_records()
-        self.assertEqual(len(records), 36)
+        self.assertEqual(len(records), 37)
         keys = {docs_package_assets.package_key(record) for record in records}
         self.assertEqual(len(keys), len(records))
         generated = "\n".join(
@@ -254,7 +262,7 @@ class DocumentationPackageAssetTests(unittest.TestCase):
     def test_checked_in_package_set_covers_every_compiled_variant(self):
         records = docs_package_assets.repository_package_records()
         manifest, entries = docs_package_assets.verify_static_package_set(ROOT, records)
-        self.assertEqual(len(entries), 36)
+        self.assertEqual(len(entries), 37)
         self.assertRegex(manifest["built_from"], r"\A[0-9a-f]{40}\Z")
 
     def test_download_page_points_to_profile_specific_example_packages(self):

@@ -17,8 +17,8 @@ APP_SOURCES ?= main.c
 APP_RESOURCES ?=
 PYTHON ?= python3
 
-ifeq ($(filter $(API_LEVEL)/$(PROFILE)/$(INSTALL_PROFILE),1.2.1/ktf-samsung/aram-ktf 1.2.1/lgt-raptor/aram-raptor 1.2.1/lgt-raptor/aram-wie-raptor),)
-$(error mk/application.mk requires an implemented WIPI-C emulator install profile)
+ifeq ($(filter $(API_LEVEL)/$(PROFILE)/$(INSTALL_PROFILE),1.2.1/ktf-samsung/aram-ktf 1.2.1/skt-samsung-sch-w830-dl21/sch-w8300-qpst-probe 1.2.1/lgt-raptor/aram-raptor 1.2.1/lgt-raptor/aram-wie-raptor),)
+$(error mk/application.mk requires an implemented WIPI-C install profile)
 endif
 
 APP_BUILD_DIR := build/wipi-$(API_LEVEL)/$(PROFILE)/$(INSTALL_PROFILE)
@@ -47,7 +47,7 @@ $(LIBWIPI_LIBRARY): FORCE
 		PROFILE=$(PROFILE) INSTALL_PROFILE=$(INSTALL_PROFILE) \
 		CROSS_COMPILE=$(CROSS_COMPILE) library
 
-ifeq ($(PROFILE),ktf-samsung)
+ifneq ($(filter $(INSTALL_PROFILE),aram-ktf sch-w8300-qpst-probe),)
 APP_METADATA_OBJECT := $(APP_BUILD_DIR)/libwipi/ktf_metadata.o
 APP_ELF := $(APP_BUILD_DIR)/client.elf
 APP_CLIENT := $(APP_BUILD_DIR)/client.bin

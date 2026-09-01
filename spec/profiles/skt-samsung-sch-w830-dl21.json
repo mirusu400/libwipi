@@ -11,7 +11,7 @@
       "headers": true,
       "target_build": true,
       "abi_adapter": "fixed-import-root-confirmed-subset",
-      "install_profiles": ["none"]
+      "install_profiles": ["none", "sch-w8300-qpst-probe"]
     }
   },
   "architecture": {

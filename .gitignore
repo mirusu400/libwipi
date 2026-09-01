@@ -12,6 +12,7 @@
 /examples/database-crud/build/
 /examples/filesystem/build/
 /examples/media-suite/build/
+/examples/handset-probe/build/
 /.cache/
 __pycache__/
 *.pyc

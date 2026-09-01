@@ -49,6 +49,7 @@ describe libwipi implementation evidence, not platform-wide WIPI requirements.
 | `lgt-raptor` | `aram-raptor` | observed in the scoped emulator suite |
 | `lgt-raptor` | `aram-wie-raptor` | observed in the scoped emulator suite |
 | `skt-samsung-sch-w830-dl21` | `none` | declared; no direct SCH binding |
+| `skt-samsung-sch-w830-dl21` | `sch-w8300-qpst-probe` | declared; no direct SCH binding |
 
 ## Compiled examples
 

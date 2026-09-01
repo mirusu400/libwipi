@@ -215,6 +215,21 @@ def read_example_records(
                 }
                 for install_profile, package in variants
             ]
+    handset_probe = records.get("handset-probe")
+    if handset_probe is not None:
+        handset_probe["variants"] = [
+            {
+                "api_level": bootstrap_api_level,
+                "abi_profile": "skt-samsung-sch-w830-dl21",
+                "install_profile": "sch-w8300-qpst-probe",
+                "expected": {"required_apis": handset_probe["apis"]},
+                "package": (
+                    f"examples/handset-probe/build/wipi-{bootstrap_api_level}/"
+                    "skt-samsung-sch-w830-dl21/sch-w8300-qpst-probe/"
+                    "libwipi-sch-w8300-probe.zip"
+                ),
+            }
+        ]
     return records
 
 
@@ -276,6 +291,10 @@ def availability_rows(
                     status = "declared; variadic SCH call is not forwarded"
                 else:
                     status = "linkable exact-device fixed-root veneer"
+                if install_id == "sch-w8300-qpst-probe":
+                    status = status.replace(
+                        "exact-device", "cross-device candidate"
+                    )
                 result.append((profile_id, str(install_id), status))
                 continue
             install = next(
@@ -569,9 +588,17 @@ def render_support_matrix(
             package_count = evidence.get("coverage", {}).get("packages")
             if isinstance(package_count, int):
                 surface = f"{package_count} first-frame packages"
+        target_device = install.get("target_device")
+        if isinstance(target_device, dict):
+            required = install.get("imports", {}).get("required_public_apis", [])
+            if observed_count == 0 and isinstance(required, list):
+                surface = f"{len(required)} linkable candidate APIs; 0 observed"
+            scope = "for an unverified named-device probe"
+        else:
+            scope = "on the named emulator contract"
         lines.append(
-            f"| {code(combination)} | "
-            f"{table(result)} on the named emulator contract | {surface} | No |"
+            f"| {code(combination)} | {table(result)} {scope} | "
+            f"{surface} | No |"
         )
     lines.extend(
         [

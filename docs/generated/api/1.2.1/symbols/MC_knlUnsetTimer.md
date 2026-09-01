@@ -52,10 +52,12 @@ describe libwipi implementation evidence, not platform-wide WIPI requirements.
 | `lgt-raptor` | `aram-raptor` | observed in the scoped emulator suite |
 | `lgt-raptor` | `aram-wie-raptor` | observed in the scoped emulator suite |
 | `skt-samsung-sch-w830-dl21` | `none` | linkable exact-device fixed-root veneer |
+| `skt-samsung-sch-w830-dl21` | `sch-w8300-qpst-probe` | linkable cross-device candidate fixed-root veneer |
 
 ## Compiled examples
 
 - [Conformance](../../../examples/conformance.md)
+- [SCH-W8300 QPST handset probe](../../../examples/handset-probe.md)
 - [Sky Hopper](../../../examples/platformer.md)
 - [System Services](../../../examples/system-services.md)
 

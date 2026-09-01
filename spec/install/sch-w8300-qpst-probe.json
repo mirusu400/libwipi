@@ -1,0 +1,78 @@
+{
+  "schema": 1,
+  "id": "sch-w8300-qpst-probe",
+  "status": "experimental-device-probe",
+  "api_level": "1.2.1",
+  "abi_profile": "skt-samsung-sch-w830-dl21",
+  "target_build": true,
+  "target_device": {
+    "carrier": "SKT",
+    "oem": "Samsung",
+    "model": "SCH-W8300",
+    "firmware": "unknown",
+    "install_transport": "QPST ZIP installation",
+    "identity_source": "device-owner report",
+    "identity_confidence": "reported-not-independently-verified"
+  },
+  "container": {
+    "outer_archive": "zip",
+    "metadata": "__adf__",
+    "inner_archive": "{aid}.jar",
+    "executable": "client.bin{decimal_bss_size}",
+    "executable_format": "raw-ARM-image",
+    "image_base": "0x00100000",
+    "entry_rule": "image_base | 1",
+    "bootstrap_result": "WipiExe pointer",
+    "wipi_exe_words": 10,
+    "exe_interface_words": 8,
+    "exe_interface_function_words": 7,
+    "class_lookup_offset": "+0x14",
+    "shape_confidence": "candidate",
+    "validation_need": "Inspect a known-good SCH-W8300 QPST-installable ZIP and record its hash before promoting this shape."
+  },
+  "imports": {
+    "strategy": "fixed process import pointer",
+    "process_import_pointer": "0x01001000",
+    "binding_source": "skt-samsung-sch-w830-dl21",
+    "target_device_confidence": "candidate-cross-device",
+    "required_public_apis": [
+      "MC_grpGetScreenFrameBuffer",
+      "MC_grpInitContext",
+      "MC_grpDrawRect",
+      "MC_grpFillRect",
+      "MC_grpDrawString",
+      "MC_grpFlushLcd",
+      "MC_grpGetPixelFromRGB",
+      "MC_grpGetFont",
+      "MC_knlDefTimer",
+      "MC_knlSetTimer",
+      "MC_knlUnsetTimer"
+    ],
+    "validation_need": "Confirm every used root field and slot on the named SCH-W8300 firmware with the probe result or a device trace."
+  },
+  "lifecycle": {
+    "main_class": "LibwipiClet",
+    "start_bridge": "startApp -> startClet",
+    "fixed_import_root": true,
+    "scope": "SCH-W8300 QPST experiment only",
+    "device_abi_claim": false
+  },
+  "evidence": {
+    "archive_shape": "observed Samsung/KTF nested ZIP shape implemented by tools/package_ktf.py",
+    "native_tables": "SPH-W8300 live client at WipiExe 0x03E8E5A4, ExeInterface 0x03E8E584, functions 0x03E8E568; active word positions and class lookup +0x14 reproduced with original libwipi code",
+    "abi_candidate": "anycall_magichole@ca5a91ad6392f62dd7428711e7a8dd9f621d3949: SCH-W830 DL21 fixed-root application evidence",
+    "install_transport": "device-owner report that SCH-W8300 accepts ZIP installation through QPST",
+    "confidence": "candidate",
+    "scope": "buildable first-device probe, not compatibility evidence"
+  },
+  "claims": {
+    "package_candidate": true,
+    "qpst_installable": false,
+    "loads": false,
+    "entry": false,
+    "first_frame": false,
+    "timer": false,
+    "interactive": false,
+    "real_device": false
+  }
+}
