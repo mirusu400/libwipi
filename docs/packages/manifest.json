@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "built_from": "13c12c0018eef50086ae35bccc199d6281e3f1d8",
+  "built_from": "bc0684088856e42cc78ca4311c247751ffff733c",
   "real_device": false,
   "packages": [
     {
@@ -200,6 +200,20 @@
       "size": 2009,
       "aid": "libwipi-vibrate",
       "module": "client.bin168",
+      "resources": [],
+      "real_device": false
+    },
+    {
+      "key": "1.2.1::ktf-samsung::sch-w8300-qpst-probe::handset-probe",
+      "example_id": "handset-probe",
+      "api_level": "1.2.1",
+      "abi_profile": "ktf-samsung",
+      "install_profile": "sch-w8300-qpst-probe",
+      "path": "packages/1.2.1/ktf-samsung/sch-w8300-qpst-probe/handset-probe/libwipi-sch-w8300-probe.zip",
+      "sha256": "c5d28084fc9fd24b70333c7f346fa091c2c9120c46ac6f3ec5d52a529426cee6",
+      "size": 2235,
+      "aid": "libwipi-sch-w8300-probe",
+      "module": "client.bin184",
       "resources": [],
       "real_device": false
     },
@@ -514,20 +528,6 @@
       "size": 3520,
       "aid": "libwipi-vibrate",
       "module": "binary.mod",
-      "resources": [],
-      "real_device": false
-    },
-    {
-      "key": "1.2.1::skt-samsung-sch-w830-dl21::sch-w8300-qpst-probe::handset-probe",
-      "example_id": "handset-probe",
-      "api_level": "1.2.1",
-      "abi_profile": "skt-samsung-sch-w830-dl21",
-      "install_profile": "sch-w8300-qpst-probe",
-      "path": "packages/1.2.1/skt-samsung-sch-w830-dl21/sch-w8300-qpst-probe/handset-probe/libwipi-sch-w8300-probe.zip",
-      "sha256": "9b6f48b2bccb8732649de23c98c026736bd31d72448c029684df3ad6fda54292",
-      "size": 2015,
-      "aid": "libwipi-sch-w8300-probe",
-      "module": "client.bin136",
       "resources": [],
       "real_device": false
     }
