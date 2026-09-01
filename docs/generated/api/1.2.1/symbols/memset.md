@@ -46,10 +46,10 @@ describe libwipi implementation evidence, not platform-wide WIPI requirements.
 | `host-sim` | `none` | host semantic test |
 | `ktf-samsung` | `none` | linkable local implementation |
 | `ktf-samsung` | `aram-ktf` | linkable local implementation |
+| `ktf-samsung` | `sch-w8300-qpst-probe` | linkable local implementation; named-device candidate |
 | `lgt-raptor` | `aram-raptor` | declared; no confirmed adapter |
 | `lgt-raptor` | `aram-wie-raptor` | declared; no confirmed adapter |
 | `skt-samsung-sch-w830-dl21` | `none` | linkable local implementation |
-| `skt-samsung-sch-w830-dl21` | `sch-w8300-qpst-probe` | linkable local implementation |
 
 ## Evidence boundary
 

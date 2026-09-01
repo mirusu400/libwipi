@@ -316,16 +316,28 @@ class SCHW8300QPSTProbeInstallProfileTests(unittest.TestCase):
         profile = self.profile
         self.assertEqual(profile["id"], "sch-w8300-qpst-probe")
         self.assertEqual(profile["api_level"], "1.2.1")
-        self.assertEqual(
-            profile["abi_profile"], "skt-samsung-sch-w830-dl21"
-        )
+        self.assertEqual(profile["abi_profile"], "ktf-samsung")
+        self.assertEqual(profile["target_device"]["carrier"], "KTF")
         self.assertEqual(profile["target_device"]["model"], "SCH-W8300")
         self.assertEqual(profile["target_device"]["firmware"], "unknown")
         self.assertEqual(profile["container"]["shape_confidence"], "candidate")
         self.assertEqual(
             profile["imports"]["target_device_confidence"],
-            "candidate-cross-device",
+            "candidate-live-sibling-dump",
         )
+
+    def test_imports_use_the_observed_ktf_named_provider_path(self):
+        imports = self.profile["imports"]
+        self.assertEqual(imports["strategy"], "named KTF provider lookup")
+        self.assertEqual(
+            imports["lookup_source"],
+            "ExeInterfaceFunctions.init parameter 4 word 0",
+        )
+        self.assertEqual(imports["lookup_name"], "WIPIC_knlInterface")
+        self.assertEqual(imports["master_vector_getter_offset"], "0x84")
+        self.assertEqual(imports["master_vector_words"], 17)
+        self.assertEqual(imports["provider_abi"], "samsung-packed-words")
+        self.assertFalse(self.profile["lifecycle"]["fixed_import_root"])
 
     def test_package_shape_and_minimal_probe_surface_are_pinned(self):
         container = self.profile["container"]

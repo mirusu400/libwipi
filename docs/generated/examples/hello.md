@@ -18,7 +18,8 @@ A checked-in libwipi application example.
 > Compiled downloads are checked into the SDK with their exact build
 > revision, inspected against the selected package profile, and published
 > with SHA-256
-> hashes. They are emulator-profile artifacts, not real-device claims.
+> hashes. Compatibility is limited to the milestones recorded for each
+> exact install profile.
 
 ## APIs demonstrated
 

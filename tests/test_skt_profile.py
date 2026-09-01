@@ -41,7 +41,7 @@ class SktSchW830ProfileTests(unittest.TestCase):
         self.assertTrue(mapping["target_build"])
         self.assertEqual(
             mapping["install_profiles"],
-            ["none", "sch-w8300-qpst-probe"],
+            ["none"],
         )
         self.assertFalse(profile["claims"]["package"])
         self.assertFalse(profile["claims"]["loads"])

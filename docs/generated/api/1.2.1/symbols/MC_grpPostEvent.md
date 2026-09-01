@@ -46,10 +46,10 @@ describe libwipi implementation evidence, not platform-wide WIPI requirements.
 | `host-sim` | `none` | headers only |
 | `ktf-samsung` | `none` | linkable generated veneer |
 | `ktf-samsung` | `aram-ktf` | linkable generated veneer |
+| `ktf-samsung` | `sch-w8300-qpst-probe` | linkable generated veneer; named-device candidate |
 | `lgt-raptor` | `aram-raptor` | declared; no confirmed adapter |
 | `lgt-raptor` | `aram-wie-raptor` | declared; no confirmed adapter |
 | `skt-samsung-sch-w830-dl21` | `none` | linkable exact-device fixed-root veneer |
-| `skt-samsung-sch-w830-dl21` | `sch-w8300-qpst-probe` | linkable cross-device candidate fixed-root veneer |
 
 ## Evidence boundary
 

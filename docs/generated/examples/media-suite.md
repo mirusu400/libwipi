@@ -18,7 +18,8 @@ This original WIPI-C clet exercises all 21 `MC_mda*` APIs through the `1.2.1/lgt
 > Compiled downloads are checked into the SDK with their exact build
 > revision, inspected against the selected package profile, and published
 > with SHA-256
-> hashes. They are emulator-profile artifacts, not real-device claims.
+> hashes. Compatibility is limited to the milestones recorded for each
+> exact install profile.
 
 ## APIs demonstrated
 

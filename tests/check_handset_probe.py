@@ -60,9 +60,22 @@ def main() -> int:
     elf_defined = symbols(nm, "--defined-only", str(elf_path))
     if "startClet" not in elf_defined:
         raise AssertionError("probe ELF does not keep its start callback")
+    dynamic_binding = {
+        "wipi_ktf_bind_kernel_interface",
+        "__wipi_ktf_table_mc_knl",
+        "__wipi_ktf_table_mc_grp",
+    }
+    missing_binding = dynamic_binding - elf_defined
+    if missing_binding:
+        raise AssertionError(
+            "probe ELF lacks KTF dynamic-provider binding: "
+            f"{sorted(missing_binding)}"
+        )
+    if b"WIPIC_knlInterface\0" not in elf_path.read_bytes():
+        raise AssertionError("probe ELF lacks the KTF kernel provider lookup name")
     print(
         f"verified SCH-W8300 probe: {len(expected)} public APIs and "
-        f"{len(lifecycle)} source lifecycle callbacks; start is linked"
+        f"{len(lifecycle)} source lifecycle callbacks; KTF binding is linked"
     )
     return 0
 

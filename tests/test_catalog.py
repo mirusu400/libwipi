@@ -50,6 +50,10 @@ class CatalogTests(unittest.TestCase):
         self.assertEqual(ktf["shared_buffer_slots"]["MC_knlDestroySharedBuf"], "0x4c")
         self.assertEqual(ktf["master_vector_getter"]["slot"], "0x84")
         self.assertEqual(ktf["layouts"]["MC_GrpContext"], 60)
+        self.assertEqual(
+            ktf["api_level_mappings"]["1.2.1"]["install_profiles"],
+            ["none", "aram-ktf", "sch-w8300-qpst-probe"],
+        )
         self.assertEqual(lgt["layouts"]["MC_GrpContext"], 56)
         self.assertEqual(lgt["import_module"], "0x1fb")
 

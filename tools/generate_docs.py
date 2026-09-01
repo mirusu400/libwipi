@@ -220,12 +220,12 @@ def read_example_records(
         handset_probe["variants"] = [
             {
                 "api_level": bootstrap_api_level,
-                "abi_profile": "skt-samsung-sch-w830-dl21",
+                "abi_profile": "ktf-samsung",
                 "install_profile": "sch-w8300-qpst-probe",
                 "expected": {"required_apis": handset_probe["apis"]},
                 "package": (
                     f"examples/handset-probe/build/wipi-{bootstrap_api_level}/"
-                    "skt-samsung-sch-w830-dl21/sch-w8300-qpst-probe/"
+                    "ktf-samsung/sch-w8300-qpst-probe/"
                     "libwipi-sch-w8300-probe.zip"
                 ),
             }
@@ -280,6 +280,8 @@ def availability_rows(
                     status = "linkable generated veneer"
                 else:
                     status = "declared; no verified veneer"
+                if install_id == "sch-w8300-qpst-probe":
+                    status += "; named-device candidate"
                 result.append((profile_id, str(install_id), status))
                 continue
             if profile_id == "skt-samsung-sch-w830-dl21":
@@ -291,10 +293,6 @@ def availability_rows(
                     status = "declared; variadic SCH call is not forwarded"
                 else:
                     status = "linkable exact-device fixed-root veneer"
-                if install_id == "sch-w8300-qpst-probe":
-                    status = status.replace(
-                        "exact-device", "cross-device candidate"
-                    )
                 result.append((profile_id, str(install_id), status))
                 continue
             install = next(
@@ -708,7 +706,8 @@ def render_example_page(record: dict[str, object]) -> str:
                     "> Compiled downloads are checked into the SDK with their exact build",
                     "> revision, inspected against the selected package profile, and published",
                     "> with SHA-256",
-                    "> hashes. They are emulator-profile artifacts, not real-device claims.",
+                    "> hashes. Compatibility is limited to the milestones recorded for each",
+                    "> exact install profile.",
                 ]
             )
     lines.extend(

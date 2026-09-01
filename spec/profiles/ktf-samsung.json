@@ -7,7 +7,7 @@
       "headers": true,
       "target_build": true,
       "abi_adapter": "table-veneer-bootstrap",
-      "install_profiles": ["none", "aram-ktf"]
+      "install_profiles": ["none", "aram-ktf", "sch-w8300-qpst-probe"]
     }
   },
   "architecture": {

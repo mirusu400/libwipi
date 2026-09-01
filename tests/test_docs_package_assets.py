@@ -225,7 +225,7 @@ class DocumentationPackageAssetTests(unittest.TestCase):
             self.assertEqual(inspection["module"], "client.bin64")
             self.assertEqual(inspection["bss_size"], 64)
 
-            record["abi_profile"] = "skt-samsung-sch-w830-dl21"
+            record["abi_profile"] = "ktf-samsung"
             record["install_profile"] = "sch-w8300-qpst-probe"
             inspection = docs_package_assets.inspect_compiled_package(
                 record, package

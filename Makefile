@@ -4,11 +4,7 @@ ifeq ($(PROFILE),ktf-samsung)
 ABI_C_SOURCES := src/abi/ktf/bind.c src/abi/ktf/runtime.c
 ABI_ASM_SOURCES := src/abi/ktf/generated_veneer.S
 else ifeq ($(PROFILE),skt-samsung-sch-w830-dl21)
-ifeq ($(INSTALL_PROFILE),sch-w8300-qpst-probe)
-ABI_C_SOURCES := src/abi/ktf/runtime.c
-else
 ABI_C_SOURCES :=
-endif
 ABI_ASM_SOURCES := src/abi/skt/generated_veneer.S
 else ifeq ($(PROFILE),lgt-raptor)
 ABI_C_SOURCES := src/abi/lgt/runtime.c src/abi/lgt/input.c
@@ -298,22 +294,24 @@ test-target-ktf:
 		INSTALL_PROFILE=none test-target-profile
 	$(MAKE) --no-print-directory API_LEVEL=1.2.1 PROFILE=ktf-samsung \
 		INSTALL_PROFILE=aram-ktf test-target-profile
+	$(MAKE) --no-print-directory test-sch-w8300-qpst-probe
 
 test-target-skt:
 	$(MAKE) --no-print-directory API_LEVEL=1.2.1 \
 		PROFILE=skt-samsung-sch-w830-dl21 INSTALL_PROFILE=none \
 		test-target-profile
-	$(MAKE) --no-print-directory test-sch-w8300-qpst-probe
 
 test-sch-w8300-qpst-probe:
+	$(MAKE) --no-print-directory API_LEVEL=1.2.1 PROFILE=ktf-samsung \
+		INSTALL_PROFILE=sch-w8300-qpst-probe test-target-profile
 	$(MAKE) --no-print-directory -C examples/handset-probe package inspect
 	python3 tests/check_ktf_image.py \
-		examples/handset-probe/build/wipi-1.2.1/skt-samsung-sch-w830-dl21/sch-w8300-qpst-probe/client.elf \
-		examples/handset-probe/build/wipi-1.2.1/skt-samsung-sch-w830-dl21/sch-w8300-qpst-probe/client.bin \
+		examples/handset-probe/build/wipi-1.2.1/ktf-samsung/sch-w8300-qpst-probe/client.elf \
+		examples/handset-probe/build/wipi-1.2.1/ktf-samsung/sch-w8300-qpst-probe/client.bin \
 		$(OBJDUMP) $(NM)
 	python3 tests/check_handset_probe.py \
-		examples/handset-probe/build/wipi-1.2.1/skt-samsung-sch-w830-dl21/sch-w8300-qpst-probe/main.o \
-		examples/handset-probe/build/wipi-1.2.1/skt-samsung-sch-w830-dl21/sch-w8300-qpst-probe/client.elf \
+		examples/handset-probe/build/wipi-1.2.1/ktf-samsung/sch-w8300-qpst-probe/main.o \
+		examples/handset-probe/build/wipi-1.2.1/ktf-samsung/sch-w8300-qpst-probe/client.elf \
 		$(NM)
 
 test-target-lgt:

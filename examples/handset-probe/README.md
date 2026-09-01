@@ -2,8 +2,14 @@
 
 This is the first physical-device experiment for the owner-reported Samsung
 SCH-W8300. It is intentionally small and uses only static storage plus eleven
-graphics/timer calls present in the confirmed SCH-W830 DL21 fixed-root subset.
-That sibling-device ABI is a candidate for SCH-W8300, not confirmed evidence.
+graphics/timer calls. Its KTF adapter follows the dynamic provider path observed
+in a loaded SPH-W8300 KTF client: init parameter 4 supplies the named-interface
+lookup, `WIPIC_knlInterface` resolves the kernel table, and kernel slot `+0x84`
+returns the master vector. It does not use the SKT SCH-W830 fixed import root.
+
+The ABI path has live sibling-device evidence. The owner-reported model string,
+firmware, install container acceptance, and lifecycle behavior are still
+SCH-W8300 candidates until this exact handset is tested.
 
 Build and inspect the candidate ZIP:
 
@@ -14,7 +20,7 @@ make package inspect
 The package is written to:
 
 ```text
-build/wipi-1.2.1/skt-samsung-sch-w830-dl21/
+build/wipi-1.2.1/ktf-samsung/
   sch-w8300-qpst-probe/libwipi-sch-w8300-probe.zip
 ```
 

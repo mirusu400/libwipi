@@ -3,16 +3,17 @@
   "id": "sch-w8300-qpst-probe",
   "status": "experimental-device-probe",
   "api_level": "1.2.1",
-  "abi_profile": "skt-samsung-sch-w830-dl21",
+  "abi_profile": "ktf-samsung",
   "target_build": true,
   "target_device": {
-    "carrier": "SKT",
+    "carrier": "KTF",
     "oem": "Samsung",
     "model": "SCH-W8300",
     "firmware": "unknown",
     "install_transport": "QPST ZIP installation",
     "identity_source": "device-owner report",
-    "identity_confidence": "reported-not-independently-verified"
+    "identity_confidence": "reported-not-independently-verified",
+    "identity_validation_need": "Record the handset label and firmware. The pinned live KTF sibling evidence is SPH-W8300, not the owner-reported SCH-W8300."
   },
   "container": {
     "outer_archive": "zip",
@@ -31,10 +32,14 @@
     "validation_need": "Inspect a known-good SCH-W8300 QPST-installable ZIP and record its hash before promoting this shape."
   },
   "imports": {
-    "strategy": "fixed process import pointer",
-    "process_import_pointer": "0x01001000",
-    "binding_source": "skt-samsung-sch-w830-dl21",
-    "target_device_confidence": "candidate-cross-device",
+    "strategy": "named KTF provider lookup",
+    "lookup_source": "ExeInterfaceFunctions.init parameter 4 word 0",
+    "lookup_name": "WIPIC_knlInterface",
+    "master_vector_getter_offset": "0x84",
+    "master_vector_words": 17,
+    "provider_abi": "samsung-packed-words",
+    "binding_source": "ktf-samsung",
+    "target_device_confidence": "candidate-live-sibling-dump",
     "required_public_apis": [
       "MC_grpGetScreenFrameBuffer",
       "MC_grpInitContext",
@@ -53,14 +58,14 @@
   "lifecycle": {
     "main_class": "LibwipiClet",
     "start_bridge": "startApp -> startClet",
-    "fixed_import_root": true,
+    "fixed_import_root": false,
     "scope": "SCH-W8300 QPST experiment only",
     "device_abi_claim": false
   },
   "evidence": {
     "archive_shape": "observed Samsung/KTF nested ZIP shape implemented by tools/package_ktf.py",
-    "native_tables": "SPH-W8300 live client at WipiExe 0x03E8E5A4, ExeInterface 0x03E8E584, functions 0x03E8E568; active word positions and class lookup +0x14 reproduced with original libwipi code",
-    "abi_candidate": "anycall_magichole@ca5a91ad6392f62dd7428711e7a8dd9f621d3949: SCH-W830 DL21 fixed-root application evidence",
+    "native_tables": "anycall_magichole@ca5a91ad6392f62dd7428711e7a8dd9f621d3949:tools/rechecks/fixtures/sph_w8300_ktf_client_registry_boundary.json; SPH-W8300 live client at WipiExe 0x03E8E5A4, ExeInterface 0x03E8E584, functions 0x03E8E568; active word positions and class lookup +0x14 reproduced with original libwipi code",
+    "abi_candidate": "anycall_magichole@ca5a91ad6392f62dd7428711e7a8dd9f621d3949:docs/interfaces/dispatch.md#loaded-ktf-client-consumer; init parameter 4 resolves WIPIC_knlInterface and kernel +0x84 returns the 17-word master vector in the SPH-W8300 dump (SHA-256 1ad5131df38f197363b826543128d214fff7d1ecf1af0652d8a3e31217fd4225)",
     "install_transport": "device-owner report that SCH-W8300 accepts ZIP installation through QPST",
     "confidence": "candidate",
     "scope": "buildable first-device probe, not compatibility evidence"

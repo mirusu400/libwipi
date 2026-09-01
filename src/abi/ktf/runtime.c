@@ -6,14 +6,14 @@
 extern const M_Addr __wipi_ktf_main_class[];
 extern void startClet(M_Int32 argc, M_Char *argv[]);
 
-#if defined(LIBWIPI_PROFILE_KTF_SAMSUNG)
+#if !defined(LIBWIPI_PROFILE_KTF_SAMSUNG)
+#error "KTF runtime requires the KTF ABI profile"
+#endif
+
 typedef M_Addr (*WipiKtfGetInterface)(const M_Char *name);
 
 static const M_Char wipi_ktf_kernel_interface_name[] =
     "WIPIC_knlInterface";
-#elif !defined(LIBWIPI_INSTALL_SCH_W8300_QPST_PROBE)
-#error "KTF runtime requires the KTF ABI or SCH-W8300 probe install profile"
-#endif
 
 static const M_Char wipi_ktf_main_class_name[] = "LibwipiClet";
 
@@ -40,7 +40,6 @@ M_Int32 __wipi_ktf_interface_init(M_Addr parameter0, M_Addr parameter1,
                                   M_Addr parameter2, M_Addr parameter3,
                                   M_Addr parameter4)
 {
-#if defined(LIBWIPI_PROFILE_KTF_SAMSUNG)
     const volatile M_Addr *host;
     WipiKtfGetInterface get_interface;
     M_Addr kernel_table;
@@ -59,20 +58,6 @@ M_Int32 __wipi_ktf_interface_init(M_Addr parameter0, M_Addr parameter1,
     get_interface = (WipiKtfGetInterface)(uintptr_t)host[0];
     kernel_table = get_interface(wipi_ktf_kernel_interface_name);
     return wipi_ktf_bind_kernel_interface(kernel_table);
-#else
-    /*
-     * The experimental SCH-W8300 package uses the SCH fixed import root.
-     * Its veneers resolve 0x01001000 on each call, so there is no dynamic
-     * provider table to install here. This remains a container candidate,
-     * not a device ABI claim.
-     */
-    (void)parameter0;
-    (void)parameter1;
-    (void)parameter2;
-    (void)parameter3;
-    (void)parameter4;
-    return M_SUCCESS;
-#endif
 }
 
 M_Int32 __wipi_ktf_executable_init(void)

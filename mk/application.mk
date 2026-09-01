@@ -17,7 +17,7 @@ APP_SOURCES ?= main.c
 APP_RESOURCES ?=
 PYTHON ?= python3
 
-ifeq ($(filter $(API_LEVEL)/$(PROFILE)/$(INSTALL_PROFILE),1.2.1/ktf-samsung/aram-ktf 1.2.1/skt-samsung-sch-w830-dl21/sch-w8300-qpst-probe 1.2.1/lgt-raptor/aram-raptor 1.2.1/lgt-raptor/aram-wie-raptor),)
+ifeq ($(filter $(API_LEVEL)/$(PROFILE)/$(INSTALL_PROFILE),1.2.1/ktf-samsung/aram-ktf 1.2.1/ktf-samsung/sch-w8300-qpst-probe 1.2.1/lgt-raptor/aram-raptor 1.2.1/lgt-raptor/aram-wie-raptor),)
 $(error mk/application.mk requires an implemented WIPI-C install profile)
 endif
 

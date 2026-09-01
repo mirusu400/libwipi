@@ -12,7 +12,7 @@ combination; no row implies compatibility with an unnamed handset.
 | `1.2.1/ktf-samsung/aram-ktf` | first frame on the named emulator contract | 14 first-frame packages | No |
 | `1.2.1/lgt-raptor/aram-raptor` | interactive on the named emulator contract | 100 observed APIs | No |
 | `1.2.1/lgt-raptor/aram-wie-raptor` | interactive on the named emulator contract | 59 observed APIs | No |
-| `1.2.1/skt-samsung-sch-w830-dl21/sch-w8300-qpst-probe` | experimental-device-probe for an unverified named-device probe | 11 linkable candidate APIs; 0 observed | No |
+| `1.2.1/ktf-samsung/sch-w8300-qpst-probe` | experimental-device-probe for an unverified named-device probe | 11 linkable candidate APIs; 0 observed | No |
 
 ## API version line
 
