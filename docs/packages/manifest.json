@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "built_from": "bc0684088856e42cc78ca4311c247751ffff733c",
+  "built_from": "0b26f71bac3081e1edbb43ad880706391835f311",
   "real_device": false,
   "packages": [
     {
@@ -209,10 +209,10 @@
       "api_level": "1.2.1",
       "abi_profile": "ktf-samsung",
       "install_profile": "sch-w8300-qpst-probe",
-      "path": "packages/1.2.1/ktf-samsung/sch-w8300-qpst-probe/handset-probe/libwipi-sch-w8300-probe.zip",
-      "sha256": "c5d28084fc9fd24b70333c7f346fa091c2c9120c46ac6f3ec5d52a529426cee6",
-      "size": 2235,
-      "aid": "libwipi-sch-w8300-probe",
+      "path": "packages/1.2.1/ktf-samsung/sch-w8300-qpst-probe/handset-probe/010100D5.zip",
+      "sha256": "aac340be29048c1e78e1ba618fe769a4166e0862fa50feee2522c7b390e436b8",
+      "size": 2203,
+      "aid": "010100D5",
       "module": "client.bin184",
       "resources": [],
       "real_device": false
