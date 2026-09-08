@@ -104,9 +104,13 @@ static void draw_frame(void)
 
 static M_Int32 prepare_directory(void)
 {
-    M_Int32 exists = MC_fsIsExist(root_name, 0);
-    if (exists != 0) {
-        (void)MC_fsMkDir(root_name, 0);
+    /* MC_fsIsExist is a result code, not a boolean: M_SUCCESS (0) means the
+       entry is there, a non-zero error (M_E_NOENT, -12, for a missing one)
+       means it is not. Only create the directory when it is absent, and
+       require that MC_fsMkDir succeed in that case; an already-present
+       directory is success on its own, not a reason to call MC_fsMkDir
+       again. */
+    if (MC_fsIsExist(root_name, 0) == M_SUCCESS) {
         return 1;
     }
     return MC_fsMkDir(root_name, 0) == M_SUCCESS;
@@ -117,18 +121,18 @@ static M_Int32 verify_persistent_file(void)
     M_Byte readback[8];
     MC_FileInfo info;
     M_Int32 descriptor;
-    M_Int32 existed = MC_fsIsExist(persistent_name, 0);
+    M_Int32 already_present = MC_fsIsExist(persistent_name, 0) == M_SUCCESS;
 
-    restart_seen = existed != 0;
+    restart_seen = already_present;
     descriptor = MC_fsOpen(
         persistent_name,
-        existed != 0 ? MC_FILE_OPEN_RDWR :
-                       MC_FILE_OPEN_RDWR | MC_FILE_OPEN_WRTRUNC,
+        already_present ? MC_FILE_OPEN_RDWR :
+                           MC_FILE_OPEN_RDWR | MC_FILE_OPEN_WRTRUNC,
         0);
     if (descriptor < 0) {
         return 0;
     }
-    if (existed != 0) {
+    if (already_present) {
         if (MC_fsRead(descriptor, readback, ARRAY_COUNT(readback)) !=
                 ARRAY_COUNT(readback) ||
             bytes_equal(readback, marker, ARRAY_COUNT(marker)) == 0 ||
@@ -152,7 +156,7 @@ static M_Int32 verify_persistent_file(void)
         info.size != (M_Uint32)ARRAY_COUNT(marker)) {
         return 0;
     }
-    if (existed != 0 && MC_fsSetMode(persistent_name, 0, 0) != M_SUCCESS) {
+    if (already_present && MC_fsSetMode(persistent_name, 0, 0) != M_SUCCESS) {
         return 0;
     }
     return 1;
@@ -181,8 +185,8 @@ static M_Int32 verify_directory_operations(void)
         return 0;
     }
     if (MC_fsRename(persistent_name, renamed_name, 0) != M_SUCCESS ||
-        MC_fsIsExist(persistent_name, 0) != 0 ||
-        MC_fsIsExist(renamed_name, 0) == 0 ||
+        MC_fsIsExist(persistent_name, 0) == M_SUCCESS ||
+        MC_fsIsExist(renamed_name, 0) != M_SUCCESS ||
         MC_fsRename(renamed_name, persistent_name, 0) != M_SUCCESS) {
         return 0;
     }
