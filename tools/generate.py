@@ -190,10 +190,64 @@ def render_make_api_levels(
             [
                 f"ifeq ($(INSTALL_PROFILE),{install['id']})",
                 f"WIPI_INSTALL_CPPFLAGS := -DLIBWIPI_INSTALL_{macro}=1",
-                "endif",
-                "",
             ]
         )
+        slot = install.get("qpst_slot")
+        if isinstance(slot, dict):
+            aid = str(slot.get("aid", ""))
+            identity = slot.get("original_identity")
+            recorded_fsize = (
+                identity.get("class_recorded_fsize")
+                if isinstance(identity, dict)
+                else None
+            )
+            manifest = slot.get("jar_manifest")
+            probe_build = str(slot.get("probe_build", ""))
+            if re.fullmatch(r"[0-9A-F]{8}", aid) is None:
+                raise ValueError(f"install profile {install['id']} has invalid slot AID")
+            if not isinstance(recorded_fsize, int) or recorded_fsize <= 0:
+                raise ValueError(
+                    f"install profile {install['id']} has invalid recorded FSize"
+                )
+            if re.fullmatch(r"[0-9]{2}", probe_build) is None:
+                raise ValueError(
+                    f"install profile {install['id']} has invalid probe build"
+                )
+            if not isinstance(manifest, dict):
+                raise ValueError(
+                    f"install profile {install['id']} has no JAR manifest policy"
+                )
+            manifest_mode = str(manifest.get("mode", ""))
+            if manifest_mode not in {"absent", "midlet"}:
+                raise ValueError(
+                    f"install profile {install['id']} has invalid JAR manifest mode"
+                )
+            manifest_values = {"MAIN_CLASS": str(manifest.get("main_class", ""))}
+            if manifest_mode == "midlet":
+                manifest_values.update(
+                    {
+                        "MIDLET_NAME": str(manifest.get("name", "")),
+                        "MIDLET_VENDOR": str(manifest.get("vendor", "")),
+                        "MIDLET_VERSION": str(manifest.get("version", "")),
+                    }
+                )
+            for field, value in manifest_values.items():
+                if re.fullmatch(r"[0-9A-Za-z][0-9A-Za-z .,_-]*", value) is None:
+                    raise ValueError(
+                        f"install profile {install['id']} has unsafe {field}"
+                    )
+            lines.extend(
+                [
+                    f"WIPI_INSTALL_SLOT_AID := {aid}",
+                    f"WIPI_INSTALL_PROBE_BUILD := {probe_build}",
+                    f"WIPI_INSTALL_JAR_MANIFEST_MODE := {manifest_mode}",
+                    *(
+                        f"WIPI_INSTALL_{field} := {value}"
+                        for field, value in manifest_values.items()
+                    ),
+                ]
+            )
+        lines.extend(["endif", ""])
     return "\n".join(lines)
 
 
@@ -846,11 +900,14 @@ def render_thumb_u16(reg: str, value: int) -> list[str]:
     return lines
 
 
+LGT_RETURN_OVERRIDE_ENVIRONMENTS = {"aram": 1, "wie": 2}
+
+
 def render_lgt_resolve_and_tail(
     method: int,
     special_timer: bool,
     aram_method: int | None,
-    wie_return_override: tuple[int, int] | None,
+    return_override: tuple[str, int, int, int] | None,
 ) -> list[str]:
     lines = [
         "    @ Preserve every argument word and the caller return address.",
@@ -893,7 +950,7 @@ def render_lgt_resolve_and_tail(
             "2:",
         ]
     )
-    if wie_return_override is None:
+    if return_override is None:
         lines.extend(
             [
                 "    ldr r4, [sp, #20]",
@@ -916,17 +973,19 @@ def render_lgt_resolve_and_tail(
     else:
         if special_timer:
             raise ValueError("MC_knlSetTimer cannot use a return override")
-        provider_success, public_success = wie_return_override
+        environment, environment_number, provider_success, public_success = (
+            return_override
+        )
         lines.extend(
             [
                 "    @ Preserve the provider address across the real call.",
                 "    mov r4, ip",
                 "    pop {r0-r3}",
                 "    bl 6f",
-                f"    @ WIE provider success {provider_success} maps to public WIPI success {public_success}.",
+                f"    @ {environment.upper()} provider success {provider_success} maps to public WIPI success {public_success}.",
                 "    ldr r2, =__wipi_lgt_environment",
                 "    ldr r2, [r2]",
-                "    cmp r2, #2",
+                f"    cmp r2, #{environment_number}",
                 "    bne 7f",
                 f"    cmp r0, #{provider_success}",
                 "    bne 7f",
@@ -977,7 +1036,7 @@ def render_lgt_veneer(
         methods
     ):
         raise ValueError(f"install profile {install['id']} has invalid return overrides")
-    parsed_return_overrides: dict[str, tuple[int, int]] = {}
+    parsed_return_overrides: dict[str, tuple[str, int, int, int]] = {}
     for name, override in return_overrides.items():
         if not isinstance(override, dict) or set(override) != {
             "environment",
@@ -985,7 +1044,8 @@ def render_lgt_veneer(
             "public_success",
         }:
             raise ValueError(f"LGT return override has an invalid shape: {name}")
-        if override["environment"] != "wie":
+        environment = override["environment"]
+        if environment not in LGT_RETURN_OVERRIDE_ENVIRONMENTS:
             raise ValueError(f"unsupported LGT return-override environment: {name}")
         provider_success = override["provider_success"]
         public_success = override["public_success"]
@@ -993,10 +1053,15 @@ def render_lgt_veneer(
             raise ValueError(f"LGT provider success is not a Thumb immediate: {name}")
         if not isinstance(public_success, int) or not 0 <= public_success <= 0xFF:
             raise ValueError(f"LGT public success is not a Thumb immediate: {name}")
-        parsed_return_overrides[name] = (provider_success, public_success)
+        parsed_return_overrides[name] = (
+            environment,
+            LGT_RETURN_OVERRIDE_ENVIRONMENTS[environment],
+            provider_success,
+            public_success,
+        )
 
     eligible: list[
-        tuple[dict[str, str], int, int | None, tuple[int, int] | None]
+        tuple[dict[str, str], int, int | None, tuple[str, int, int, int] | None]
     ] = []
     for name, encoded_method in methods.items():
         row = by_name[name]
@@ -1017,7 +1082,7 @@ def render_lgt_veneer(
         ".thumb",
         "",
     ]
-    for row, method, aram_method, wie_return_override in eligible:
+    for row, method, aram_method, return_override in eligible:
         name = row["name"]
         lines.extend(
             [
@@ -1034,7 +1099,7 @@ def render_lgt_veneer(
                 method,
                 name == "MC_knlSetTimer",
                 aram_method,
-                wie_return_override,
+                return_override,
             )
         )
         lines.extend([f".size {name}, .-{name}", ".pool", ""])

@@ -94,6 +94,20 @@ class GenerationTests(unittest.TestCase):
             self.assertIn(f"movs r1, #{method >> 8:#x}", veneer)
             self.assertIn("lsls r1, r1, #8", veneer)
             self.assertIn(f"adds r1, #{method & 0xff:#x}", veneer)
+        return_overrides = install["imports"]["return_overrides"]
+        self.assertEqual(
+            return_overrides["MC_grpGetDisplayInfo"]["environment"], "aram"
+        )
+        display_start = assembly.index("MC_grpGetDisplayInfo:")
+        display_end = assembly.index(
+            ".size MC_grpGetDisplayInfo", display_start
+        )
+        display_info = assembly[display_start:display_end]
+        self.assertIn("ARAM provider success 1", display_info)
+        self.assertIn("__wipi_lgt_environment", display_info)
+        self.assertIn("cmp r2, #1", display_info)
+        self.assertIn("cmp r0, #1", display_info)
+        self.assertIn("movs r0, #0", display_info)
 
     def test_every_catalog_declaration_is_emitted(self):
         with (ROOT / "spec/wipi-1.2.1/api.csv").open(

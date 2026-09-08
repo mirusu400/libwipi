@@ -181,7 +181,7 @@
       },
       "returns": "The public WIPI result code after any profile-specific normalization.",
       "notes": [
-        "The WIE install adapter normalizes its observed provider success value to the public WIPI success value."
+        "The lgt-raptor vendor provider answers the display count (1) on success, not M_SUCCESS (0); every lgt-raptor install adapter (aram-raptor and aram-wie-raptor) normalizes its observed provider success value to the public WIPI success value so application code can test the documented `== M_SUCCESS` contract on every profile."
       ],
       "examples": ["graphics-gallery", "conformance"]
     },

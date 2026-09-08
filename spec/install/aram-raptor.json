@@ -145,7 +145,13 @@
       "MC_grpDrawArc": "0xd7",
       "MC_grpFillArc": "0xd8"
     },
-    "return_overrides": {}
+    "return_overrides": {
+      "MC_grpGetDisplayInfo": {
+        "environment": "aram",
+        "provider_success": 1,
+        "public_success": 0
+      }
+    }
   },
   "memory_resolution": {
     "representation": "direct-guest-address",

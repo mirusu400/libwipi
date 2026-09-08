@@ -211,7 +211,7 @@ M_Int32 MC_grpGetPixelFromRGB(M_Int32 r, M_Int32 g, M_Int32 b);
  * @param i Display index.
  * @param pi Output display-information structure.
  * @return The public WIPI result code after any profile-specific normalization.
- * @note The WIE install adapter normalizes its observed provider success value to the public WIPI success value.
+ * @note The lgt-raptor vendor provider answers the display count (1) on success, not M_SUCCESS (0); every lgt-raptor install adapter (aram-raptor and aram-wie-raptor) normalizes its observed provider success value to the public WIPI success value so application code can test the documented `== M_SUCCESS` contract on every profile.
  * @par API level
  * WIPI-C 1.2.1, ordinal 30.
  * @par Documentation status

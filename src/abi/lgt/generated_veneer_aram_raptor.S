@@ -1503,11 +1503,25 @@ MC_grpGetDisplayInfo:
     ldr r3, =__wipi_missing_import
     mov ip, r3
 2:
-    ldr r4, [sp, #20]
-    mov lr, r4
-    pop {r0-r4}
-    add sp, #4
-    bx ip
+    @ Preserve the provider address across the real call.
+    mov r4, ip
+    pop {r0-r3}
+    bl 6f
+    @ ARAM provider success 1 maps to public WIPI success 0.
+    ldr r2, =__wipi_lgt_environment
+    ldr r2, [r2]
+    cmp r2, #1
+    bne 7f
+    cmp r0, #1
+    bne 7f
+    movs r0, #0
+7:
+    pop {r4}
+    pop {r1}
+    bx r1
+6:
+    @ ARMv4T provider-call thunk (BLX is ARMv5T).
+    bx r4
 3:
     @ ARMv4T Thumb resolver-call thunk (BLX is ARMv5T).
     bx r3
